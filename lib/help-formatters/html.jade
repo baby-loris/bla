@@ -1,0 +1,30 @@
+doctype html
+html(lang="en")
+  head
+    title API Index
+    meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
+    link(rel='stylesheet', href='//yastatic.net/bootstrap/3.1.1/css/bootstrap.min.css')
+  body(class='container')
+    div(class='col-md-6')
+      each key in Object.keys(methods)
+        - var method = methods[key];
+        h1
+          =method.getName() + ' '
+          small
+            =method.getDescription()
+        table(class='table table-bordered table-condensed')
+          thead
+            tr
+              th Name
+              th Type
+              th Description
+          tbody
+          - var params = method.getParams();
+          each name in Object.keys(params)
+            - var param = params[name];
+            tr
+              td= name
+                if param.required
+                  span(title='Required field', style='color:red;cursor:default') &nbsp;*
+              td= param.type
+              td= param.description

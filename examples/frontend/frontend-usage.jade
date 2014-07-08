@@ -1,0 +1,43 @@
+doctype html
+html(lang="en")
+  head
+    title Frontend example
+    meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
+    link(rel='stylesheet', href='//yastatic.net/bootstrap/3.1.1/css/bootstrap.min.css')
+    script(src='/node_modules/ym/modules.js')
+    script(src='/node_modules/inherit/lib/inherit.js')
+    script(src='/node_modules/vow/vow.min.js')
+    script(src='//yastatic.net/jquery/2.1.1/jquery.min.js')
+    script(src='/blocks/common/api/api.js')
+    script.
+      modules.define('jquery', function (provide) {
+        provide($);
+      });
+      modules.require('api', function (Api) {
+        var api = new Api('/api/');
+        $(function () {
+           $('#name').on('input', function (e) {
+               api.exec('hello', {name: e.currentTarget.value})
+                   .then(function (response) {
+                     $('#result')
+                       .removeClass('label-danger')
+                       .addClass('label-success')
+                       .html(response);
+                   })
+                   .fail(function (error) {
+                     $('#result')
+                       .toggleClass('label-success')
+                       .toggleClass('label-danger')
+                       .html(error.message);
+                   });
+           });
+        });
+      });
+  body(class='container')
+    div(class='col-md-7')
+      h1 Tests for the frontend part of API
+      div(class='form-group')
+        label(class='control-label', for='name') Enter your name
+        input(class='form-control', id='name')
+        h2
+          span(class='label label-success', id='result')

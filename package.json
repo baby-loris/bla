@@ -1,0 +1,35 @@
+{
+  "author": "Alexander Tarmolov  <hevil@yandex.ru>",
+  "description": "Provides API mechanism for your baby-loris.",
+  "name": "baby-loris-api",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.yandex-team.ru/hevil/baby-loris-api.git"
+  },
+  "dependencies": {
+    "inherit" : "2.1.0",
+    "jade": "1.3.1",
+    "vow-asker" : "0.3.2",
+    "vow-fs" : "0.3.1"
+  },
+  "devDependencies": {
+    "body-parser": "1.4.3",
+    "express": "4.2.0",
+    "supervisor": "0.5.7",
+    "ym": "0.1.0"
+  },
+  "publishConfig": {
+    "registry": "http://npm.yandex-team.ru"
+  },
+  "main": "lib/api",
+  "files": [
+    "blocks",
+    "lib"
+  ],
+  "enb": {
+    "sources": [
+      "blocks/common"
+    ]
+  }
+}
