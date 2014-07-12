@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tests</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="../../node_modules/mocha/mocha.css" />
+
+        <script src="../../node_modules/mocha/mocha.js"></script>
+        <script src="../../node_modules/chai/chai.js"></script>
+        <script src="../../node_modules/sinon/pkg/sinon.js"></script>
+
+        <script src="../../node_modules/ym/modules.js"></script>
+        <script src="../../node_modules/inherit/lib/inherit.js"></script>
+        <script src="../../node_modules/vow/vow.min.js"></script>
+        <script src="http://yastatic.net/jquery/2.1.1/jquery.min.js"></script>
+
+        <script src="../../blocks/common/baby-loris-api/baby-loris-api.js"></script>
+        <script src="../../blocks/common/baby-loris-api-error/baby-loris-api-error.js"></script>
+        <script src="../../blocks/common/baby-loris-api/baby-loris-api.test.js"></script>
+        <script src="../../blocks/common/baby-loris-api-error/baby-loris-api-error.test.js"></script>
+
+        <script>
+            modules.define('jquery', function (provide) {
+                provide($);
+            });
+
+            mocha.setup('bdd');
+            mocha.checkLeaks();
+            mocha.globals(['jQuery*']);
+
+            chai.config.includeStack = true;
+
+            // Resolve test dependency if `test` module is not found.
+            modules.define('test', function (provide) {
+                provide();
+            });
+
+            var should = chai.should();
+            modules.require(['test'], function () {
+                if (window.mochaPhantomJS) {
+                    mochaPhantomJS.run();
+                } else {
+                    mocha.run();
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <div id="mocha"></div>
+    </body>
+</html>

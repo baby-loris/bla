@@ -3,7 +3,6 @@ var app = express();
 var apiMiddleware = require('../../lib/middleware');
 var jade = require('jade');
 var vowFs = require('vow-fs');
-var path = require('path');
 var bodyParser = require('body-parser');
 
 function serveJsFilesFrom(dirName) {
@@ -12,7 +11,7 @@ function serveJsFilesFrom(dirName) {
             res.set('Content-Type', 'text/javascript');
             next();
         })
-        .use('/' + dirName, express.static(__dirname + '/../../' + dirName))
+        .use('/' + dirName, express.static(__dirname + '/../../' + dirName));
 }
 
 app

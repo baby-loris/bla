@@ -1,3 +1,5 @@
+/*global $:true */
+
 modules.define('jquery', function (provide) {
     provide($);
 });
@@ -6,7 +8,7 @@ modules.define('domready', ['jquery'], function (provide, $) {
     $(provide);
 });
 
-modules.require(['api', 'domready'], function (Api) {
+modules.require(['baby-loris-api', 'domready'], function (Api) {
     var api = new Api('/api/');
     $('#name').on('input', function (e) {
         api.exec('hello', {name: e.currentTarget.value})
@@ -20,5 +22,15 @@ modules.require(['api', 'domready'], function (Api) {
                     .attr('class', 'label label-danger')
                     .html(error.message);
             });
+    });
+
+    api.exec('get-kittens').then(function (kittens) {
+        kittens.forEach(function (kitten) {
+            $('<img/>')
+                .addClass('img-thumbnail')
+                .attr('src', kitten.url)
+                .attr('title', kitten.title)
+                .appendTo($('#kittens'));
+        });
     });
 });

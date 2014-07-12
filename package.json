@@ -2,7 +2,7 @@
   "author": "Alexander Tarmolov  <hevil@yandex.ru>",
   "description": "Provides API mechanism for your baby-loris.",
   "name": "baby-loris-api",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.yandex-team.ru/hevil/baby-loris-api.git"
@@ -15,8 +15,20 @@
   },
   "devDependencies": {
     "body-parser": "1.4.3",
+    "chai": "1.9.1",
     "express": "4.2.0",
+    "git-hooks": "0.0.7",
+    "jscs": "1.5.8",
+    "jshint": "2.5.2",
+    "jshint-groups": "0.6.2",
+    "mocha": "1.20.1",
+    "mocha-phantomjs": "3.5.0",
+    "nock": "0.42.1",
+    "phantomjs": "1.9.7-12",
+    "sinon": "1.10.2",
+    "supertest": "0.13.0",
     "supervisor": "0.5.7",
+    "vow-asker": "0.6.6",
     "ym": "0.1.0"
   },
   "publishConfig": {
