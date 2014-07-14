@@ -1,7 +1,7 @@
 # baby-loris-api
 \[ [Quick start](#quick-start) • [Examples](#examples) • [API Reference](#api-reference) \]
 
-Provides helpers to support API in your baby-loris project.
+Provides helpers for writing your own API methods and using them from server and client sides.
 
 ## Installation
 ```
