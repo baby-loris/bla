@@ -42,9 +42,12 @@ You can find a working example in [example/backend](examples/backend/index.js) d
 ### or on frontend side
 First, include [API middleware](#express-middleware) to your express application.
 ```javascript
-var app = express();
+var app = require('express')();
+var bodyParser = require('body-parser')();
 var apiMiddleware = require('baby-loris-api/lib/middleware');
-app.use('/api/:method?', apiMiddleware(__dirname + '/api/**/*.api.js'));
+app
+    .use(bodyParser.urlencoded({extended: false}))
+    .use('/api/:method?', apiMiddleware(__dirname + '/api/**/*.api.js'));
 ```
 
 Only then use api module.
