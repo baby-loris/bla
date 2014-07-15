@@ -40,6 +40,9 @@
     "blocks",
     "lib"
   ],
+  "scripts": {
+    "test": "make validate"
+  },
   "enb": {
     "sources": [
       "blocks/common"
