@@ -5,12 +5,12 @@ html(lang="en")
     meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
     link(rel='stylesheet', href='//yastatic.net/bootstrap/3.1.1/css/bootstrap.min.css')
   body(class='container')
-    div(class='col-md-8')
+    div(class='col-md-7')
       each key in Object.keys(methods)
         - var method = methods[key];
         h1
           =method.getName() + ' '
-          small
+        p
             =method.getDescription()
         - var params = method.getParamsDeclarations();
         if Object.keys(params).length
