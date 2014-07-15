@@ -1,4 +1,5 @@
-# baby-loris-api
+# baby-loris-api [![NPM version](https://badge.fury.io/js/baby-loris-api.png)](http://badge.fury.io/js/baby-loris-api) [![Build Status](https://secure.travis-ci.org/tarmolov/baby-loris-api.png)](http://travis-ci.org/tarmolov/baby-loris-api)
+
 \[ [Quick start](#quick-start) • [Examples](#examples) • [API Reference](#api-reference) \]
 
 Provides helpers for writing your own API methods and using them from server and client sides.
