@@ -8,7 +8,7 @@ html(lang="en")
     div(class='col-md-7')
       each key in Object.keys(methods)
         - var method = methods[key];
-        h1
+        h3
           =method.getName() + ' '
         p
             =method.getDescription()
