@@ -48,7 +48,8 @@ describe('api-method', function () {
                 }).should.be.true;
                 spy.calledOnce.should.be.true;
                 done();
-            });
+            })
+            .done();
     });
 
     it('should reject promise with an API error for missing required parameter', function (done) {
@@ -66,10 +67,11 @@ describe('api-method', function () {
                 error.should.be.instanceOf(ApiError);
                 spy.calledOnce.should.be.false;
                 done();
-            });
+            })
+            .done();
     });
 
-    it('should reject an API error for a invalid parameter', function () {
+    it('should reject an API error for a invalid parameter', function (done) {
         var spy = sinon.spy();
         var apiMethod = new ApiMethod('test-method')
             .addParam({
@@ -83,6 +85,15 @@ describe('api-method', function () {
                 error.should.be.instanceOf(ApiError);
                 spy.calledOnce.should.be.false;
                 done();
-            });
+            })
+            .done();
+    });
+
+    it('should hide the documentation on the doc page', function () {
+        var apiMethod = new ApiMethod('test-method');
+
+        apiMethod.isHiddenOnDocPage().should.be.false;
+        apiMethod.hideOnDocPage()
+        apiMethod.isHiddenOnDocPage().should.be.true;
     });
 });

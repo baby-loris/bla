@@ -39,7 +39,8 @@ describe('get-kittens.api.js', function () {
             GetKittensApiMethod.exec()
                 .then(function (response) {
                     done();
-                });
+                })
+                .done();
         });
     });
 
@@ -49,7 +50,8 @@ describe('get-kittens.api.js', function () {
             GetKittensApiMethod.exec()
                 .fail(function (error) {
                     done();
-                });
+                })
+                .done();
         });
     });
 });

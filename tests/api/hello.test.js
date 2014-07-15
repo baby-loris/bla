@@ -9,6 +9,7 @@ describe('hello.api.js', function () {
             .then(function (response) {
                 response.should.be.equal('Hello, Alexander');
                 done();
-            });
+            })
+            .done();
     });
 });

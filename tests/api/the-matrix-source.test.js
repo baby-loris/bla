@@ -9,7 +9,8 @@ describe('the-matrix-source.api.js', function () {
             .then(function (response) {
                 response.should.be.equal('Welcome to the Source, Neo!');
                 done();
-            });
+            })
+            .done();
     });
 
     it('should deny other users to enter', function (done) {
@@ -17,6 +18,7 @@ describe('the-matrix-source.api.js', function () {
             .fail(function (error) {
                 error.type.should.be.equal('MATRIX_ERROR');
                 done();
-            });
+            })
+            .done();
     });
 });

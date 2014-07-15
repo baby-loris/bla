@@ -79,6 +79,7 @@ make example examples/frontend
       * [addParam(param)](#addparamparam)
       * [setAction(action)](#setactionaction)
       * [exec([params])](#execparams)
+      * [hideOnDocPage()](#hideondocpage)
     * [Class ApiError](#class-apierror)
       * [Error types](#error-types)
     * [Express middleware](#express-middleware)
@@ -183,6 +184,9 @@ helloMethod.exec({name: 'Stepan'})
         console.log(error.message);
     });
 ```
+
+#### hideOnDocPage()
+Hides the API method in built documentation.
 
 ### Class ApiError
 #### constructor(type, message)
