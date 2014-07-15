@@ -3,6 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var apiMiddleware = require('../../lib/middleware');
 var should = require('chai').should();
+var sinon = require('sinon');
 
 var API_FILES_PATH = __dirname + '/../../examples/api/**/*.api.js';
 
@@ -63,6 +64,29 @@ describe('middleware', function (done) {
                     throw err;
                 }
             })
+    });
+
+    describe('when buildMethodName option is set', function () {
+        var stub = sinon.stub().returns('hello');
+        beforeEach(function () {
+            app = express()
+                .use(bodyParser.urlencoded({extended: false}))
+                .use('/api/:method?', apiMiddleware(API_FILES_PATH, {buildMethodName: stub}));
+        });
+
+        it('should build a custom methodname', function () {
+            request(app)
+                .get('/api/any/method/?name=Stepan')
+                .expect('Content-Type', /json/)
+                .expect('{"data":"Hello, Stepan"}')
+                .expect(200)
+                .end(function (err, res) {
+                    if (err) {
+                        throw err;
+                    }
+                    stub.callCount.should.be.equal(1);
+                })
+        });
     });
 
     describe('when generating documentations is turned off', function () {
