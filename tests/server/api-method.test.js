@@ -28,6 +28,19 @@ describe('api-method', function () {
         apiMethod.getParamsDeclarations()[paramDeclaration.name].should.be.eq(paramDeclaration);
     });
 
+    it('should throw an error for redefining a parameter', function () {
+        var apiMethod = new ApiMethod('test-method');
+        var paramDeclaration = {
+            name: 'testParam'
+        };
+        apiMethod.addParam(paramDeclaration);
+
+        var fn = function () {
+            apiMethod.addParam(paramDeclaration);
+        };
+        fn.should.throw(ApiError);
+    });
+
     it('should run an action with normalized parameters', function (done) {
         var apiMethod = new ApiMethod('test-method');
         var spy = sinon.spy();
