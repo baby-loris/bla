@@ -218,10 +218,10 @@ The middleware adds support API to your Express application. You need to pass ``
 #### Options
 Using the second paremeter ```options``` you can tune the middleware up.
 
-| Name             | Type     | Description                                   |
-| ---------------- | -------- | --------------------------------------------- |
-| [disableDocPage] | Boolean  | Turn off generating page with documentation   |
-| [buildMethoName] | Function | ```express.Request``` is passed to the function. The function should return a method name. By default methodName is grabbed by executing ```req.param('method')```. |
+| Name              | Type     | Description                                   |
+| ----------------- | -------- | --------------------------------------------- |
+| [disableDocPage]  | Boolean  | Turn off generating page with documentation   |
+| [buildMethodName] | Function | ```express.Request``` is passed to the function. The function should return a method name. By default methodName is grabbed by executing ```req.param('method')```. |
 
 Method parameters are collected from Express request using [req.param](http://expressjs.com/4x/api.html#req.param) method. That means that you can use ```GET``` and ```POST``` methods from the client side as well.
 
