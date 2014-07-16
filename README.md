@@ -296,3 +296,8 @@ Requirements:
 This class is provided by ```baby-loris-api-error``` module.
 
 It works absolutely the same as [the server version of ApiError](#class-apierror).
+
+## Thanks
+  * [@mdevils](https://github.com/mdevils/) — an initial idea of building api methods for the server side using [enb](https://github.com/enb-make/enb).
+  * [@dfilatov](https://github.com/dfilatov/) — an idea of using [glob](https://github.com/isaacs/node-glob) to find api methods, advice and recommendataions.
+  * [@dodev](https://github.com/dodev), [@dmikis](https://github.com/dmikis), Olesya Pashkovskaya, and [@makishvili](https://github.com/makishvili) for review, advice, and right questions :)
