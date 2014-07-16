@@ -1,4 +1,4 @@
-# baby-loris-api [![NPM version](https://badge.fury.io/js/baby-loris-api.png)](http://badge.fury.io/js/baby-loris-api) [![Build Status](https://secure.travis-ci.org/tarmolov/baby-loris-api.png)](http://travis-ci.org/tarmolov/baby-loris-api)
+# baby-loris-api [![NPM version](https://badge.fury.io/js/baby-loris-api.png)](http://badge.fury.io/js/baby-loris-api) [![Build Status](https://secure.travis-ci.org/tarmolov/baby-loris-api.png)](http://travis-ci.org/tarmolov/baby-loris-api) [![Coverage Status](https://coveralls.io/repos/tarmolov/baby-loris-api/badge.png?branch=master)](https://coveralls.io/r/tarmolov/baby-loris-api?branch=master)
 
 \[ [Quick start](#quick-start) • [Examples](#examples) • [API Reference](#api-reference) \]
 
