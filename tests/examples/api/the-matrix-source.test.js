@@ -1,7 +1,7 @@
 var should = require('chai').should();
 
-var TheMatrixSourceApiMethod = require('../../examples/api/the-matrix-source.api.js');
-var ApiError = require('../../lib/api-error');
+var TheMatrixSourceApiMethod = require('../../../examples/api/the-matrix-source.api.js');
+var ApiError = require('../../../lib/api-error');
 
 describe('the-matrix-source.api.js', function () {
     it('should permit Neo to enter', function (done) {

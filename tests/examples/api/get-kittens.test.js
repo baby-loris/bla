@@ -2,7 +2,7 @@ var should = require('chai').should();
 var nock = require('nock');
 var querystring = require('querystring');
 
-var GetKittensApiMethod = require('../../examples/api/get-kittens.api.js');
+var GetKittensApiMethod = require('../../../examples/api/get-kittens.api.js');
 
 var flickr = nock('https://api.flickr.com')
     .filteringPath(function () {

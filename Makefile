@@ -25,7 +25,7 @@ test-client:
 
 test-server:
 	@echo Run server tests
-	@$(NODE_MODULES_BIN)/mocha $(MOCHA_FLAGS) --recursive tests/server tests/api
+	@$(NODE_MODULES_BIN)/mocha $(MOCHA_FLAGS) --recursive tests/server tests/examples
 
 # If the first argument is "example"...
 ifeq (example,$(firstword $(MAKECMDGOALS)))
