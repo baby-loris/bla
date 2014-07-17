@@ -223,9 +223,17 @@ Using the second paremeter ```options``` you can tune the middleware up.
 | [disableDocPage]  | Boolean  | Turn off generating page with documentation   |
 | [buildMethodName] | Function | ```express.Request``` is passed to the function. The function should return a method name. By default methodName is grabbed by executing ```req.param('method')```. |
 
-Method parameters are collected from Express request using [req.param](http://expressjs.com/4x/api.html#req.param) method. That means that you can use ```GET``` and ```POST``` methods from the client side as well.
+Method parameters are collected from Express request using [req.param](http://expressjs.com/4x/api.html#req.param) method and req.session.
 
-**Note.** Don't forget to add [body-parser](https://github.com/expressjs/body-parser) middleware if you decide to use ```POST``` requests.
+A parameter ```myparam``` would be search in the next sources:
+  1. URL path (```/api/:myparam?```).
+  2. Query string (```?myparam=1```).
+  3. Request body.
+  4. Express session (see [express-session](https://github.com/expressjs/session) for more details).
+
+That means that you can use ```GET``` and ```POST``` methods from the client side as well.
+
+**Note.** Don't forget to add [body-parser](https://github.com/expressjs/body-parser) middleware because the client module uses ```POST``` requests by default.
 
 Also you must specify ```:method?``` parameter in the route path used by this middleware or ```buildMethodName``` function. Otherwise, the middleware couldn't find any API method at all.
 
