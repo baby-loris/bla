@@ -8,10 +8,8 @@
     "url": "https://github.com/tarmolov/baby-loris-api.git"
   },
   "dependencies": {
-    "inherit": "~2.1.0",
     "jade": "~1.3.1",
-    "vow-fs": "~0.3.1",
-    "vow":"~0.4.4"
+    "vow-fs": "~0.3.1"
   },
   "peerDepencencies": {
     "inherit": "~2.1.0",
@@ -23,6 +21,7 @@
     "coveralls": "2.11.1",
     "express": "4.2.0",
     "git-hooks": "0.0.7",
+    "inherit": "~2.1.0",
     "istanbul": "0.3.0",
     "jscs": "1.5.8",
     "jshint": "2.5.2",
@@ -35,6 +34,7 @@
     "sinon": "1.10.2",
     "supertest": "0.13.0",
     "supervisor": "0.5.7",
+    "vow":"~0.4.4",
     "vow-asker": "0.6.6",
     "ym": "0.1.0"
   },
