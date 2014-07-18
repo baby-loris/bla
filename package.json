@@ -47,6 +47,10 @@
     "test": "make validate"
   },
   "enb": {
+    "dependencies": [
+      "vow",
+      "inherit"
+    ],
     "sources": [
       "blocks/common"
     ]
