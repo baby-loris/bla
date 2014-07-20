@@ -5,20 +5,11 @@ var jade = require('jade');
 var vowFs = require('vow-fs');
 var bodyParser = require('body-parser');
 
-function serveJsFilesFrom(dirName) {
-    return express.Router()
-        .use('/' + dirName, function (req, res, next) {
-            res.set('Content-Type', 'text/javascript');
-            next();
-        })
-        .use('/' + dirName, express.static(__dirname + '/../../' + dirName));
-}
-
 app
     .use(bodyParser.urlencoded({extended: false}))
-    .use(serveJsFilesFrom('blocks'))
-    .use(serveJsFilesFrom('examples'))
-    .use(serveJsFilesFrom('node_modules'))
+    .use('/blocks', express.static(__dirname + '/../../blocks'))
+    .use('/examples', express.static(__dirname + '/../../examples'))
+    .use('/node_modules', express.static(__dirname + '/../../node_modules'))
     .use('/api/:method?', apiMiddleware(__dirname + '/../api/**/*.api.js'))
     .get('/', function (req, res) {
         var path = __dirname + '/page.jade';
