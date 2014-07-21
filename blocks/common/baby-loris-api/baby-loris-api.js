@@ -49,7 +49,8 @@ modules.define(
                 {
                     method: 'post',
                     dataType: 'json',
-                    cache: false
+                    cache: false,
+                    traditional: true
                 },
                 options.ajaxSettings,
                 {
