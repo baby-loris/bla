@@ -20,4 +20,8 @@ describe('normalize', function () {
         normalize('true', 'Boolean').should.be.equal(true);
         normalize('lorem ipsum', 'Boolean').should.be.equal(true);
     });
+
+    it('should normalize value to array', function () {
+        normalize('42', 'Array').should.be.deep.equal(['42']);
+    });
 });
