@@ -1,3 +1,7 @@
+### 0.0.3
+  * Add ```Array``` type.
+  * Fix bugs: #1, #2, #3, #4.
+
 ### 0.0.2
   * Add the licence (MIT).
   * Add a test coverage.
