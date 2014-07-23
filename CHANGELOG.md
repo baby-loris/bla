@@ -1,3 +1,6 @@
+### 0.0.4
+  * Fix misprint in peerDependencies
+
 ### 0.0.3
   * Add ```Array``` type.
   * Fix bugs: [#1](../../issues/1), [#2](../../issues/2), [#3](../../issues/3), [#4](../../issues/4).
