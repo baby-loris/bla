@@ -1,6 +1,6 @@
 ### 0.0.3
   * Add ```Array``` type.
-  * Fix bugs: #1, #2, #3, #4.
+  * Fix bugs: [#1](../../issues/1), [#2](../../issues/2), [#3](../../issues/3), [#4](../../issues/4).
 
 ### 0.0.2
   * Add the licence (MIT).
