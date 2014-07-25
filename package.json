@@ -3,10 +3,18 @@
   "description": "Easy way to create your own API methods for server and client sides",
   "name": "baby-loris-api",
   "version": "0.0.4",
+  "homepage": "https://github.com/tarmolov/baby-loris-api",
   "repository": {
     "type": "git",
     "url": "https://github.com/tarmolov/baby-loris-api.git"
   },
+  "bugs": {
+    "url": "https://github.com/tarmolov/baby-loris-api/issues"
+  },
+  "engines": {
+    "node" : ">=0.10.x"
+  },
+  "engineStrict": true,
   "dependencies": {
     "jade": "1.3.1",
     "vow-fs": "^0.3.1"
@@ -46,6 +54,12 @@
   "scripts": {
     "test": "make validate"
   },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/tarmolov//blob/master/LICENSE"
+    }
+  ],
   "enb": {
     "dependencies": [
       "vow",
