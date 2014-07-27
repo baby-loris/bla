@@ -21,7 +21,8 @@
   },
   "peerDependencies": {
     "inherit": "^2.1.0",
-    "vow": "^0.4.4"
+    "vow": "^0.4.4",
+    "ym": "^0.1.0"
   },
   "devDependencies": {
     "body-parser": "1.4.3",
@@ -43,8 +44,7 @@
     "supertest": "0.13.0",
     "supervisor": "0.5.7",
     "vow":"^0.4.4",
-    "vow-asker": "0.6.6",
-    "ym": "0.1.0"
+    "vow-asker": "0.6.6"
   },
   "main": "lib/api",
   "files": [
