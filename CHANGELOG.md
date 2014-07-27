@@ -1,5 +1,9 @@
+### 0.0.5
+  * Add ym to peerDependencies.
+  * Strict a node engine. Works properly only with node >= 0.10.x.
+
 ### 0.0.4
-  * Fix misprint in peerDependencies
+  * Fix misprint in peerDependencies.
 
 ### 0.0.3
   * Add ```Array``` type.
