@@ -44,7 +44,8 @@
     "supertest": "0.13.0",
     "supervisor": "0.5.7",
     "vow":"^0.4.4",
-    "vow-asker": "0.6.6"
+    "vow-asker": "0.6.6",
+    "ym": "^0.1.0"
   },
   "main": "lib/api",
   "files": [
