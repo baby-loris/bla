@@ -4,6 +4,14 @@
 
 Provides helpers for writing your own API methods and using them from server and client sides.
 
+## [View Demo project](https://github.com/tarmolov/weatherpic)
+
+## Features
+  * Simple integrating to your project.
+  * The same interface of API methods on server and client sides.
+  * Normalization request parameters.
+  * Generating documentation for all declared API methods.
+
 ## Installation
 ```
 npm install baby-loris-api --save
