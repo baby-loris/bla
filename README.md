@@ -72,6 +72,8 @@ See [Api class](#class-api-baby-loris-api) for more information.
 
 You can find a working example in [example/frontend](examples/frontend) directory.
 
+**Note.** ```express 4.x``` is used in all examples. See [package.json](package.json#L31) for more details.
+
 ## Examples
 You can find examples in [examples](examples) folder.
 
