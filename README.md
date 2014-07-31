@@ -52,7 +52,7 @@ You can find a working example in [example/backend](examples/backend/index.js) d
 First, include [API middleware](#express-middleware) to your express application.
 ```javascript
 var app = require('express')();
-var bodyParser = require('body-parser')();
+var bodyParser = require('body-parser');
 var apiMiddleware = require('baby-loris-api/lib/middleware');
 app
     .use(bodyParser.urlencoded({extended: false}))
