@@ -6,7 +6,7 @@ var vowFs = require('vow-fs');
 var bodyParser = require('body-parser');
 
 app
-    .use(bodyParser.urlencoded({extended: false}))
+    .use(bodyParser.json())
     .use('/blocks', express.static(__dirname + '/../../blocks'))
     .use('/examples', express.static(__dirname + '/../../examples'))
     .use('/node_modules', express.static(__dirname + '/../../node_modules'))

@@ -1,7 +1,9 @@
 var app = require('express')();
+var bodyParser = require('body-parser')();
 var apiMiddleware = require('../../lib/middleware');
 
 app
+    .use(bodyParser.json())
     .use('/api/:method?', apiMiddleware(__dirname + '/../api/**/*.api.js'))
     .listen(8080);
 

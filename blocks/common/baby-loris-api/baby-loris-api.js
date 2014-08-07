@@ -49,13 +49,14 @@ modules.define(
                 {
                     method: 'post',
                     dataType: 'json',
+                    contentType: 'application/json',
                     cache: false,
                     traditional: true
                 },
                 options.ajaxSettings,
                 {
                     url: this._basePath + methodName,
-                    data: params
+                    data: JSON.stringify(params)
                 }
             );
 

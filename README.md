@@ -55,7 +55,7 @@ var app = require('express')();
 var bodyParser = require('body-parser');
 var apiMiddleware = require('baby-loris-api/lib/middleware');
 app
-    .use(bodyParser.urlencoded({extended: false}))
+    .use(bodyParser.json())
     .use('/api/:method?', apiMiddleware(__dirname + '/api/**/*.api.js'));
 ```
 
