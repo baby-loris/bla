@@ -1,3 +1,8 @@
+### 0.0.6
+  * Add Features part and link to the [demo project](https://github.com/tarmolov/weatherpic).
+  * Use json for body in post requests.
+  * Fix a couple of issues: [#5](../../issues/5), [#7](../../issues/7)
+
 ### 0.0.5
   * Add ym to peerDependencies.
   * Strict a node engine. Works properly only with node >= 0.10.x.
