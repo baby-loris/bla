@@ -8,7 +8,7 @@ var FLICK_PHOTO_URL_TEMPLATE = 'https://farm{farm-id}.staticflickr.com/{server-i
 /**
  * Build url for a photo.
  *
- * @see ../../tests/api/get-kittens.test.js Tests for the API method.
+ * @see ../../tests/examples/api/get-kittens.test.js Tests for the API method.
  * @param {Object} data Data for the flickr photo.
  * @return {String}
  */

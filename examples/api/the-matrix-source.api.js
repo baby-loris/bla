@@ -5,7 +5,7 @@ var ApiError = require('../../lib/api-error');
  * In The Matrix movie only Neo could enter to the Source.
  * This method checks can the passed user enter to the Source.
  *
- * @see ../../tests/api/the-matrix-source.test.js Tests for the API method.
+ * @see ../../tests/examples/api/the-matrix-source.test.js Tests for the API method.
  */
 module.exports = new ApiMethod('the-matrix-source')
     .setDescription('Only the One can enter to the source')
