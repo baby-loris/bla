@@ -259,9 +259,12 @@ If you don't provide any method name, the middleware will show your the list of 
 Example:
 ```
 var app = require('express')();
+var bodyParser = require('body-parser');
 var apiMiddleware = require('baby-loris-api/lib/middleware');
 
-app.use('/api/:method?', apiMiddleware(__dirname + '/../api/**/*.api.js'))
+app
+    .use(bodyParser.json())
+    .use('/api/:method?', apiMiddleware(__dirname + '/../api/**/*.api.js'))
 ```
 
 You can find a working example in [example/middleware](examples/middleware/index.js) directory.
