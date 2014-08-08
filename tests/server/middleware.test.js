@@ -54,6 +54,19 @@ describe('middleware', function (done) {
             })
     });
 
+    it('shouldn\'t execute methods with executeOnServerOnly option', function () {
+        request(app)
+            .get('/api/the-matrix-source')
+            .expect('Content-Type', /json/)
+            .expect('{"error":{"type":"BAD_REQUEST","message":"Method can be executed only on server side"}}')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) {
+                    throw err;
+                }
+            })
+    });
+
     it('should generate documentation page if method name was missed', function () {
         request(app)
             .get('/api/')

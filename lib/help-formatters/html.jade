@@ -10,6 +10,8 @@ html(lang="en")
         - var method = methods[key];
         h3
           =method.getName() + ' '
+          if method.getOption('executeOnServerOnly')
+            span(class='label label-primary', style='font-size:0.5em;vertical-align:middle') server only
         p
             =method.getDescription()
         - var params = method.getParamsDeclarations();

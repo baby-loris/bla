@@ -26,6 +26,7 @@ function getPhotoUrl(data) {
  */
 module.exports = new ApiMethod('get-kittens')
     .setDescription('Returns photos of kittens using Flickr API')
+    .setOption('hiddenOnDocPage', true)
     .setAction(function () {
         return asker({
             host: 'api.flickr.com',

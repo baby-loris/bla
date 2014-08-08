@@ -93,7 +93,7 @@ make example examples/frontend
       * [addParam(param)](#addparamparam)
       * [setAction(action)](#setactionaction)
       * [exec([params])](#execparams)
-      * [hideOnDocPage()](#hideondocpage)
+      * [setOption(name, value)](#setoptionname-value)
     * [Class ApiError](#class-apierror)
       * [Error types](#error-types)
     * [Express middleware](#express-middleware)
@@ -199,8 +199,15 @@ helloMethod.exec({name: 'Stepan'})
     });
 ```
 
-#### hideOnDocPage()
-Hides the API method in built documentation.
+#### setOption(name, value)
+Sets an extra option for the method.
+
+List of available options:
+
+| Name                | Type     | Description                                    |
+| ------------------- | -------- | ---------------------------------------------- |
+| hiddenOnDocPage     | Boolean  | Hides the API method in built documentation.   |
+| executeOnServerOnly | Boolean  | Permit to execute method only on server side . |
 
 ### Class ApiError
 #### constructor(type, message)

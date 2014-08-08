@@ -82,7 +82,7 @@ describe('api', function () {
         var api = new Api(__dirname + '/../../examples/api/**/*.api.js');
         api.generateHelp()
             .then(function (help) {
-                help.should.not.contain('the-matrix-source');
+                help.should.not.contain('get-kittens');
                 done();
             })
             .done();
