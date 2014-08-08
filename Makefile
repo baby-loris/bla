@@ -1,6 +1,4 @@
 NODE_MODULES_BIN = node_modules/.bin
-SUPERVISOR := $(NODE_MODULES_BIN)/supervisor
-ISTANBUL := $(NODE_MODULES_BIN)/ISTANBUL
 
 MOCHA_FLAGS ?= -R dot
 
@@ -18,12 +16,15 @@ lint:
 	@$(NODE_MODULES_BIN)/jshint-groups
 	@$(NODE_MODULES_BIN)/jscs .
 
+# Run all tests
 test: test-client test-server
 
+# Run client tests
 test-client:
 	@echo Run client tests
 	@$(NODE_MODULES_BIN)/mocha-phantomjs $(MOCHA_FLAGS) tests/client/run-tests.html
 
+# Run server tests
 test-server:
 	@echo Run server tests
 	@$(NODE_MODULES_BIN)/mocha $(MOCHA_FLAGS) --recursive tests/server tests/examples
@@ -38,10 +39,10 @@ endif
 
 # Run an example
 example: npm
-	@$(SUPERVISOR) -n exit -w examples -- $(RUN_ARGS)
+	@$(NODE_MODULES_BIN)/supervisor -n exit -w examples -- $(RUN_ARGS)
 
 # Build coverage
 coverage:
-	@$(ISTANBUL) cover $(NODE_MODULES_BIN)/mocha tests/server tests/examples -- --recursive -R spec
+	@$(NODE_MODULES_BIN)/ISTANBUL cover $(NODE_MODULES_BIN)/mocha tests/server tests/examples -- --recursive -R spec
 
 .PHONY: all npm validate lint test test-client test-server example coverage
