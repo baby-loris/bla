@@ -1,5 +1,6 @@
 NODE_MODULES_BIN = node_modules/.bin
 SUPERVISOR := $(NODE_MODULES_BIN)/supervisor
+ISTANBUL := $(NODE_MODULES_BIN)/ISTANBUL
 
 MOCHA_FLAGS ?= -R dot
 
@@ -39,4 +40,8 @@ endif
 example: npm
 	@$(SUPERVISOR) -n exit -w examples -- $(RUN_ARGS)
 
-.PHONY: all npm validate lint test test-client test-server example
+# Build coverage
+coverage:
+	@$(ISTANBUL) cover $(NODE_MODULES_BIN)/mocha tests/server tests/examples -- --recursive -R spec
+
+.PHONY: all npm validate lint test test-client test-server example coverage
