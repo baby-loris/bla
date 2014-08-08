@@ -1,5 +1,5 @@
 var app = require('express')();
-var bodyParser = require('body-parser')();
+var bodyParser = require('body-parser');
 var apiMiddleware = require('../../lib/middleware');
 
 app

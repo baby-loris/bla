@@ -102,11 +102,10 @@ describe('api-method', function () {
             .done();
     });
 
-    it('should hide the documentation on the doc page', function () {
+    it('should set method option', function () {
         var apiMethod = new ApiMethod('test-method');
 
-        apiMethod.isHiddenOnDocPage().should.be.false;
-        apiMethod.hideOnDocPage()
-        apiMethod.isHiddenOnDocPage().should.be.true;
+        apiMethod.setOption('hiddenOnDocPage', true);
+        apiMethod.getOption('hiddenOnDocPage').should.be.true;
     });
 });

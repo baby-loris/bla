@@ -9,7 +9,7 @@ var ApiError = require('../../lib/api-error');
  */
 module.exports = new ApiMethod('the-matrix-source')
     .setDescription('Only the One can enter to the source')
-    .hideOnDocPage()
+    .setOption('hiddenOnDocPage', true)
     .addParam({
         name: 'name',
         description: 'User name (only "Neo" value is allowed)',
