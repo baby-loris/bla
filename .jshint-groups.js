@@ -34,6 +34,7 @@ module.exports = {
                 node: true
             },
             includes: [
+                'api/**/*.js',
                 'examples/**/*.js',
                 'lib/**/*.js'
             ],
@@ -75,8 +76,9 @@ module.exports = {
                 expr: true
             },
             includes: [
+                'test/api/**/*.test.js',
                 'test/server/**/*.test.js',
-                'test/api/**/*.test.js'
+                'test/examples/**/*.test.js'
             ]
         }
     }
