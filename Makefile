@@ -6,7 +6,7 @@ all: npm validate
 
 # Install npm modules
 npm:
-	@npm install --registry http://npm.yandex-team.ru/
+	@npm install
 
 # Validation
 validate: lint test
