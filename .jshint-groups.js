@@ -22,7 +22,7 @@ module.exports = {
             },
             includes: [
                 'blocks/**/*.js',
-                'examples/frontend/client.js'
+                'examples/**/*/*client.js'
             ],
             excludes: [
                 'blocks/**/*.test.js'
@@ -39,7 +39,7 @@ module.exports = {
                 'lib/**/*.js'
             ],
             excludes: [
-                'examples/frontend/client.js'
+                'examples/**/*client.js'
             ]
         },
 

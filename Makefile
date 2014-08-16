@@ -29,20 +29,20 @@ test-server:
 	@echo Run server tests
 	@$(NODE_MODULES_BIN)/mocha $(MOCHA_FLAGS) --recursive tests/lib tests/examples tests/api
 
-# If the first argument is "example"...
-ifeq (example,$(firstword $(MAKECMDGOALS)))
-  # use the rest as arguments for "example"
+# If the first argument is "run"...
+ifeq (run,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "run"
   RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
   # ...and turn them into do-nothing targets
   $(eval $(RUN_ARGS):;@:)
 endif
 
 # Run an example
-example: npm
+run: npm
 	@$(NODE_MODULES_BIN)/supervisor -n exit -w examples -- $(RUN_ARGS)
 
 # Build coverage
 coverage:
 	@$(NODE_MODULES_BIN)/ISTANBUL cover $(NODE_MODULES_BIN)/mocha tests/lib tests/examples tests/api -- --recursive $(MOCHA_FLAGS)
 
-.PHONY: all npm validate lint test test-client test-server example coverage
+.PHONY: all npm validate lint test test-client test-server run coverage

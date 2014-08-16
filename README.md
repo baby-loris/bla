@@ -46,8 +46,6 @@ api.exec('hello', {name: 'Stepan'}).then(function (response) {
 });
 ```
 
-You can find a working example in [example/backend](examples/backend/index.js) directory.
-
 ### or on frontend side
 First, include [API middleware](#express-middleware) to your express application.
 ```javascript
@@ -70,16 +68,22 @@ modules.require('baby-loris-api', function (Api) {
 ```
 See [Api class](#class-api-baby-loris-api) for more information.
 
-You can find a working example in [example/frontend](examples/frontend) directory.
-
 **Note.** ```express 4.x``` is used in all examples. See [package.json](package.json#L31) for more details.
 
 ## Examples
-You can find examples in [examples](examples) folder.
+  * Server side
+    * [Basic usage](examples/backend/basic_usage.js)
+  * Middleware
+    * [Basic usage](examples/middleware/basic_usage.js)
+    * [Separate express.Router for the middleware](examples/middleware/api_router.js)
+    * [Without docpage](examples/middleware/without_docpage.js)
+    * [Custom API method name builder](examples/middleware/build_method_name.js)
+  * Frontend side
+    * [Using YM module system](examples/frontend/ym)
 
 Use makefile to run an example. For instance,
 ```
-make example examples/frontend
+make run examples/backend/basic_usage.js
 ```
 
 ## Built-in API methods
@@ -241,10 +245,10 @@ The middleware adds support API to your Express application. You need to pass ``
 #### Options
 Using the second paremeter ```options``` you can tune the middleware up.
 
-| Name              | Type     | Description                                   |
-| ----------------- | -------- | --------------------------------------------- |
-| [disableDocPage]  | Boolean  | Turn off generating page with documentation   |
-| [buildMethodName] | Function | ```express.Request``` is passed to the function. The function should return a method name. By default methodName is grabbed by executing ```req.param('method')```. |
+| Name              | Type     | Description                                                                                         |
+| ----------------- | -------- | --------------------------------------------------------------------------------------------------- |
+| [disableDocPage]  | Boolean  | Turn off generating page with documentation. See [example](examples/middleware/without_docpage.js). |
+| [buildMethodName] | Function | ```express.Request``` is passed to the function. The function should return a method name. By default methodName is grabbed by executing ```req.param('method')```. See [example](examples/middleware/build_method_name.js). |
 
 Method parameters are collected from Express request using [req.param](http://expressjs.com/4x/api.html#req.param) method and req.session.
 
@@ -256,7 +260,7 @@ A parameter ```myparam``` would be search in the next sources:
 
 That means that you can use ```GET``` and ```POST``` methods from the client side as well.
 
-**Note.** Don't forget to add [body-parser](https://github.com/expressjs/body-parser) middleware because the client module uses ```POST``` requests by default.
+**Note.** Don't forget to add [body-parser](https://github.com/expressjs/body-parser) middleware because the client module uses ```POST``` requests.
 
 Also you must specify ```:method?``` parameter in the route path used by this middleware or ```buildMethodName``` function. Otherwise, the middleware couldn't find any API method at all.
 
@@ -273,7 +277,7 @@ app
     .use('/api/:method?', apiMiddleware(__dirname + '/../api/**/*.api.js'))
 ```
 
-You can find a working example in [example/middleware](examples/middleware/index.js) directory.
+You can find a working examples in [example/middleware](examples/middleware) directory.
 
 #### Response
 The middleware returns JSON from the server with ```200``` status (even if an error occured). You can distinguish an error and successful response cheking ```data``` and ```error``` fields in the root object.
