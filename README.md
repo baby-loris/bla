@@ -300,7 +300,6 @@ Requirements:
   * [YM](https://github.com/ymaps/modules) module system.
   * [inherit](https://github.com/dfilatov/inherit) — Inheritance module for Node.js and browsers.
   * [vow](https://github.com/dfilatov/vow) — DOM Promise and Promises/A+ implementation for Node.js and browsers.
-  * [jQuery](http://jquery.com/) because everything needs jQuery :)
 
 This class is provided by ```baby-loris-api``` module.
 
@@ -311,7 +310,6 @@ Also you can specify extra options:
 
 | Name             | Type    | Description                                                                               |
 | ---------------- | ------- | ----------------------------------------------------------------------------------------- |
-| [ajaxSettings]   | Object  | jQuery settings for ajax request                                                          |
 | [disableBatch]   | Boolean | Disable using [batch](#baby-loris-api-batch) for client requests (```false``` by default) |
 
 Example:

@@ -12,7 +12,6 @@
         <script src="../../node_modules/ym/modules.js"></script>
         <script src="../../node_modules/inherit/lib/inherit.js"></script>
         <script src="../../node_modules/vow/vow.min.js"></script>
-        <script src="http://yastatic.net/jquery/2.1.1/jquery.min.js"></script>
 
         <script src="../../blocks/common/baby-loris-api/baby-loris-api.js"></script>
         <script src="../../blocks/common/baby-loris-api-error/baby-loris-api-error.js"></script>
@@ -20,13 +19,8 @@
         <script src="../../blocks/common/baby-loris-api-error/baby-loris-api-error.test.js"></script>
 
         <script>
-            modules.define('jquery', function (provide) {
-                provide($);
-            });
-
             mocha.setup('bdd');
             mocha.checkLeaks();
-            mocha.globals(['jQuery*']);
 
             chai.config.includeStack = true;
 

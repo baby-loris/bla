@@ -2,17 +2,44 @@ modules.define(
     'baby-loris-api',
     [
         'inherit',
-        'jquery',
         'vow',
         'baby-loris-api-error'
     ],
     function (
         provide,
         inherit,
-        $,
         vow,
         ApiError
     ) {
+
+    /**
+     * Makes an ajax request.
+     *
+     * @param {String} url A string containing the URL to which the request is sent.
+     * @param {String} data Data to be sent to the server.
+     */
+    function sendAjaxRequest(url, data) {
+        var xhr = new XMLHttpRequest();
+        var d = vow.defer();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    d.resolve(JSON.parse(xhr.responseText));
+                } else {
+                    d.reject(xhr);
+                }
+            }
+        };
+
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Accept', 'application/json, text/javascript, */*; q=0.01');
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send(data);
+
+        return d.promise();
+    }
 
     /*
      * Set of predefined API errors.
@@ -29,20 +56,12 @@ modules.define(
          * @param {String} basePath
          * @param {Object} [options] Extra options.
          * @param {Boolean} [options.disableBatch=false] Disable using batch mode.
-         * @param {Object} [options.ajaxSettings] jQuery settings for ajax request.
          */
         __constructor: function (basePath, options) {
             this._basePath = basePath;
-            this._options = $.extend(true, {
-                ajaxSettings: {
-                    method: 'post',
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    cache: false,
-                    traditional: true
-                },
-                disableBatch: false
-            }, options);
+            this._options = {
+                disableBatch: options && options.disableBatch
+            };
             this._batch = [];
             this._deferreds = {};
         },
@@ -65,15 +84,10 @@ modules.define(
          */
         _execWithoutBatching: function (methodName, params) {
             var defer = vow.defer();
-            var options = $.extend(true, {},
-                this._options.ajaxSettings,
-                {
-                    data: JSON.stringify(params),
-                    url: this._basePath + methodName
-                }
-            );
+            var url = this._basePath + methodName;
+            var data = JSON.stringify(params);
 
-            $.ajax(options).then(
+            sendAjaxRequest(url, data).then(
                 this._resolvePromise.bind(this, defer),
                 this._rejectPromise.bind(this, defer)
             );
@@ -158,11 +172,9 @@ modules.define(
          * Performs batch request.
          */
         _sendBatchRequest: function () {
-            var options = $.extend(true, {}, this._options.ajaxSettings, {
-                url: this._basePath + 'baby-loris-api-batch',
-                data: JSON.stringify({methods: this._batch})
-            });
-            $.ajax(options).then(
+            var url = this._basePath + 'baby-loris-api-batch';
+            var data = JSON.stringify({methods: this._batch});
+            sendAjaxRequest(url, data).then(
                 this._resolvePromises.bind(this, this._batch),
                 this._rejectPromises.bind(this, this._batch)
             );
