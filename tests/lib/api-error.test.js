@@ -13,6 +13,12 @@ describe('api-error', function () {
         error.should.be.instanceOf(ApiError);
     });
 
+    it('should have built-in error types', function () {
+        should.exist(ApiError.BAD_REQUEST);
+        should.exist(ApiError.NOT_FOUND);
+        should.exist(ApiError.INTERNAL_ERROR);
+    });
+
     it('should have a corret type', function () {
         error.type.should.be.equal('BAD_TIMES');
     });

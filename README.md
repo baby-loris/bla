@@ -298,7 +298,6 @@ Example of a error response:
 ### Class Api (baby-loris-api)
 Requirements:
   * [YM](https://github.com/ymaps/modules) module system.
-  * [inherit](https://github.com/dfilatov/inherit) — Inheritance module for Node.js and browsers.
   * [vow](https://github.com/dfilatov/vow) — DOM Promise and Promises/A+ implementation for Node.js and browsers.
 
 This class is provided by ```baby-loris-api``` module.
@@ -324,7 +323,6 @@ Sends a request to the server for executing API method with name ```methodName``
 ### Class ApiError (baby-loris-api-error)
 Requirements:
   * [YM](https://github.com/ymaps/modules) module system.
-  * [inherit](https://github.com/dfilatov/inherit) — Inheritance module for Node.js and browsers.
 
 This class is provided by ```baby-loris-api-error``` module.
 

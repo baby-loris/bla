@@ -1,13 +1,11 @@
 modules.define(
     'baby-loris-api',
     [
-        'inherit',
         'vow',
         'baby-loris-api-error'
     ],
     function (
         provide,
-        inherit,
         vow,
         ApiError
     ) {
@@ -50,21 +48,22 @@ modules.define(
 
     /**
      * Api provider.
+     *
+     * @param {String} basePath
+     * @param {Object} [options] Extra options.
+     * @param {Boolean} [options.disableBatch=false] Disable using batch mode.
      */
-    var Api = inherit({
-        /**
-         * @param {String} basePath
-         * @param {Object} [options] Extra options.
-         * @param {Boolean} [options.disableBatch=false] Disable using batch mode.
-         */
-        __constructor: function (basePath, options) {
-            this._basePath = basePath;
-            this._options = {
-                disableBatch: options && options.disableBatch
-            };
-            this._batch = [];
-            this._deferreds = {};
-        },
+    function Api(basePath, options) {
+        this._basePath = basePath;
+        this._options = {
+            disableBatch: options && options.disableBatch
+        };
+        this._batch = [];
+        this._deferreds = {};
+    }
+
+    Api.prototype = {
+        constructor: Api,
 
         /**
          * Executes api by path with specified parameters.
@@ -237,7 +236,7 @@ modules.define(
                 delete this._deferreds[requestId];
             }
         }
-    });
+    };
 
     provide(Api);
 });
