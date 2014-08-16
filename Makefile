@@ -22,12 +22,12 @@ test: test-client test-server
 # Run client tests
 test-client:
 	@echo Run client tests
-	@$(NODE_MODULES_BIN)/mocha-phantomjs $(MOCHA_FLAGS) tests/client/run-tests.html
+	@$(NODE_MODULES_BIN)/mocha-phantomjs $(MOCHA_FLAGS) tests/blocks/run-tests.html
 
 # Run server tests
 test-server:
 	@echo Run server tests
-	@$(NODE_MODULES_BIN)/mocha $(MOCHA_FLAGS) --recursive tests/server tests/examples tests/api
+	@$(NODE_MODULES_BIN)/mocha $(MOCHA_FLAGS) --recursive tests/lib tests/examples tests/api
 
 # If the first argument is "example"...
 ifeq (example,$(firstword $(MAKECMDGOALS)))
@@ -43,6 +43,6 @@ example: npm
 
 # Build coverage
 coverage:
-	@$(NODE_MODULES_BIN)/ISTANBUL cover $(NODE_MODULES_BIN)/mocha tests/server tests/examples tests/api -- --recursive $(MOCHA_FLAGS)
+	@$(NODE_MODULES_BIN)/ISTANBUL cover $(NODE_MODULES_BIN)/mocha tests/lib tests/examples tests/api -- --recursive $(MOCHA_FLAGS)
 
 .PHONY: all npm validate lint test test-client test-server example coverage

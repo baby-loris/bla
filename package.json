@@ -68,7 +68,7 @@
       "inherit"
     ],
     "sources": [
-      "blocks/common"
+      "blocks"
     ]
   }
 }
