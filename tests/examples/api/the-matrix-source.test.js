@@ -1,4 +1,4 @@
-var should = require('chai').should();
+require('chai').should();
 
 var TheMatrixSourceApiMethod = require('../../../examples/api/the-matrix-source.api.js');
 

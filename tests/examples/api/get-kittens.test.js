@@ -1,6 +1,5 @@
-var should = require('chai').should();
+require('chai').should();
 var nock = require('nock');
-var querystring = require('querystring');
 
 var GetKittensApiMethod = require('../../../examples/api/get-kittens.api.js');
 
@@ -37,7 +36,7 @@ describe('get-kittens.api.js', function () {
         it('should returns kittens', function (done) {
             flickr.reply(200, flickrMockResponce);
             GetKittensApiMethod.exec()
-                .then(function (response) {
+                .then(function () {
                     done();
                 })
                 .done();
@@ -48,7 +47,7 @@ describe('get-kittens.api.js', function () {
         it('should reject promise when timeout is reached', function (done) {
             flickr.reply(500, 'Internal server error');
             GetKittensApiMethod.exec()
-                .fail(function (error) {
+                .fail(function () {
                     done();
                 })
                 .done();

@@ -1,4 +1,4 @@
-var should = require('chai').should();
+require('chai').should();
 
 var HelloApiMethod = require('../../../examples/api/hello.api.js');
 

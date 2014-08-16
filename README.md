@@ -11,6 +11,7 @@ Provides helpers for writing your own API methods and using them from server and
   * The same interface of API methods on server and client sides.
   * Normalization request parameters.
   * Generating documentation for all declared API methods.
+  * [Enb builder](examples/frontend/enb) support.
 
 ## Installation
 ```
@@ -80,6 +81,7 @@ See [Api class](#class-api-baby-loris-api) for more information.
     * [Custom API method name builder](examples/middleware/build_method_name.js)
   * Frontend side
     * [Using YM module system](examples/frontend/ym)
+    * [Using with enb builder](examples/frontend/enb)
 
 Use makefile to run an example. For instance,
 ```

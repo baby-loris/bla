@@ -1,8 +1,7 @@
-var should = require('chai').should();
+require('chai').should();
 var sinon = require('sinon');
 
 var Api = require('../../lib/api');
-var ApiError = require('../../lib/api-error');
 var HelloMethod = require('../../examples/api/hello.api.js');
 var api = new Api(__dirname + '/../../examples/api/**/*.api.js');
 

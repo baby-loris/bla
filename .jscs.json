@@ -3,6 +3,9 @@
 
     "excludeFiles": [
         ".git/**",
+        "examples/frontend/enb/.enb/tmp/**",
+        "examples/frontend/enb/node_modules/**",
+        "examples/frontend/enb/build/**",
         "node_modules/**",
         "coverage/**"
     ]

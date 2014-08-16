@@ -22,10 +22,11 @@ module.exports = {
             },
             includes: [
                 'blocks/**/*.js',
-                'examples/**/*/*client.js'
+                'examples/frontend/ym/client.js',
+                'examples/frontend/enb/blocks/*.js'
             ],
             excludes: [
-                'blocks/**/*.test.js'
+                'examples/frontend/ym/blocks/*.bt.js'
             ]
         },
 
@@ -35,11 +36,13 @@ module.exports = {
             },
             includes: [
                 'api/**/*.js',
-                'examples/**/*.js',
+                'examples/api/*.js',
+                'examples/backend/*.js',
+                'examples/middleware/*.js',
+                'examples/fronted/ym/index.js',
+                'examples/fronted/enb/app.js',
+                'examples/frontend/ym/blocks/*.bt.js',
                 'lib/**/*.js'
-            ],
-            excludes: [
-                'examples/**/*client.js'
             ]
         },
 
@@ -50,17 +53,16 @@ module.exports = {
                     'modules',
                     'describe',
                     'it',
-                    'before',
                     'beforeEach',
-                    'after',
                     'afterEach',
                     'chai',
+                    'should',
                     'sinon'
                 ],
                 expr: true
             },
             includes: [
-                'blocks/**/*.test.js'
+                'tests/blocks/**/*.test.js'
             ]
         },
 
@@ -70,15 +72,17 @@ module.exports = {
                 predef: [
                     'describe',
                     'it',
+                    'beforeEach',
+                    'afterEach',
                     'should',
                     'require'
                 ],
                 expr: true
             },
             includes: [
-                'test/api/**/*.test.js',
-                'test/server/**/*.test.js',
-                'test/examples/**/*.test.js'
+                'tests/api/**/*.test.js',
+                'tests/server/**/*.test.js',
+                'tests/examples/**/*.test.js'
             ]
         }
     }
