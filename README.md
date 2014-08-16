@@ -11,6 +11,7 @@ Provides helpers for writing your own API methods and using them from server and
   * The same interface of API methods on server and client sides.
   * Normalization request parameters.
   * Generating documentation for all declared API methods.
+  * Joining all client requests into one during one tick (see [batch method](#baby-loris-api-batch)).
   * [Enb builder](examples/frontend/enb) support.
 
 ## Installation
