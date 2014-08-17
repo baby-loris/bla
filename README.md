@@ -59,7 +59,20 @@ app
     .use('/api/:method?', apiMiddleware(__dirname + '/api/**/*.api.js'));
 ```
 
-Only then use api module.
+Include client library to your project.
+```html
+<script type="text/javascript" src="build/baby-loris-api.min.js"></script>
+```
+or specify ```baby-loris-api``` as enb dependency in package.json.
+```json
+"enb": {
+    "dependencies": [
+        "baby-loris-api"
+    ]
+}
+```
+
+Then use API module with [YM](https://github.com/ymaps/modules) module system
 ```javascript
 modules.require('baby-loris-api', function (Api) {
     var api = new Api('/api/');
@@ -68,6 +81,23 @@ modules.require('baby-loris-api', function (Api) {
     });
 });
 ```
+with [require.js](http://requirejs.org/)
+```javascript
+require(['baby-loris-api'], function (Api) {
+    var api = new Api('/api/');
+    api.exec('hello', {name: 'Stepan'}).then(function (response) {
+        console.log(response); // 'Hello, Stepan'
+    });
+});
+```
+or without module system at all
+```javascript
+var api = new bla.Api('/api/');
+api.exec('hello', {name: 'Stepan'}).then(function (response) {
+    console.log(response); // 'Hello, Stepan'
+});
+```
+
 See [Api class](#class-api-baby-loris-api) for more information.
 
 **Note.** ```express 4.x``` is used in all examples. See [package.json](package.json#L31) for more details.
@@ -82,7 +112,9 @@ See [Api class](#class-api-baby-loris-api) for more information.
     * [Custom API method name builder](examples/middleware/build_method_name.js)
   * Frontend side
     * [Using YM module system](examples/frontend/ym)
+    * [Using with require.js](examples/frontend/requirejs)
     * [Using with enb builder](examples/frontend/enb)
+    * [Without module system (using ```bla``` namespace)](examples/frontend/bla)
 
 Use makefile to run an example. For instance,
 ```
@@ -304,10 +336,7 @@ Example of a error response:
 
 ### Class Api (baby-loris-api)
 Requirements:
-  * [YM](https://github.com/ymaps/modules) module system.
   * [vow](https://github.com/dfilatov/vow) — DOM Promise and Promises/A+ implementation for Node.js and browsers.
-
-This class is provided by ```baby-loris-api``` module.
 
 #### constructor(basePath, [options])
 Creates a new instance of client API. ```basePath``` is used to build path for ajax requests to the server. For example, if you define ```/api``` as a ```basePath``` then all request will be sent at ```https://<your host>/api/<method name>```.
@@ -320,18 +349,23 @@ Also you can specify extra options:
 
 Example:
 ```javascript
+// ym
 modules.require('baby-loris-api', function (Api) {
     var api = new Api('/api/');
 });
+
+// require.js
+require(['baby-loris-api'], function (Api) {
+    var api = new Api('/api/');
+});
+
+// without module system
+var api = new bla.Api('/api/');
 ```
 #### exec(methodName, [params])
 Sends a request to the server for executing API method with name ```methodName``` and provided ```params```.
 
 ### Class ApiError (baby-loris-api-error)
-Requirements:
-  * [YM](https://github.com/ymaps/modules) module system.
-
-This class is provided by ```baby-loris-api-error``` module.
 
 It works absolutely the same as [the server version of ApiError](#class-apierror).
 

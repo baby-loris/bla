@@ -18,11 +18,11 @@ module.exports = {
         client: {
             options: {
                 browser: true,
-                predef: ['modules']
+                predef: ['modules', 'define', 'require', 'bla']
             },
             includes: [
                 'blocks/**/*.js',
-                'examples/frontend/ym/client.js',
+                'examples/frontend/*/client.js',
                 'examples/frontend/enb/blocks/*.js'
             ],
             excludes: [
@@ -39,7 +39,7 @@ module.exports = {
                 'examples/api/*.js',
                 'examples/backend/*.js',
                 'examples/middleware/*.js',
-                'examples/fronted/ym/index.js',
+                'examples/fronted/*/index.js',
                 'examples/fronted/enb/app.js',
                 'examples/frontend/ym/blocks/*.bt.js',
                 'lib/**/*.js'

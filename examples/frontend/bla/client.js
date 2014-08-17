@@ -1,13 +1,6 @@
-modules.define('domready', function (provide) {
-    if (document.readyState === 'complete') {
-        provide();
-    } else {
-        document.addEventListener('DOMContentLoaded', provide);
-    }
-});
+var api = new bla.Api('/api/');
 
-modules.require(['baby-loris-api', 'domready'], function (Api) {
-    var api = new Api('/api/');
+document.addEventListener('DOMContentLoaded', function () {
     var input = document.getElementById('name');
     var result = document.getElementById('result');
 
@@ -31,5 +24,5 @@ modules.require(['baby-loris-api', 'domready'], function (Api) {
                     .replace('%s', kitten.title);
             })
             .join('');
-    });
-});
+        });
+}, false);
