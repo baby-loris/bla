@@ -16,27 +16,7 @@
         <script src="../../blocks/bla-error/bla-error.js"></script>
         <script src="./bla/bla.test.js"></script>
         <script src="./bla-error/bla-error.test.js"></script>
-
-        <script>
-            mocha.setup('bdd');
-            mocha.checkLeaks();
-
-            chai.config.includeStack = true;
-
-            // Resolve test dependency if `test` module is not found.
-            modules.define('test', function (provide) {
-                provide();
-            });
-
-            var should = chai.should();
-            modules.require(['test'], function () {
-                if (window.mochaPhantomJS) {
-                    mochaPhantomJS.run();
-                } else {
-                    mocha.run();
-                }
-            });
-        </script>
+        <script src="./run-tests.js"></script>
     </head>
     <body>
         <div id="mocha"></div>

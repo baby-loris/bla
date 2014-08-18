@@ -44,6 +44,7 @@
     "mocha-phantomjs": "3.5.0",
     "nock": "0.42.1",
     "phantomjs": "1.9.7-12",
+    "polyfill-function-prototype-bind": "0.0.1",
     "requirejs": "2.1.14",
     "sinon": "1.10.2",
     "supertest": "0.13.0",
@@ -60,6 +61,29 @@
     "lib",
     "build"
   ],
+  "testling": {
+    "harness": "mocha-bdd",
+    "scripts": [
+      "node_modules/chai/chai.js",
+      "node_modules/sinon/pkg/sinon.js",
+      "node_modules/ym/modules.js",
+      "node_modules/vow/vow.min.js",
+      "blocks/bla-error/bla-error.js",
+      "blocks/bla/bla.js",
+      "node_modules/polyfill-function-prototype-bind/bind.js",
+      "tests/blocks/run-tests.js"
+    ],
+    "files": [
+      "tests/blocks/**/*.js"
+    ],
+    "browsers": [
+      "ie/6..10",
+      "firefox/latest",
+      "chrome/latest",
+      "safari/5..latest",
+      "opera/11", "opera/next"
+    ]
+  },
   "scripts": {
     "test": "make validate",
     "prepublish": "make build"
