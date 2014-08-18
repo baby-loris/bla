@@ -1,5 +1,17 @@
 language: node_js
 node_js:
-  - "0.11"
-  - "0.10"
-after_success: istanbul cover ./node_modules/mocha/bin/_mocha tests/lib tests/examples tests/api -- --recursive -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+- '0.11'
+- '0.10'
+after_success: make coverage
+env:
+  global:
+    secure: L7hbA0XDt6V7eXAJtSwG3OrPHsUE1M8/2pr0PCpvODRb7/J+Gqx5LRFa9ZSrnImwa79YBnDqIuT4ewTFYskMfGtvxSfXLK7z2tBXhgZvEXBwv1YryTvEMM4a5C7hGIrLeEgdNimUUqq42JwQYfvUhvHVO4IQk777ytCZsn2UIX0=
+deploy:
+  provider: npm
+  email: tarmolov@gmail.com
+  api_key:
+    secure: LfLG35921234nZk3Me9Z3G3qy5NxJvZ5mLwJE3iTIloJlbDLgmaXlClYMVtO0JHD7/nLxZA1EE9lFJ1JexDNMCnH/eLqWDGui0YdAAAzysrNwlpoQNuRChxRL8lLaNAxilIDv/rQxCoKZCzT7apjU7nV1Of4SgJOYhOZ2kkmub0=
+  on:
+    tags: true
+    all_branches: true
+  before_deploy: make build_lib travis

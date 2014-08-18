@@ -43,6 +43,7 @@
     "sinon": "1.10.2",
     "supertest": "0.13.0",
     "supervisor": "0.5.7",
+    "uglify-js": "2.4.15",
     "vow": "^0.4.4",
     "vow-asker": "0.6.6",
     "ym": "0.1.0"

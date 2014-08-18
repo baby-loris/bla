@@ -7,6 +7,7 @@
         "examples/frontend/enb/node_modules/**",
         "examples/frontend/enb/build/**",
         "node_modules/**",
+        "build/**",
         "coverage/**"
     ]
 }

@@ -43,6 +43,22 @@ run: npm
 
 # Build coverage
 coverage:
-	@$(NODE_MODULES_BIN)/ISTANBUL cover $(NODE_MODULES_BIN)/mocha tests/lib tests/examples tests/api -- --recursive $(MOCHA_FLAGS)
+	@$(NODE_MODULES_BIN)/istanbul cover $(NODE_MODULES_BIN)/_mocha tests/lib tests/examples tests/api -- --recursive $(MOCHA_FLAGS)
+	@cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
 
-.PHONY: all npm validate lint test test-client test-server run coverage
+# Build a new version of the library
+build_lib:
+	@cat node_modules/vow/lib/vow.js \
+		blocks/baby-loris-api-error/baby-loris-api-error.js \
+		blocks/baby-loris-api-error/baby-loris-api-error.js > build/baby-loris-api.js
+	@$(NODE_MODULES_BIN)/uglifyjs build/baby-loris-api.js > build/baby-loris-api.min.js
+
+# Set up travis environment
+travis:
+	@git config --global user.email "travis@travis-ci.org"
+	@git config --global user.name "Travis"
+	@git add build
+	@git commit -m "Rebuild"
+	@git push
+
+.PHONY: all npm validate lint test test-client test-server run coverage build_lib travis
