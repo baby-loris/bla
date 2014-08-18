@@ -1,6 +1,6 @@
 # baby-loris-api [![NPM version](https://badge.fury.io/js/baby-loris-api.png)](http://badge.fury.io/js/baby-loris-api) [![Build Status](https://secure.travis-ci.org/tarmolov/baby-loris-api.png)](http://travis-ci.org/tarmolov/baby-loris-api) [![Coverage Status](https://coveralls.io/repos/tarmolov/baby-loris-api/badge.png?branch=master)](https://coveralls.io/r/tarmolov/baby-loris-api?branch=master)
 
-\[ [Quick start](#quick-start) • [Examples](#examples) • [API Reference](#api-reference) • [Heroes](#thanks)\]
+\[ [Quick start](#quick-start) • [Examples](#examples) • [Built-in API methods](#built-in-api-methods) • [API Reference](#api-reference) • [Heroes](#thanks)\]
 
 Provides helpers for writing your own API methods and using them from server and client sides.
 
@@ -82,6 +82,12 @@ Use makefile to run an example. For instance,
 make example examples/frontend
 ```
 
+## Built-in API methods
+### baby-loris-api-batch
+This method is used on the client side and makes it possible to joint all requests to the server during one tick. It shortens number of request dramatically.
+
+The client side uses this method by default and can be changed with ```disableBatch``` option.
+
 ## API Reference
   * Server side
     * [Class Api](#class-api)
@@ -99,7 +105,7 @@ make example examples/frontend
     * [Express middleware](#express-middleware)
   * Frontend side
     * [Class Api (baby-loris-api)](#class-api-baby-loris-api)
-      * [constructor(basePath)](#constructorbasepath)
+      * [constructor(basePath, [options])](#constructorbasepath-options)
       * [exec(methodName, [params], [options])](#execmethodname-params-options)
     * [Class ApiError (baby-loris-api-error)](#class-apierror-baby-loris-api-error)
 
@@ -298,8 +304,15 @@ Requirements:
 
 This class is provided by ```baby-loris-api``` module.
 
-#### constructor(basePath)
+#### constructor(basePath, [options])
 Creates a new instance of client API. ```basePath``` is used to build path for ajax requests to the server. For example, if you define ```/api``` as a ```basePath``` then all request will be sent at ```https://<your host>/api/<method name>```.
+
+Also you can specify extra options:
+
+| Name             | Type    | Description                                                                               |
+| ---------------- | ------- | ----------------------------------------------------------------------------------------- |
+| [ajaxSettings]   | Object  | jQuery settings for ajax request                                                          |
+| [disableBatch]   | Boolean | Disable using [batch](#baby-loris-api-batch) for client requests (```false``` by default) |
 
 Example:
 ```javascript
@@ -307,14 +320,8 @@ modules.require('baby-loris-api', function (Api) {
     var api = new Api('/api/');
 });
 ```
-#### exec(methodName, [params], [options])
+#### exec(methodName, [params])
 Sends a request to the server for executing API method with name ```methodName``` and provided ```params```.
-
-Also you can specify extra options:
-
-| Name             | Type    | Description                                       |
-| ---------------- | ------- | ------------------------------------------------- |
-| [ajaxSettings]   | Object  | jQuery settings for ajax request                  |
 
 ### Class ApiError (baby-loris-api-error)
 Requirements:
