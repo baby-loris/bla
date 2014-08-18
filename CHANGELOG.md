@@ -1,3 +1,14 @@
+### 0.0.7
+  * Add ```setOption``` method. [#9](../../issues/9)
+  * Add batch support for the client side. [#10](../../issues/10)
+  * Add more examples. [#6](../../issues/6), [#11](../../issues/11)
+  * Add a special example for enb project. [#12](../../issues/12)
+  * Add a contribution guide. [#18](../../issues/18)
+  * Add AMD support and global for the client (remove ym dependency). [#16](../../issues/16)
+  * Build baby-loris-api.min.js for each npm release. [#15](../../issues/15)
+  * Remove jquery and inherit dependecies for the client. [#13](../../issues/13), [#14](../../issues/14)
+  * Fix coverage calculating.
+
 ### 0.0.6
   * Add Features part and link to the [demo project](https://github.com/tarmolov/weatherpic).
   * Use json for body in post requests.

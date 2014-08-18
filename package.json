@@ -2,7 +2,7 @@
   "author": "Alexander Tarmolov  <tarmolov@gmail.com>",
   "description": "Easy way to create your own API methods for server and client sides",
   "name": "baby-loris-api",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "homepage": "https://github.com/tarmolov/baby-loris-api",
   "repository": {
     "type": "git",
