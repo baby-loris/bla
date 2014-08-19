@@ -79,6 +79,10 @@
 
             /**
              * Executes method immediately.
+             *
+             * @param {String} methodName Method name.
+             * @param {Object} params Data should be sent to the method.
+             * @returns {vow.Promise}
              */
             _execWithoutBatching: function (methodName, params) {
                 var defer = vow.defer();
@@ -95,6 +99,10 @@
 
             /**
              * Executes method with a little delay, adding it to batch.
+             *
+             * @param {String} methodName Method name.
+             * @param {Object} params Data should be sent to the method.
+             * @returns {vow.Promise}
              */
             _execWithBatching: function (methodName, params) {
                 var requestId = this._getRequestId(methodName, params);
