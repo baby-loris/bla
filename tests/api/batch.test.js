@@ -1,7 +1,7 @@
 require('chai').should();
 var sinon = require('sinon');
 
-var Api = require('../../lib/api');
+var Api = require('../../lib/index').Api;
 var HelloMethod = require('../../examples/api/hello.api.js');
 var api = new Api(__dirname + '/../../examples/api/**/*.api.js');
 

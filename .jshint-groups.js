@@ -40,7 +40,6 @@ module.exports = {
                 'examples/backend/*.js',
                 'examples/middleware/*.js',
                 'examples/fronted/*/index.js',
-                'examples/fronted/enb/app.js',
                 'examples/frontend/ym/blocks/*.bt.js',
                 'lib/**/*.js'
             ]

@@ -13,7 +13,7 @@ build:
 
 # Run an application
 dev:
-	@node app.js
+	@node index.js
 
 # Clean build results
 clean:

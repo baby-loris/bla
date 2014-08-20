@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 
-var apiMiddleware = require('../../../lib/middleware');
+var apiMiddleware = require('../../../lib/index').apiMiddleware;
 var enbServerMiddleware = require('enb/lib/server/server-middleware');
 var dropRequireCache = require('enb/lib/fs/drop-require-cache');
 var enbBuilder = enbServerMiddleware.createBuilder();

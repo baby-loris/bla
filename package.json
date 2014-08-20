@@ -48,7 +48,7 @@
     "vow-asker": "0.6.6",
     "ym": "0.1.0"
   },
-  "main": "lib/api",
+  "main": "lib/index",
   "files": [
     "api",
     "blocks",

@@ -1,6 +1,6 @@
 var app = require('express')();
 var bodyParser = require('body-parser');
-var apiMiddleware = require('../../lib/middleware');
+var apiMiddleware = require('../../lib/index').apiMiddleware;
 
 app
     .use(bodyParser.json())

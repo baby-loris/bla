@@ -4,7 +4,7 @@
   "author": "Alexander Tarmolov <tarmolov@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "baby-loris-api": "0.0.6",
+    "baby-loris-api": "0.0.7",
     "express": "4.8.4",
     "body-parser": "1.6.4"
   },
