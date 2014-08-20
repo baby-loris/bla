@@ -250,16 +250,22 @@
 
     var defineAsGlobal = true;
 
-    if (typeof modules === 'object') {
-        modules.define('baby-loris-api', ['vow', 'baby-loris-api-error'], function (provide, vow, ApiError) {
+    /**
+     * @see https://github.com/ymaps/modules
+     */
+    if (typeof global.modules === 'object') {
+        global.modules.define('baby-loris-api', ['vow', 'baby-loris-api-error'], function (provide, vow, ApiError) {
             var Api = createApiClass(vow, ApiError);
             provide(Api);
         });
         defineAsGlobal = false;
     }
 
-    if (typeof define === 'function') {
-        define('baby-loris-api', ['baby-loris-api-error', 'vow'], function (ApiError, vow) {
+    /**
+     * @see requirejs.org
+     */
+    if (typeof global.define === 'function') {
+        global.define('baby-loris-api', ['baby-loris-api-error', 'vow'], function (ApiError, vow) {
             return createApiClass(vow, ApiError);
         });
         defineAsGlobal = false;
