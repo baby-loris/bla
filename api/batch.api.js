@@ -31,18 +31,19 @@ module.exports = new ApiMethod('baby-loris-api-batch')
         })).then(function (response) {
             return response.map(function (promise) {
                 var data = promise.valueOf();
+
                 if (promise.isFulfilled()) {
                     return {
                         data: data
                     };
-                } else {
-                    return {
-                        error: {
-                            type: data.type || ApiError.INTERNAL_ERROR,
-                            message: data.message
-                        }
-                    };
                 }
+
+                return {
+                    error: {
+                        type: data.type || ApiError.INTERNAL_ERROR,
+                        message: data.message
+                    }
+                };
             });
         });
     });
