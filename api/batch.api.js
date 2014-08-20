@@ -39,7 +39,7 @@ module.exports = new ApiMethod('baby-loris-api-batch')
                     return {
                         error: {
                             type: data.type || ApiError.INTERNAL_ERROR,
-                            message: data.message,
+                            message: data.message
                         }
                     };
                 }
