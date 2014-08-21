@@ -23,7 +23,7 @@ npm install baby-loris-api --save
 ### Declare API Method
 Write API method declaration.
 ```javascript
-var ApiMethod = require('baby-loris-api/lib/api-method');
+var ApiMethod = require('baby-loris-api').ApiMethod;
 
 module.exports = new ApiMethod('hello')
     .setDescription('Hello API method')
@@ -41,7 +41,7 @@ Save it to the file ```hello.api.js``` and move it to ```api``` directory.
 
 ### and use it on server side
 ```javascript
-var Api = require('baby-loris-api');
+var Api = require('baby-loris-api').Api;
 var api = new Api(__dirname + '/api/**/*.api.js');
 api.exec('hello', {name: 'Stepan'}).then(function (response) {
     console.log(response); // 'Hello, Stepan'
@@ -53,7 +53,7 @@ First, include [API middleware](#express-middleware) to your express application
 ```javascript
 var app = require('express')();
 var bodyParser = require('body-parser');
-var apiMiddleware = require('baby-loris-api/lib/middleware');
+var apiMiddleware = require('baby-loris-api').apiMiddleware;
 app
     .use(bodyParser.json())
     .use('/api/:method?', apiMiddleware(__dirname + '/api/**/*.api.js'));
@@ -154,7 +154,7 @@ Creates a new instance of API and collects all your API methods from ```methodPa
 
 Example:
 ```javascript
-var Api = require('baby-loris-api');
+var Api = require('baby-loris-api').Api;
 var api = new Api(__dirname + '/api/**/*.api.js');
 ```
 
@@ -183,7 +183,7 @@ ApiMethod class supports chaining for methods: ```setDescription```, ```addParam
 
 Example:
 ```javascript
-var ApiMethod = require('baby-loris-api/lib/api-method');
+var ApiMethod = require('baby-loris-api').ApiMethod;
 var helloMethod = new ApiMethod('hello');
 ```
 #### setDescription(description)
@@ -262,7 +262,7 @@ See bellow supported list of errors.
 
 Example:
 ```javascript
-var ApiError = require('baby-loris-api/lib/api-error');
+var ApiError = require('baby-loris-api').ApiError;
 throw new ApiError(ApiError.INTERNAL_ERROR, 'Internal server error');
 ```
 
@@ -273,7 +273,7 @@ throw new ApiError(ApiError.INTERNAL_ERROR, 'Internal server error');
 
 ### Express Middleware
 ```
-var apiMiddleware = require('baby-loris-api/lib/middleware')(methodPathPattern, options)
+var apiMiddleware = require('baby-loris-api').apiMiddleware(methodPathPattern, options)
 ```
 The middleware adds support API to your Express application. You need to pass ```methodPathPattern``` as you did for Api class.
 
@@ -305,7 +305,7 @@ Example:
 ```
 var app = require('express')();
 var bodyParser = require('body-parser');
-var apiMiddleware = require('baby-loris-api/lib/middleware');
+var apiMiddleware = require('baby-loris-api').apiMiddleware;
 
 app
     .use(bodyParser.json())

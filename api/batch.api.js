@@ -1,7 +1,6 @@
 var vow = require('vow');
 
-var ApiMethod = require('../lib/api-method');
-var ApiError = require('../lib/api-error');
+var bla = require('../lib/index');
 
 /**
  * @typedef {Object} BatchApiMethod
@@ -15,7 +14,7 @@ var ApiError = require('../lib/api-error');
  * }
  */
 
-module.exports = new ApiMethod('baby-loris-api-batch')
+module.exports = new bla.ApiMethod('baby-loris-api-batch')
     .setDescription('Executes a set of methods')
     .setOption('hiddenOnDocPage', true)
     .addParam({
@@ -40,7 +39,7 @@ module.exports = new ApiMethod('baby-loris-api-batch')
 
                 return {
                     error: {
-                        type: data.type || ApiError.INTERNAL_ERROR,
+                        type: data.type || bla.ApiError.INTERNAL_ERROR,
                         message: data.message
                     }
                 };
