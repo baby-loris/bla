@@ -14,6 +14,7 @@
          *
          * @param {String} url A string containing the URL to which the request is sent.
          * @param {String} data Data to be sent to the server.
+         * @returns {vow.Promise}
          */
         function sendAjaxRequest(url, data) {
             var xhr = new XMLHttpRequest();
@@ -48,7 +49,7 @@
         /**
          * Api provider.
          *
-         * @param {String} basePath
+         * @param {String} basePath Url path to the middleware root.
          * @param {Object} [options] Extra options.
          * @param {Boolean} [options.disableBatch=false] Disable using batch mode.
          */
@@ -169,6 +170,8 @@
              * Initializes async batch request.
              */
             _run: function () {
+                // The collecting requests for the batch will start when a first request is received.
+                // That's why the batch length is checked there.
                 if (this._batch.length === 1) {
                     setTimeout(this._sendBatchRequest.bind(this), 0);
                 }
