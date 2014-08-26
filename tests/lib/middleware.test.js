@@ -1,6 +1,7 @@
 var request = require('supertest');
 var express = require('express');
 var bodyParser = require('body-parser');
+var Api = require('../../lib/api');
 var apiMiddleware = require('../../lib/middleware');
 var should = require('chai').should();
 var sinon = require('sinon');
@@ -11,7 +12,7 @@ describe('middleware', function (done) {
     var app;
     beforeEach(function () {
         app = express()
-            .use(bodyParser.urlencoded({extended: false}))
+            .use(bodyParser.json())
             .use('/api/:method?', apiMiddleware(API_FILES_PATH));
     });
 
@@ -33,6 +34,24 @@ describe('middleware', function (done) {
             .post('/api/hello')
             .expect('Content-Type', /json/)
             .expect('{"error":{"type":"BAD_REQUEST","message":"missing name parameter"}}')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) {
+                    throw err;
+                }
+            })
+    });
+
+    it('should handle batch requests', function () {
+        request(app)
+            .post('/api/baby-loris-api-batch')
+            .send({
+                methods: [
+                    {method: 'hello', params: {name: 'Stepan'}}
+                ]
+            })
+            .expect('Content-Type', /json/)
+            .expect('{"data":[{"data":"Hello, Stepan"}]}')
             .expect(200)
             .end(function (err, res) {
                 if (err) {
@@ -83,7 +102,7 @@ describe('middleware', function (done) {
         var stub = sinon.stub().returns('hello');
         beforeEach(function () {
             app = express()
-                .use(bodyParser.urlencoded({extended: false}))
+                .use(bodyParser.json())
                 .use('/api/:method?', apiMiddleware(API_FILES_PATH, {buildMethodName: stub}));
         });
 
@@ -105,7 +124,7 @@ describe('middleware', function (done) {
     describe('when generating documentations is turned off', function () {
         beforeEach(function () {
             app = express()
-                .use(bodyParser.urlencoded({extended: false}))
+                .use(bodyParser.json())
                 .use('/api/:method?', apiMiddleware(API_FILES_PATH, {disableDocPage: true}));
         });
 
@@ -114,6 +133,28 @@ describe('middleware', function (done) {
                 .get('/api/')
                 .expect('Content-Type', /json/)
                 .expect('{"error":{"type":"BAD_REQUEST","message":"API method was\'t specified"}}')
+                .expect(200)
+                .end(function (err, res) {
+                    if (err) {
+                        throw err;
+                    }
+                })
+        });
+    });
+
+    describe('when Api instance is passed', function () {
+        beforeEach(function () {
+            var api = new Api(API_FILES_PATH);
+            app = express()
+                .use(bodyParser.json())
+                .use('/api/:method?', apiMiddleware(api));
+        });
+
+        it('should response to a right request', function () {
+            request(app)
+                .get('/api/hello?name=Alexander')
+                .expect('Content-Type', /json/)
+                .expect('{"data":"Hello, Alexander"}')
                 .expect(200)
                 .end(function (err, res) {
                     if (err) {

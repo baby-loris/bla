@@ -105,8 +105,10 @@ See [Api class](#class-api-baby-loris-api) for more information.
 ## Examples
   * Server side
     * [Basic usage](examples/backend/basic_usage.js)
+    * [Export Api as a module](examples/backend/export.js)
   * Middleware
     * [Basic usage](examples/middleware/basic_usage.js)
+    * [Using exesting Api instance](examples/middleware/using_api_instance.js)
     * [Separate express.Router for the middleware](examples/middleware/api_router.js)
     * [Without docpage](examples/middleware/without_docpage.js)
     * [Custom API method name builder](examples/middleware/build_method_name.js)
@@ -275,7 +277,7 @@ throw new ApiError(ApiError.INTERNAL_ERROR, 'Internal server error');
 ```
 var apiMiddleware = require('baby-loris-api').apiMiddleware(methodPathPattern, options)
 ```
-The middleware adds support API to your Express application. You need to pass ```methodPathPattern``` as you did for Api class.
+The middleware adds support API to your Express application. You need to pass ```methodPathPattern``` as you did for Api class or an Api instance itself.
 
 #### Options
 Using the second paremeter ```options``` you can tune the middleware up.
