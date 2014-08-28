@@ -103,6 +103,11 @@ See [Api class](#class-api-baby-loris-api) for more information.
 **Note.** ```express 4.x``` is used in all examples. See [package.json](package.json#L31) for more details.
 
 ## Examples
+  * Api methods
+    * [Simple hello method](examples/api/hello.api.js)
+    * [Throwing ApiError](examples/api/the-matrix-source.api.js)
+    * [Getting data by http](examples/api/get-kittens.api.js)
+    * [Using express request](examples/api/geolocation.api.js)
   * Server side
     * [Basic usage](examples/backend/basic_usage.js)
     * [Export Api as a module](examples/backend/export.js)
@@ -133,13 +138,13 @@ The client side uses this method by default and can be changed with ```disableBa
   * Server side
     * [Class Api](#class-api)
       * [constructor(methodPathPattern)](#constructormethodpathpattern)
-      * [exec(methodName, [params])](#execmethodname-params)
+      * [exec(methodName, [params], [request])](#execmethodname-params-request)
     * [Class ApiMethod](#class-apimethod)
       * [constructor(methodName)](#constructormethodname)
       * [setDescription(description)](#setdescriptiondescription)
       * [addParam(param)](#addparamparam)
       * [setAction(action)](#setactionaction)
-      * [exec([params])](#execparams)
+      * [exec([params], [request])](#execparams-request)
       * [setOption(name, value)](#setoptionname-value)
     * [Class ApiError](#class-apierror)
       * [Error types](#error-types)
@@ -160,8 +165,10 @@ var Api = require('baby-loris-api').Api;
 var api = new Api(__dirname + '/api/**/*.api.js');
 ```
 
-#### exec(methodName, [params])
+#### exec(methodName, [params], [request])
 Executes an API method ```methodName``` with provided ```params```.
+
+An express request can also be passed using ```request``` parameter. [The middleware](#express-middleware) proxies it for you.
 
 Returns [vow.Promise](https://github.com/dfilatov/vow).
 Promise will be resolved with a method response or rejected with [ApiError](#class-apierror).
@@ -229,8 +236,10 @@ helloMethod.setAction(function (params) {
 });
 ```
 
-#### exec([params])
+#### exec([params], [request])
 Executes an API method with provided ```params```.
+
+An express request can also be passed using ```request``` parameter. [The middleware](#express-middleware) proxies it for you.
 
 Returns [vow.Promise](https://github.com/dfilatov/vow).
 Promise will be resolved with a method response or rejected with [ApiError](#class-apierror).
@@ -278,6 +287,8 @@ throw new ApiError(ApiError.INTERNAL_ERROR, 'Internal server error');
 var apiMiddleware = require('baby-loris-api').apiMiddleware(methodPathPattern, options)
 ```
 The middleware adds support API to your Express application. You need to pass ```methodPathPattern``` as you did for Api class or an Api instance itself.
+
+**Note.** The middleware always proxies an express request to an executed method.
 
 #### Options
 Using the second paremeter ```options``` you can tune the middleware up.

@@ -8,7 +8,7 @@ var flickr = nock('https://api.flickr.com')
         return '/services/rest/';
     })
     .get('/services/rest/');
-var flickrMockResponce = {
+var flickrMockResponse = {
     photos: {
         page: 1,
         pages: 127973,
@@ -33,8 +33,8 @@ var flickrMockResponce = {
 
 describe('get-kittens.api.js', function () {
     describe('when server works', function () {
-        it('should returns kittens', function (done) {
-            flickr.reply(200, flickrMockResponce);
+        it('should return kittens', function (done) {
+            flickr.reply(200, flickrMockResponse);
             GetKittensApiMethod.exec()
                 .then(function () {
                     done();
