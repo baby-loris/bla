@@ -1,5 +1,10 @@
+### 0.0.8
+  * Add a possibility to pass an Api instance to the middleware. [#22](../../issues/22)
+  * Proxy express request to a method. [#20](../../issues/20)
+  * Export namespace instead of paths on file system (**breaks backward compatibility**).
+
 ### 0.0.7
-  * Add ```setOption``` method. [#9](../../issues/9)
+  * Add ```setOption``` method. [#9](../../issues/9) (**breaks backward compatibility**)
   * Add batch support for the client side. [#10](../../issues/10)
   * Add more examples. [#6](../../issues/6), [#11](../../issues/11)
   * Add a special example for enb project. [#12](../../issues/12)
@@ -11,7 +16,7 @@
 
 ### 0.0.6
   * Add Features part and link to the [demo project](https://github.com/tarmolov/weatherpic).
-  * Use json for body in post requests.
+  * Use json for body in post requests (**breaks backward compatibility**).
   * Fix a couple of issues: [#5](../../issues/5), [#7](../../issues/7)
 
 ### 0.0.5
