@@ -57,10 +57,10 @@ build_lib:
 travis:
 	@git config --global user.email "travis@travis-ci.org"
 	@git config --global user.name "Travis"
-	@git add build
-	@git commit -m "Rebuild"
 	@git remote rm origin
 	@git remote add origin https://tarmolov:$(GH_TOKEN)@github.com/tarmolov/baby-loris-api.git
+	@git add build
+	@git commit -m "Rebuild"
 	@git push origin master
 
 .PHONY: all npm validate lint test test-client test-server run coverage build_lib travis
