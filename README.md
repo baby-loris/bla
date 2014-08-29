@@ -298,13 +298,12 @@ Using the second paremeter ```options``` you can tune the middleware up.
 | [disableDocPage]  | Boolean  | Turn off generating page with documentation. See [example](examples/middleware/without_docpage.js). |
 | [buildMethodName] | Function | ```express.Request``` is passed to the function. The function should return a method name. By default methodName is grabbed by executing ```req.param('method')```. See [example](examples/middleware/build_method_name.js). |
 
-Method parameters are collected from Express request using [req.param](http://expressjs.com/4x/api.html#req.param) method and req.session.
+Method parameters are collected from Express request using [req.param](http://expressjs.com/4x/api.html#req.param) method.
 
 A parameter ```myparam``` would be search in the next sources:
   1. URL path (```/api/:myparam?```).
   2. Query string (```?myparam=1```).
   3. Request body.
-  4. Express session (see [express-session](https://github.com/expressjs/session) for more details).
 
 That means that you can use ```GET``` and ```POST``` methods from the client side as well.
 
