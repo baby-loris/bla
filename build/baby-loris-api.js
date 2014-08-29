@@ -1307,15 +1307,21 @@ defineAsGlobal && (global.vow = vow);
 
     var defineAsGlobal = true;
 
-    if (typeof modules === 'object') {
-        modules.define('baby-loris-api-error', function (provide) {
+    /**
+     * @see https://github.com/ymaps/modules
+     */
+    if (typeof global.modules === 'object') {
+        global.modules.define('baby-loris-api-error', function (provide) {
             provide(ApiError);
         });
         defineAsGlobal = false;
     }
 
-    if (typeof define === 'function') {
-        define('baby-loris-api-error', function () {
+    /**
+     * @see requirejs.org
+     */
+    if (typeof global.define === 'function') {
+        global.define('baby-loris-api-error', function () {
             return ApiError;
         });
         defineAsGlobal = false;
@@ -1368,15 +1374,21 @@ defineAsGlobal && (global.vow = vow);
 
     var defineAsGlobal = true;
 
-    if (typeof modules === 'object') {
-        modules.define('baby-loris-api-error', function (provide) {
+    /**
+     * @see https://github.com/ymaps/modules
+     */
+    if (typeof global.modules === 'object') {
+        global.modules.define('baby-loris-api-error', function (provide) {
             provide(ApiError);
         });
         defineAsGlobal = false;
     }
 
-    if (typeof define === 'function') {
-        define('baby-loris-api-error', function () {
+    /**
+     * @see requirejs.org
+     */
+    if (typeof global.define === 'function') {
+        global.define('baby-loris-api-error', function () {
             return ApiError;
         });
         defineAsGlobal = false;

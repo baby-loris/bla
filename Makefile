@@ -47,20 +47,10 @@ coverage:
 	@cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
 
 # Build a new version of the library
-build_lib:
+build:
 	@cat node_modules/vow/lib/vow.js \
 		blocks/baby-loris-api-error/baby-loris-api-error.js \
 		blocks/baby-loris-api-error/baby-loris-api-error.js > build/baby-loris-api.js
 	@$(NODE_MODULES_BIN)/uglifyjs build/baby-loris-api.js > build/baby-loris-api.min.js
 
-# Set up travis environment
-travis:
-	@git config --global user.email "travis@travis-ci.org"
-	@git config --global user.name "Travis"
-	@git remote rm origin
-	@git remote add origin https://tarmolov:$(GH_TOKEN)@github.com/tarmolov/baby-loris-api.git
-	@git add build
-	@git commit -m "Rebuild"
-	@git push origin master
-
-.PHONY: all npm validate lint test test-client test-server run coverage build_lib travis
+.PHONY: all npm validate lint test test-client test-server run coverage build
