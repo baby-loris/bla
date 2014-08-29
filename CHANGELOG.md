@@ -1,7 +1,11 @@
+### 0.0.9
+  * Delete using express session for search parameter value (**breaks backward compatibility**).
+  * Fix bug when the batch method does not proxy request to submethods.
+
 ### 0.0.8
   * Add a possibility to pass an Api instance to the middleware. [#22](../../issues/22)
   * Proxy express request to a method. [#20](../../issues/20)
-  * Export namespace instead of paths on file system (**breaks backward compatibility**).
+  * Export namespace instead of paths on file system.
 
 ### 0.0.7
   * Add ```setOption``` method. [#9](../../issues/9) (**breaks backward compatibility**)
