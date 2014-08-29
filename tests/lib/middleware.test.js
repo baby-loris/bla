@@ -2,6 +2,7 @@ var request = require('supertest');
 var express = require('express');
 var bodyParser = require('body-parser');
 var Api = require('../../lib/api');
+var HelloMethod = require('../../examples/api/hello.api.js');
 var apiMiddleware = require('../../lib/middleware');
 var should = require('chai').should();
 var sinon = require('sinon');
@@ -124,6 +125,30 @@ describe('middleware', function (done) {
                 .expect('{"data":"Hello, Alexander"}')
                 .expect(200)
                 .end(done);
+        });
+    });
+
+    describe('when middleware is executed', function () {
+        beforeEach(function () {
+            sinon.spy(HelloMethod, 'exec');
+        });
+
+        afterEach(function () {
+            HelloMethod.exec.restore();
+        });
+
+        it('should proxy express request to a method', function (done) {
+            request(app)
+                .get('/api/hello?name=Alexander')
+                .expect('Content-Type', /json/)
+                .expect('{"data":"Hello, Alexander"}')
+                .expect(200)
+                .end(function (err, res) {
+                    HelloMethod.exec.calledOnce.should.be.true;
+                    HelloMethod.exec.calledWith({name: 'Alexander'}).should.be.true;
+                    HelloMethod.exec.firstCall.args[1].should.be.instanceof(require('http').IncomingMessage)
+                    done(err);
+                });
         });
     });
 });

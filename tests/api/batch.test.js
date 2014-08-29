@@ -32,8 +32,8 @@ describe('batch.api.js', function () {
             .then(function (response) {
                 helloSpy.calledTwice.should.be.true;
 
-                helloSpy.firstCall.calledWithExactly(methods[0].params, api).should.be.true;
-                helloSpy.secondCall.calledWithExactly(methods[1].params, api).should.be.true;
+                helloSpy.firstCall.calledWithExactly(methods[0].params, undefined, api).should.be.true;
+                helloSpy.secondCall.calledWithExactly(methods[1].params, undefined, api).should.be.true;
 
                 response[0].data.should.be.equal('Hello, Sam');
                 response[1].data.should.be.equal('Hello, Dean');
