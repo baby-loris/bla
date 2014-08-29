@@ -2,7 +2,7 @@ language: node_js
 node_js:
 - '0.11'
 - '0.10'
-after_success: make coverage
+after_success: make coverage build_lib travis
 env:
   global:
     secure: L7hbA0XDt6V7eXAJtSwG3OrPHsUE1M8/2pr0PCpvODRb7/J+Gqx5LRFa9ZSrnImwa79YBnDqIuT4ewTFYskMfGtvxSfXLK7z2tBXhgZvEXBwv1YryTvEMM4a5C7hGIrLeEgdNimUUqq42JwQYfvUhvHVO4IQk777ytCZsn2UIX0=
@@ -14,4 +14,3 @@ deploy:
   on:
     tags: true
     all_branches: true
-  before_deploy: make build_lib travis
