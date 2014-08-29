@@ -26,7 +26,7 @@ module.exports = new bla.ApiMethod('baby-loris-api-batch')
     })
     .setAction(function (params, request, api) {
         return vow.allResolved(params.methods.map(function (method) {
-            return api.exec(method.method, method.params);
+            return api.exec(method.method, method.params, request);
         })).then(function (response) {
             return response.map(function (promise) {
                 var data = promise.valueOf();
