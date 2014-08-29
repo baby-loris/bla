@@ -147,7 +147,7 @@ The client side uses this method by default and can be changed with ```disableBa
   * Frontend side
     * [Class Api (baby-loris-api)](#class-api-baby-loris-api)
       * [constructor(basePath, [options])](#constructorbasepath-options)
-      * [exec(methodName, [params], [options])](#execmethodname-params-options)
+      * [exec(methodName, [params])](#execmethodname-params)
     * [Class ApiError (baby-loris-api-error)](#class-apierror-baby-loris-api-error)
 
 ### Class Api
