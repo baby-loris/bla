@@ -41,7 +41,7 @@ describe('api-method', function () {
         fn.should.throw(ApiError);
     });
 
-    it('should run an action with normalized parameters', function (done) {
+    it('should run an action with normalized parameters', function () {
         var apiMethod = new ApiMethod('test-method');
         var spy = sinon.spy();
         var params = [
@@ -52,7 +52,7 @@ describe('api-method', function () {
         params.forEach(apiMethod.addParam.bind(apiMethod));
         apiMethod.setAction(spy);
 
-        apiMethod.exec({param1: '123', param2: 'false', param3: 'Bazzinga!'})
+        return apiMethod.exec({param1: '123', param2: 'false', param3: 'Bazzinga!'})
             .then(function (response) {
                 spy.alwaysCalledWith({
                     param1: 123,
@@ -60,12 +60,10 @@ describe('api-method', function () {
                     param3: 'Bazzinga!'
                 }).should.be.true;
                 spy.calledOnce.should.be.true;
-                done();
-            })
-            .done();
+            });
     });
 
-    it('should reject promise with an API error for missing required parameter', function (done) {
+    it('should reject promise with an API error for missing required parameter', function () {
         var spy = sinon.spy();
         var apiMethod = new ApiMethod('test-method')
             .addParam({
@@ -75,16 +73,14 @@ describe('api-method', function () {
             })
             .setAction(spy);
 
-        apiMethod.exec()
+        return apiMethod.exec()
             .fail(function (error) {
                 error.should.be.instanceOf(ApiError);
                 spy.calledOnce.should.be.false;
-                done();
-            })
-            .done();
+            });
     });
 
-    it('should reject an API error for a invalid parameter', function (done) {
+    it('should reject an API error for a invalid parameter', function () {
         var spy = sinon.spy();
         var apiMethod = new ApiMethod('test-method')
             .addParam({
@@ -93,13 +89,11 @@ describe('api-method', function () {
             })
             .setAction(spy);
 
-        apiMethod.exec({param1: 'nan'})
+        return apiMethod.exec({param1: 'nan'})
             .fail(function (error) {
                 error.should.be.instanceOf(ApiError);
                 spy.calledOnce.should.be.false;
-                done();
-            })
-            .done();
+            });
     });
 
     it('should set method option', function () {
