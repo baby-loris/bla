@@ -53,7 +53,7 @@ describe('middleware', function (done) {
         request(app)
             .get('/api/non-existent-method')
             .expect('Content-Type', /json/)
-            .expect('{"error":{"type":"NOT_FOUND","message":"API method non-existent-method was\'t found"}}')
+            .expect('{"error":{"type":"NOT_FOUND","message":"API method non-existent-method wasn\'t found"}}')
             .expect(200)
             .end(done);
     });
@@ -104,7 +104,7 @@ describe('middleware', function (done) {
             request(app)
                 .get('/api/')
                 .expect('Content-Type', /json/)
-                .expect('{"error":{"type":"BAD_REQUEST","message":"API method was\'t specified"}}')
+                .expect('{"error":{"type":"BAD_REQUEST","message":"API method wasn\'t specified"}}')
                 .expect(200)
                 .end(done);
         });
