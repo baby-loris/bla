@@ -1,3 +1,6 @@
+### 0.0.10
+  * Find api methods synchronously.
+
 ### 0.0.9
   * Delete using express session for search parameter value (**breaks backward compatibility**).
   * Fix bug when the batch method does not proxy request to submethods.
