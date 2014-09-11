@@ -1,4 +1,4 @@
-# baby-loris-api [![NPM version](https://badge.fury.io/js/baby-loris-api.png)](http://badge.fury.io/js/baby-loris-api) [![Build Status](https://secure.travis-ci.org/tarmolov/baby-loris-api.png)](http://travis-ci.org/tarmolov/baby-loris-api) [![Coverage Status](https://coveralls.io/repos/tarmolov/baby-loris-api/badge.png?branch=master)](https://coveralls.io/r/tarmolov/baby-loris-api?branch=master)
+# bla [![NPM version](https://badge.fury.io/js/bla.png)](http://badge.fury.io/js/bla) [![Build Status](https://secure.travis-ci.org/tarmolov/bla.png)](http://travis-ci.org/tarmolov/bla) [![Coverage Status](https://coveralls.io/repos/tarmolov/bla/badge.png?branch=master)](https://coveralls.io/r/tarmolov/bla?branch=master)
 
 \[ [Quick start](#quick-start) • [Examples](#examples) • [Built-in API methods](#built-in-api-methods) • [API Reference](#api-reference) • [Contribution guide](CONTRIBUTION.md) • [Heroes](#thanks)\]
 
@@ -11,19 +11,19 @@ Provides helpers for writing your own API methods and using them from server and
   * The same interface of API methods on server and client sides.
   * Normalization request parameters.
   * Generating documentation for all declared API methods.
-  * Joining all client requests into one during one tick (see [batch method](#baby-loris-api-batch)).
+  * Joining all client requests into one during one tick (see [batch method](#bla-batch)).
   * [Enb builder](examples/frontend/enb) support.
 
 ## Installation
 ```
-npm install baby-loris-api --save
+npm install bla --save
 ```
 
 ## Quick start
 ### Declare API Method
 Write API method declaration.
 ```javascript
-var ApiMethod = require('baby-loris-api').ApiMethod;
+var ApiMethod = require('bla').ApiMethod;
 
 module.exports = new ApiMethod('hello')
     .setDescription('Hello API method')
@@ -41,7 +41,7 @@ Save it to the file ```hello.api.js``` and move it to ```api``` directory.
 
 ### and use it on server side
 ```javascript
-var Api = require('baby-loris-api').Api;
+var Api = require('bla').Api;
 var api = new Api(__dirname + '/api/**/*.api.js');
 api.exec('hello', {name: 'Stepan'}).then(function (response) {
     console.log(response); // 'Hello, Stepan'
@@ -53,7 +53,7 @@ First, include [API middleware](#express-middleware) to your express application
 ```javascript
 var app = require('express')();
 var bodyParser = require('body-parser');
-var apiMiddleware = require('baby-loris-api').apiMiddleware;
+var apiMiddleware = require('bla').apiMiddleware;
 app
     .use(bodyParser.json())
     .use('/api/:method?', apiMiddleware(__dirname + '/api/**/*.api.js'));
@@ -61,20 +61,20 @@ app
 
 Include client library to your project.
 ```html
-<script type="text/javascript" src="build/baby-loris-api.min.js"></script>
+<script type="text/javascript" src="build/bla.min.js"></script>
 ```
-or specify ```baby-loris-api``` as enb dependency in package.json.
+or specify ```bla``` as enb dependency in package.json.
 ```json
 "enb": {
     "dependencies": [
-        "baby-loris-api"
+        "bla"
     ]
 }
 ```
 
 Then use API module with [YM](https://github.com/ymaps/modules) module system
 ```javascript
-modules.require('baby-loris-api', function (Api) {
+modules.require('bla', function (Api) {
     var api = new Api('/api/');
     api.exec('hello', {name: 'Stepan'}).then(function (response) {
         console.log(response); // 'Hello, Stepan'
@@ -83,7 +83,7 @@ modules.require('baby-loris-api', function (Api) {
 ```
 with [require.js](http://requirejs.org/)
 ```javascript
-require(['baby-loris-api'], function (Api) {
+require(['bla'], function (Api) {
     var api = new Api('/api/');
     api.exec('hello', {name: 'Stepan'}).then(function (response) {
         console.log(response); // 'Hello, Stepan'
@@ -98,7 +98,7 @@ api.exec('hello', {name: 'Stepan'}).then(function (response) {
 });
 ```
 
-See [Api class](#class-api-baby-loris-api) for more information.
+See [Api class](#class-api-bla) for more information.
 
 **Note.** ```express 4.x``` is used in all examples. See [package.json](package.json#L31) for more details.
 
@@ -129,7 +129,7 @@ make run examples/backend/basic_usage.js
 ```
 
 ## Built-in API methods
-### baby-loris-api-batch
+### bla-batch
 This method is used on the client side and makes it possible to joint all requests to the server during one tick. It shortens number of request dramatically.
 
 The client side uses this method by default and can be changed with ```disableBatch``` option.
@@ -150,10 +150,10 @@ The client side uses this method by default and can be changed with ```disableBa
       * [Error types](#error-types)
     * [Express middleware](#express-middleware)
   * Frontend side
-    * [Class Api (baby-loris-api)](#class-api-baby-loris-api)
+    * [Class Api (bla)](#class-api-bla)
       * [constructor(basePath, [options])](#constructorbasepath-options)
       * [exec(methodName, [params])](#execmethodname-params)
-    * [Class ApiError (baby-loris-api-error)](#class-apierror-baby-loris-api-error)
+    * [Class ApiError (bla-error)](#class-apierror-bla-error)
 
 ### Class Api
 #### constructor(methodPathPattern)
@@ -161,7 +161,7 @@ Creates a new instance of API and collects all your API methods from ```methodPa
 
 Example:
 ```javascript
-var Api = require('baby-loris-api').Api;
+var Api = require('bla').Api;
 var api = new Api(__dirname + '/api/**/*.api.js');
 ```
 
@@ -192,7 +192,7 @@ ApiMethod class supports chaining for methods: ```setDescription```, ```addParam
 
 Example:
 ```javascript
-var ApiMethod = require('baby-loris-api').ApiMethod;
+var ApiMethod = require('bla').ApiMethod;
 var helloMethod = new ApiMethod('hello');
 ```
 #### setDescription(description)
@@ -273,7 +273,7 @@ See bellow supported list of errors.
 
 Example:
 ```javascript
-var ApiError = require('baby-loris-api').ApiError;
+var ApiError = require('bla').ApiError;
 throw new ApiError(ApiError.INTERNAL_ERROR, 'Internal server error');
 ```
 
@@ -284,7 +284,7 @@ throw new ApiError(ApiError.INTERNAL_ERROR, 'Internal server error');
 
 ### Express Middleware
 ```
-var apiMiddleware = require('baby-loris-api').apiMiddleware(methodPathPattern, options)
+var apiMiddleware = require('bla').apiMiddleware(methodPathPattern, options)
 ```
 The middleware adds support API to your Express application. You need to pass ```methodPathPattern``` as you did for Api class or an Api instance itself.
 
@@ -317,7 +317,7 @@ Example:
 ```
 var app = require('express')();
 var bodyParser = require('body-parser');
-var apiMiddleware = require('baby-loris-api').apiMiddleware;
+var apiMiddleware = require('bla').apiMiddleware;
 
 app
     .use(bodyParser.json())
@@ -346,7 +346,7 @@ Example of a error response:
 }
 ```
 
-### Class Api (baby-loris-api)
+### Class Api (bla)
 Requirements:
   * [vow](https://github.com/dfilatov/vow) — DOM Promise and Promises/A+ implementation for Node.js and browsers.
 
@@ -357,17 +357,17 @@ Also you can specify extra options:
 
 | Name             | Type    | Description                                                                               |
 | ---------------- | ------- | ----------------------------------------------------------------------------------------- |
-| [disableBatch]   | Boolean | Disable using [batch](#baby-loris-api-batch) for client requests (```false``` by default) |
+| [disableBatch]   | Boolean | Disable using [batch](#bla-batch) for client requests (```false``` by default) |
 
 Example:
 ```javascript
 // ym
-modules.require('baby-loris-api', function (Api) {
+modules.require('bla', function (Api) {
     var api = new Api('/api/');
 });
 
 // require.js
-require(['baby-loris-api'], function (Api) {
+require(['bla'], function (Api) {
     var api = new Api('/api/');
 });
 
@@ -377,7 +377,7 @@ var api = new bla.Api('/api/');
 #### exec(methodName, [params])
 Sends a request to the server for executing API method with name ```methodName``` and provided ```params```.
 
-### Class ApiError (baby-loris-api-error)
+### Class ApiError (bla-error)
 
 It works absolutely the same as [the server version of ApiError](#class-apierror).
 

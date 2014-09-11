@@ -181,7 +181,7 @@
              * Performs batch request.
              */
             _sendBatchRequest: function () {
-                var url = this._basePath + 'baby-loris-api-batch';
+                var url = this._basePath + 'bla-batch';
                 var data = JSON.stringify({methods: this._batch});
                 sendAjaxRequest(url, data).then(
                     this._resolvePromises.bind(this, this._batch),
@@ -257,7 +257,7 @@
      * @see https://github.com/ymaps/modules
      */
     if (typeof global.modules === 'object') {
-        global.modules.define('baby-loris-api', ['vow', 'baby-loris-api-error'], function (provide, vow, ApiError) {
+        global.modules.define('bla', ['vow', 'bla-error'], function (provide, vow, ApiError) {
             var Api = createApiClass(vow, ApiError);
             provide(Api);
         });
@@ -268,7 +268,7 @@
      * @see requirejs.org
      */
     if (typeof global.define === 'function') {
-        global.define('baby-loris-api', ['baby-loris-api-error', 'vow'], function (ApiError, vow) {
+        global.define('bla', ['bla-error', 'vow'], function (ApiError, vow) {
             return createApiClass(vow, ApiError);
         });
         defineAsGlobal = false;

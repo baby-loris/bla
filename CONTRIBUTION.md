@@ -18,10 +18,10 @@ tests                   Tests
 ```
 
 ## How to develop
-### Create your own copy of baby-loris-api
+### Create your own copy of bla
 ```
-git clone https://github.com/tarmolov/baby-loris-api.git
-cd baby-loris-api
+git clone https://github.com/tarmolov/bla.git
+cd bla
 make
 ```
 

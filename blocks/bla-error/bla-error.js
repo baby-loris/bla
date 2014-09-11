@@ -43,7 +43,7 @@
      * @see https://github.com/ymaps/modules
      */
     if (typeof global.modules === 'object') {
-        global.modules.define('baby-loris-api-error', function (provide) {
+        global.modules.define('bla-error', function (provide) {
             provide(ApiError);
         });
         defineAsGlobal = false;
@@ -53,7 +53,7 @@
      * @see requirejs.org
      */
     if (typeof global.define === 'function') {
-        global.define('baby-loris-api-error', function () {
+        global.define('bla-error', function () {
             return ApiError;
         });
         defineAsGlobal = false;

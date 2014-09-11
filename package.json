@@ -1,8 +1,8 @@
 {
-  "name": "baby-loris-api",
+  "name": "bla",
   "description": "Easy way to create your own API methods for server and client sides",
   "version": "0.0.10",
-  "homepage": "https://github.com/tarmolov/baby-loris-api",
+  "homepage": "https://github.com/tarmolov/bla",
   "author": "Alexander Tarmolov  <tarmolov@gmail.com>",
   "contributors": [
     "Olesya Pashkovskaya",
@@ -10,10 +10,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/tarmolov/baby-loris-api.git"
+    "url": "https://github.com/tarmolov/bla.git"
   },
   "bugs": {
-    "url": "https://github.com/tarmolov/baby-loris-api/issues"
+    "url": "https://github.com/tarmolov/bla/issues"
   },
   "engines": {
     "node": ">=0.10.x"

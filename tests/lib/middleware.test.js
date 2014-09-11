@@ -37,7 +37,7 @@ describe('middleware', function (done) {
 
     it('should handle batch requests', function (done) {
         request(app)
-            .post('/api/baby-loris-api-batch')
+            .post('/api/bla-batch')
             .send({
                 methods: [
                     {method: 'hello', params: {name: 'Stepan'}}
