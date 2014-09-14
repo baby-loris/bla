@@ -1,3 +1,6 @@
+### 0.0.11
+  * Change package name: ```baby-loris-api``` -> ```bla```  (**breaks backward compatibility**).
+
 ### 0.0.10
   * Find api methods synchronously.
 
