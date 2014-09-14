@@ -1,7 +1,7 @@
 /**
  * @module vow
  * @author Filatov Dmitry <dfilatov@yandex-team.ru>
- * @version 0.4.5
+ * @version 0.4.4
  * @license
  * Dual licensed under the MIT and GPL licenses:
  *   * http://www.opensource.org/licenses/mit-license.php
@@ -105,9 +105,8 @@ Deferred.prototype = /** @lends Deferred.prototype */{
 
 var PROMISE_STATUS = {
     PENDING   : 0,
-    RESOLVED  : 1,
-    FULFILLED : 2,
-    REJECTED  : 3
+    FULFILLED : 1,
+    REJECTED  : -1
 };
 
 /**
@@ -408,7 +407,7 @@ Promise.prototype = /** @lends Promise.prototype */ {
     _vow : true,
 
     _resolve : function(val) {
-        if(this._status > PROMISE_STATUS.RESOLVED) {
+        if(this._status !== PROMISE_STATUS.PENDING) {
             return;
         }
 
@@ -417,18 +416,12 @@ Promise.prototype = /** @lends Promise.prototype */ {
             return;
         }
 
-        this._status = PROMISE_STATUS.RESOLVED;
-
         if(val && !!val._vow) { // shortpath for vow.Promise
-            val.isFulfilled()?
-                this._fulfill(val.valueOf()) :
-                val.isRejected()?
-                    this._reject(val.valueOf()) :
-                    val.then(
-                        this._fulfill,
-                        this._reject,
-                        this._notify,
-                        this);
+            val.then(
+                this._resolve,
+                this._reject,
+                this._notify,
+                this);
             return;
         }
 
@@ -481,7 +474,7 @@ Promise.prototype = /** @lends Promise.prototype */ {
     },
 
     _fulfill : function(val) {
-        if(this._status > PROMISE_STATUS.RESOLVED) {
+        if(this._status !== PROMISE_STATUS.PENDING) {
             return;
         }
 
@@ -493,7 +486,7 @@ Promise.prototype = /** @lends Promise.prototype */ {
     },
 
     _reject : function(reason) {
-        if(this._status > PROMISE_STATUS.RESOLVED) {
+        if(this._status !== PROMISE_STATUS.PENDING) {
             return;
         }
 
@@ -534,7 +527,7 @@ Promise.prototype = /** @lends Promise.prototype */ {
                 this._rejectedCallbacks.push(cb);
         }
 
-        if(this._status <= PROMISE_STATUS.RESOLVED) {
+        if(this._status === PROMISE_STATUS.PENDING) {
             this._progressCallbacks.push({ defer : defer, fn : onProgress, ctx : ctx });
         }
     },
@@ -834,16 +827,9 @@ var vow = /** @exports vow */ {
      * @returns {vow:Promise}
      */
     fulfill : function(value) {
-        var defer = vow.defer(),
-            promise = defer.promise();
-
-        defer.resolve(value);
-
-        return promise.isFulfilled()?
-            promise :
-            promise.then(null, function(reason) {
-                return reason;
-            });
+        return vow.when(value, null, function(reason) {
+            return reason;
+        });
     },
 
     /**
@@ -854,17 +840,9 @@ var vow = /** @exports vow */ {
      * @returns {vow:Promise}
      */
     reject : function(reason) {
-        if(vow.isPromise(reason)) {
-            return reason.then(function(val) {
-                var defer = vow.defer();
-                defer.reject(val);
-                return defer.promise();
-            });
-        }
-
-        var defer = vow.defer();
-        defer.reject(reason);
-        return defer.promise();
+        return vow.when(reason, function(val) {
+            throw val;
+        });
     },
 
     /**
@@ -1333,7 +1311,7 @@ defineAsGlobal && (global.vow = vow);
      * @see https://github.com/ymaps/modules
      */
     if (typeof global.modules === 'object') {
-        global.modules.define('baby-loris-api-error', function (provide) {
+        global.modules.define('bla-error', function (provide) {
             provide(ApiError);
         });
         defineAsGlobal = false;
@@ -1343,7 +1321,7 @@ defineAsGlobal && (global.vow = vow);
      * @see requirejs.org
      */
     if (typeof global.define === 'function') {
-        global.define('baby-loris-api-error', function () {
+        global.define('bla-error', function () {
             return ApiError;
         });
         defineAsGlobal = false;
@@ -1358,41 +1336,255 @@ defineAsGlobal && (global.vow = vow);
 (function (global) {
 
     /**
-     * API error.
+     * Returns API class based on dependecies.
      *
-     * @param {String} type Error type.
-     * @param {String} message Human-readable description of the error.
+     * @param {Object} vow
+     * @param {Object} ApiError
+     * @returns {Function}
      */
-    function ApiError(type, message) {
-        this.name = 'ApiError';
-        this.type = type;
-        this.message = message;
+    function createApiClass(vow, ApiError) {
 
-        if (Error.captureStackTrace) {
-            Error.captureStackTrace(this, this.constructor);
+        /**
+         * Makes an ajax request.
+         *
+         * @param {String} url A string containing the URL to which the request is sent.
+         * @param {String} data Data to be sent to the server.
+         * @returns {vow.Promise}
+         */
+        function sendAjaxRequest(url, data) {
+            var xhr = new XMLHttpRequest();
+            var d = vow.defer();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        d.resolve(JSON.parse(xhr.responseText));
+                    } else {
+                        d.reject(xhr);
+                    }
+                }
+            };
+
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Accept', 'application/json, text/javascript, */*; q=0.01');
+            xhr.setRequestHeader('Content-type', 'application/json');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send(data);
+
+            return d.promise();
         }
+
+        /*
+         * Set of predefined API errors.
+         */
+        var XHR_ERRORS = {
+            404: new ApiError(ApiError.NOT_FOUND, 'API middleware wasn\'t found')
+        };
+
+        /**
+         * Api provider.
+         *
+         * @param {String} basePath Url path to the middleware root.
+         * @param {Object} [options] Extra options.
+         * @param {Boolean} [options.disableBatch=false] Disable using batch mode.
+         */
+        function Api(basePath, options) {
+            this._basePath = basePath;
+            this._options = {
+                disableBatch: options && options.disableBatch
+            };
+            this._batch = [];
+            this._deferreds = {};
+        }
+
+        Api.prototype = {
+            constructor: Api,
+
+            /**
+             * Executes api by path with specified parameters.
+             *
+             * @param {String} methodName Method name.
+             * @param {Object} params Data should be sent to the method.
+             * @returns {vow.Promise}
+             */
+            exec: function (methodName, params) {
+                return this._options.disableBatch ?
+                    this._execWithoutBatching(methodName, params) :
+                    this._execWithBatching(methodName, params);
+            },
+
+            /**
+             * Executes method immediately.
+             *
+             * @param {String} methodName Method name.
+             * @param {Object} params Data should be sent to the method.
+             * @returns {vow.Promise}
+             */
+            _execWithoutBatching: function (methodName, params) {
+                var defer = vow.defer();
+                var url = this._basePath + methodName;
+                var data = JSON.stringify(params);
+
+                sendAjaxRequest(url, data).then(
+                    this._resolvePromise.bind(this, defer),
+                    this._rejectPromise.bind(this, defer)
+                );
+
+                return defer.promise();
+            },
+
+            /**
+             * Executes method with a little delay, adding it to batch.
+             *
+             * @param {String} methodName Method name.
+             * @param {Object} params Data should be sent to the method.
+             * @returns {vow.Promise}
+             */
+            _execWithBatching: function (methodName, params) {
+                var requestId = this._getRequestId(methodName, params);
+                var promise = this._getRequestPromise(requestId);
+
+                if (!promise) {
+                    this._addToBatch(methodName, params);
+                    promise = this._createPromise(requestId);
+                    this._run();
+                }
+
+                return promise;
+            },
+
+            /**
+             * Generates an ID for a method request.
+             *
+             * @param {String} methodName
+             * @param {Object} params
+             * @returns {String}
+             */
+            _getRequestId: function (methodName, params) {
+                var stringifiedParams = JSON.stringify(params) || '';
+                return methodName + stringifiedParams;
+            },
+
+            /**
+             * Gets the promise object for given request ID.
+             *
+             * @param {String} requestId Request ID for which promise is retrieved.
+             * @returns {vow.Promise|undefined}
+             */
+            _getRequestPromise: function (requestId) {
+                var defer = this._deferreds[requestId];
+                return defer && defer.promise();
+            },
+
+            /**
+             * Appends data to the batch array.
+             *
+             * @param {String} methodName
+             * @param {Object} params
+             */
+            _addToBatch: function (methodName, params) {
+                this._batch.push({
+                    method: methodName,
+                    params: params
+                });
+            },
+
+            /**
+             * Creates new deferred promise.
+             *
+             * @param {String} requestId Request ID for which promise is generated.
+             * @returns {vow.Promise}
+             */
+            _createPromise: function (requestId) {
+                var defer = vow.defer();
+                this._deferreds[requestId] = defer;
+                return defer.promise();
+            },
+
+            /**
+             * Initializes async batch request.
+             */
+            _run: function () {
+                // The collecting requests for the batch will start when a first request is received.
+                // That's why the batch length is checked there.
+                if (this._batch.length === 1) {
+                    setTimeout(this._sendBatchRequest.bind(this), 0);
+                }
+            },
+
+            /**
+             * Performs batch request.
+             */
+            _sendBatchRequest: function () {
+                var url = this._basePath + 'bla-batch';
+                var data = JSON.stringify({methods: this._batch});
+                sendAjaxRequest(url, data).then(
+                    this._resolvePromises.bind(this, this._batch),
+                    this._rejectPromises.bind(this, this._batch)
+                );
+
+                this._batch = [];
+            },
+
+            /**
+             * Resolve deferred promise.
+             *
+             * @param {vow.Deferred} defer
+             * @param {Object} response Server response.
+             */
+            _resolvePromise: function (defer, response) {
+                var error = response.error;
+                if (error) {
+                    defer.reject(new ApiError(error.type, error.message));
+                } else {
+                    defer.resolve(response.data);
+                }
+            },
+
+            /**
+             * Resolves deferred promises.
+             *
+             * @param {Object[]} batch Batch request data.
+             * @param {Object} response Server response.
+             */
+            _resolvePromises: function (batch, response) {
+                var data = response.data;
+                for (var i = 0, requestId; i < batch.length; i++) {
+                    requestId = this._getRequestId(batch[i].method, batch[i].params);
+                    this._resolvePromise(this._deferreds[requestId], data[i]);
+                    delete this._deferreds[requestId];
+                }
+            },
+
+            /**
+             * Rejects deferred promise.
+             *
+             * @param {vow.Deferred} defer
+             * @param {XMLHttpRequest} xhr
+             */
+            _rejectPromise: function (defer, xhr) {
+                var errorMessage = xhr.message || xhr.statusText || xhr.responseText;
+                var error = XHR_ERRORS[xhr.status] || new ApiError(ApiError.INTERNAL_ERROR, errorMessage);
+                defer.reject(error);
+            },
+
+            /**
+             * Rejects deferred promises.
+             *
+             * @param {Object[]} batch Batch request data.
+             * @param {XMLHttpRequest} xhr
+             */
+            _rejectPromises: function (batch, xhr) {
+                for (var i = 0, requestId; i < batch.length; i++) {
+                    requestId = this._getRequestId(batch[i].method, batch[i].params);
+                    this._rejectPromise(this._deferreds[requestId], xhr);
+                    delete this._deferreds[requestId];
+                }
+            }
+        };
+
+        return Api;
     }
-
-    ApiError.prototype = Object.create(Error.prototype, {
-        constructor: {
-            value: ApiError
-        }
-    });
-
-    /**
-     * Invalid or missed parameter.
-     */
-    ApiError.BAD_REQUEST = 'BAD_REQUEST';
-
-    /**
-     * Unspecified error or server logic error.
-     */
-    ApiError.INTERNAL_ERROR = 'INTERNAL_ERROR';
-
-    /**
-     * API middleware wasn't found.
-     */
-    ApiError.NOT_FOUND = 'NOT_FOUND';
 
     var defineAsGlobal = true;
 
@@ -1400,8 +1592,9 @@ defineAsGlobal && (global.vow = vow);
      * @see https://github.com/ymaps/modules
      */
     if (typeof global.modules === 'object') {
-        global.modules.define('baby-loris-api-error', function (provide) {
-            provide(ApiError);
+        global.modules.define('bla', ['vow', 'bla-error'], function (provide, vow, ApiError) {
+            var Api = createApiClass(vow, ApiError);
+            provide(Api);
         });
         defineAsGlobal = false;
     }
@@ -1410,15 +1603,15 @@ defineAsGlobal && (global.vow = vow);
      * @see requirejs.org
      */
     if (typeof global.define === 'function') {
-        global.define('baby-loris-api-error', function () {
-            return ApiError;
+        global.define('bla', ['bla-error', 'vow'], function (ApiError, vow) {
+            return createApiClass(vow, ApiError);
         });
         defineAsGlobal = false;
     }
 
     if (defineAsGlobal) {
         global.bla = global.bla || {};
-        global.bla.ApiError = ApiError;
+        global.bla.Api = createApiClass(global.vow, global.bla.ApiError);
     }
 
 }(this));

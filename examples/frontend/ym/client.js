@@ -6,7 +6,7 @@ modules.define('domready', function (provide) {
     }
 });
 
-modules.require(['baby-loris-api', 'domready'], function (Api) {
+modules.require(['bla', 'domready'], function (Api) {
     var api = new Api('/api/');
     var input = document.getElementById('name');
     var result = document.getElementById('result');

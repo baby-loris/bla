@@ -1,6 +1,6 @@
-modules.define('test', ['baby-loris-api-error'], function (provide, ApiError) {
+modules.define('test', ['bla-error'], function (provide, ApiError) {
 
-    describe('baby-loris-api-error', function () {
+    describe('bla-error', function () {
         var error;
 
         beforeEach(function () {

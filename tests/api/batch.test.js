@@ -27,7 +27,7 @@ describe('batch.api.js', function () {
     });
 
     it('should execute api methods', function () {
-        return api.exec('baby-loris-api-batch', {methods: methods})
+        return api.exec('bla-batch', {methods: methods})
             .then(function (response) {
                 HelloMethod.exec.calledTwice.should.be.true;
 
@@ -40,7 +40,7 @@ describe('batch.api.js', function () {
     });
 
     it('should return error for api method', function () {
-        return api.exec('baby-loris-api-batch', {methods: [{method: 'hello'}]})
+        return api.exec('bla-batch', {methods: [{method: 'hello'}]})
             .then(function (response) {
                 HelloMethod.exec.calledOnce.should.be.true;
                 response[0].error.should.be.deep.equal({
@@ -51,7 +51,7 @@ describe('batch.api.js', function () {
     });
 
     it('should proxy express request', function () {
-        return api.exec('baby-loris-api-batch', {methods: [methods[0]]}, expressRequest)
+        return api.exec('bla-batch', {methods: [methods[0]]}, expressRequest)
             .then(function () {
                 HelloMethod.exec.calledOnce.should.be.true;
                 HelloMethod.exec.firstCall.calledWithExactly({name: 'Sam'}, expressRequest, api).should.be.true;

@@ -1,8 +1,8 @@
 modules.define(
     'test',
     [
-        'baby-loris-api',
-        'baby-loris-api-error'
+        'bla',
+        'bla-error'
     ],
     function (
         provide,
@@ -10,7 +10,7 @@ modules.define(
         ApiError
     ) {
 
-    describe('baby-loris-api', function () {
+    describe('bla', function () {
         var api;
 
         beforeEach(function () {
@@ -29,7 +29,7 @@ modules.define(
                 it('should resolve a promise for a good request', function (callback) {
                     this.server.respondWith(
                         'POST',
-                        '/api/baby-loris-api-batch',
+                        '/api/bla-batch',
                         [
                             200,
                             {
@@ -52,7 +52,7 @@ modules.define(
                 it('should reject a promise for a bad request', function (callback) {
                     this.server.respondWith(
                         'POST',
-                        '/api/baby-loris-api-batch',
+                        '/api/bla-batch',
                         [
                             200,
                             {
@@ -77,7 +77,7 @@ modules.define(
                 it('should reject a promise with an API error', function (callback) {
                     this.server.respondWith(
                         'POST',
-                        '/api/baby-loris-api-batch',
+                        '/api/bla-batch',
                         [
                             200,
                             {

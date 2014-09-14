@@ -1,10 +1,10 @@
 {
-  "name": "baby-loris-api-enb-example",
-  "description": "Example of using baby-loris-api and enb builder",
+  "name": "bla-enb-example",
+  "description": "Example of using bla and enb builder",
   "author": "Alexander Tarmolov <tarmolov@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "baby-loris-api": "0.0.7",
+    "bla": "0.0.11",
     "express": "4.8.4",
     "body-parser": "1.6.4"
   },
@@ -13,7 +13,7 @@
   },
   "enb": {
     "dependencies": [
-      "baby-loris-api"
+      "bla"
     ],
     "sources": [
       "blocks"

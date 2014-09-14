@@ -1,13 +1,13 @@
 require.config({
     paths: {
-        'baby-loris-api-error': 'blocks/baby-loris-api-error/baby-loris-api-error',
-        'baby-loris-api': 'blocks/baby-loris-api/baby-loris-api',
+        'bla-error': 'blocks/bla-error/bla-error',
+        bla: 'blocks/bla/bla',
         vow: 'node_modules/vow/vow.min'
     }
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    require(['baby-loris-api'], function (Api) {
+    require(['bla'], function (Api) {
         var api = new Api('/api/');
         var input = document.getElementById('name');
         var result = document.getElementById('result');

@@ -3,19 +3,19 @@ node_js:
 - '0.11'
 - '0.10'
 after_success:
-  - make coverage
-  - git config --global user.email "travis@travis-ci.org"
-  - git config --global user.name "Travis"
-  - git remote rm origin
-  - git remote add origin https://${GH_TOKEN}@github.com/tarmolov/baby-loris-api.git
-  - git checkout master
-  - make build
-  - git add build
-  - git commit -m "Rebuild"
-  - git push origin master
+- make coverage
+- git config --global user.email "travis@travis-ci.org"
+- git config --global user.name "Travis"
+- git remote rm origin
+- git remote add origin https://${GH_TOKEN}@github.com/tarmolov/bla.git
+- git checkout master
+- make build
+- git add build
+- git commit -m "Rebuild"
+- git push origin master
 env:
   global:
-    secure: L7hbA0XDt6V7eXAJtSwG3OrPHsUE1M8/2pr0PCpvODRb7/J+Gqx5LRFa9ZSrnImwa79YBnDqIuT4ewTFYskMfGtvxSfXLK7z2tBXhgZvEXBwv1YryTvEMM4a5C7hGIrLeEgdNimUUqq42JwQYfvUhvHVO4IQk777ytCZsn2UIX0=
+    secure: KyKfxDv/kWEU7ym9slCKgSaJc5Ujke8hdZrQsD3JVUZFRpQulCjVHJQx78IMl4EPULUr8NTmYbR9OXJWNAuDyJyoC8fEmWip9zcvVj2QJZ62T8VK2wy59tUieKqdhLz8Hug1oCZ/LjnYDsSjfXL+i+mRos686RH+RHbHk0FmZ7Q=
 deploy:
   provider: npm
   email: tarmolov@gmail.com

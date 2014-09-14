@@ -14,7 +14,7 @@ var bla = require('../lib/index');
  * }
  */
 
-module.exports = new bla.ApiMethod('baby-loris-api-batch')
+module.exports = new bla.ApiMethod('bla-batch')
     .setDescription('Executes a set of methods')
     .setOption('hiddenOnDocPage', true)
     .addParam({
