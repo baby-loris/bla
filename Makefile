@@ -49,8 +49,8 @@ coverage:
 # Build a new version of the library
 build:
 	@cat node_modules/vow/lib/vow.js \
-		blocks/baby-loris-api-error/baby-loris-api-error.js \
-		blocks/baby-loris-api/baby-loris-api.js > build/baby-loris-api.js
-	@$(NODE_MODULES_BIN)/uglifyjs build/baby-loris-api.js > build/baby-loris-api.min.js
+		blocks/bla-error/bla-error.js \
+		blocks/bla/bla.js > build/bla.js
+	@$(NODE_MODULES_BIN)/uglifyjs build/bla.js > build/bla.min.js
 
 .PHONY: all npm validate lint test test-client test-server run coverage build
