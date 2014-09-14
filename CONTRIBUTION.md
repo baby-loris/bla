@@ -20,7 +20,7 @@ tests                   Tests
 ## How to develop
 ### Create your own copy of bla
 ```
-git clone https://github.com/tarmolov/bla.git
+git clone https://github.com/baby-loris/bla.git
 cd bla
 make
 ```

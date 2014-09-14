@@ -1,10 +1,10 @@
-# bla [![NPM version](https://badge.fury.io/js/bla.png)](http://badge.fury.io/js/bla) [![Build Status](https://secure.travis-ci.org/tarmolov/bla.png)](http://travis-ci.org/tarmolov/bla) [![Coverage Status](https://coveralls.io/repos/tarmolov/bla/badge.png?branch=master)](https://coveralls.io/r/tarmolov/bla?branch=master)
+# bla [![NPM version](https://badge.fury.io/js/bla.png)](http://badge.fury.io/js/bla) [![Build Status](https://secure.travis-ci.org/baby-loris/bla.png)](http://travis-ci.org/baby-loris/bla) [![Coverage Status](https://coveralls.io/repos/baby-loris/bla/badge.png?branch=master)](https://coveralls.io/r/baby-loris/bla?branch=master)
 
 \[ [Quick start](#quick-start) • [Examples](#examples) • [Built-in API methods](#built-in-api-methods) • [API Reference](#api-reference) • [Contribution guide](CONTRIBUTION.md) • [Heroes](#thanks)\]
 
 Provides helpers for writing your own API methods and using them from server and client sides.
 
-## [View Demo project](https://github.com/tarmolov/weatherpic)
+## [View Demo project](https://github.com/baby-loris/weatherpic)
 
 ## Features
   * Simple integrating to your project.

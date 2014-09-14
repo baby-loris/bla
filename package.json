@@ -2,7 +2,7 @@
   "name": "bla",
   "description": "Easy way to create your own API methods for server and client sides",
   "version": "0.0.10",
-  "homepage": "https://github.com/tarmolov/bla",
+  "homepage": "https://github.com/baby-loris/bla",
   "author": "Alexander Tarmolov  <tarmolov@gmail.com>",
   "contributors": [
     "Olesya Pashkovskaya",
@@ -10,10 +10,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/tarmolov/bla.git"
+    "url": "https://github.com/baby-loris/bla.git"
   },
   "bugs": {
-    "url": "https://github.com/tarmolov/bla/issues"
+    "url": "https://github.com/baby-loris/bla/issues"
   },
   "engines": {
     "node": ">=0.10.x"
@@ -65,7 +65,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/tarmolov/blob/master/LICENSE"
+      "url": "https://github.com/baby-loris/bla/blob/master/LICENSE"
     }
   ],
   "enb": {
