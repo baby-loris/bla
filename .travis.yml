@@ -4,15 +4,6 @@ node_js:
 - '0.10'
 after_success:
 - make coverage
-- git config --global user.email "travis@travis-ci.org"
-- git config --global user.name "Travis"
-- git remote rm origin
-- git remote add origin https://${GH_TOKEN}@github.com/baby-loris/bla.git
-- git checkout master
-- make build
-- git add build
-- git commit -m "Rebuild"
-- git push origin master
 env:
   global:
     secure: eqRYdVVi8kzSZZWL3KCdIGzGjt6zQ4T0Y6FMynx8rc/eMzq9TSPRRetD2pwMWplsBA0uRgwtbN2Pekv+8mQ0UO6VGvVFpS4dV/ty1cii8yCoP5+u4TIlAGV+KgYzvOekAPSXnhag9RPC5+AtFuPPjZy39wAs8rj1qzpOnREMfnM=
