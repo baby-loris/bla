@@ -1,3 +1,6 @@
+### 0.0.12
+  * Build on `npm prepublish`
+
 ### 0.0.11
   * Change package name: ```baby-loris-api``` -> ```bla```  (**breaks backward compatibility**).
 

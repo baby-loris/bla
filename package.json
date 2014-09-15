@@ -1,7 +1,7 @@
 {
   "name": "bla",
   "description": "Easy way to create your own API methods for server and client sides",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "homepage": "https://github.com/baby-loris/bla",
   "author": "Alexander Tarmolov  <tarmolov@gmail.com>",
   "contributors": [
