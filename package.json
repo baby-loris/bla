@@ -57,10 +57,12 @@
   "files": [
     "api",
     "blocks",
-    "lib"
+    "lib",
+    "build"
   ],
   "scripts": {
-    "test": "make validate"
+    "test": "make validate",
+    "prepublish": "make build"
   },
   "licenses": [
     {

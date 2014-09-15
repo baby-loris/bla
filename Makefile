@@ -48,6 +48,7 @@ coverage:
 
 # Build a new version of the library
 build:
+	@mkdir -p build
 	@cat node_modules/vow/lib/vow.js \
 		blocks/bla-error/bla-error.js \
 		blocks/bla/bla.js > build/bla.js
