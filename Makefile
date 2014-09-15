@@ -44,7 +44,6 @@ run: npm
 # Build coverage
 coverage:
 	@$(NODE_MODULES_BIN)/istanbul cover $(NODE_MODULES_BIN)/_mocha tests/lib tests/examples tests/api -- --recursive $(MOCHA_FLAGS)
-	@cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
 
 # Build a new version of the library
 build:
