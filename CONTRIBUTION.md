@@ -51,8 +51,9 @@ make coverage
 ## How to publish a new version to npm
 **Note.** Only for maintainers.
 
-  1. Add a new record to the [CHANGELOG.md](CHANGELOG.md).
-  2. Add a version tag.
-  3. Push changelog and tag.
+  1. Increment version in [package.json](package.json).
+  2. Add a new record to the [CHANGELOG.md](CHANGELOG.md).
+  3. Add a version tag (for example, ```git tag 0.0.12```).
+  4. Push changelog and tag (basically, ```git push && git push --tags```).
 
 Travis does all other stuff for you.
