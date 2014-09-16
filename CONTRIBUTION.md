@@ -43,7 +43,7 @@ Only server tests:
 make test-server
 ```
 
-### Build coverage (only for sever side)
+### Build coverage (only for server side)
 ```
 make coverage
 ```
