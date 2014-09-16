@@ -2,8 +2,8 @@ language: node_js
 node_js:
 - '0.11'
 - '0.10'
-after_success:
-- make coverage
+script: "npm run travis"
+after_success: "npm install coveralls@2.11.1 && cat ./coverage/lcov.info | coveralls"
 deploy:
   provider: npm
   email: tarmolov@gmail.com
