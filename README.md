@@ -4,6 +4,8 @@
 
 Provides helpers for writing your own API methods and using them from server and client sides.
 
+The package is versioned according to [SemVer](http://semver.org).
+
 ## [View Demo project](https://github.com/baby-loris/weatherpic)
 
 ## Features
