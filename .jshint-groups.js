@@ -12,7 +12,8 @@ module.exports = {
         unused: true,
         trailing: true,
         maxlen: 120,
-        quotmark: 'single'
+        quotmark: 'single',
+        expr: true
     },
     groups: {
         client: {
