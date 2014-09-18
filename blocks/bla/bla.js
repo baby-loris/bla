@@ -1,6 +1,8 @@
 (function (global) {
     /**
-     * Borrowed from `next tick` by Dmitry Filatov https://github.com/dfilatov
+     * Borrowed from `next-tick` by Dmitry Filatov.
+     * @see https://github.com/bem/bem-core/blob/v2/common.blocks/next-tick/next-tick.vanilla.js
+     *
      * Calls a callback function in the next tick.
      *
      * @param {Function} callback
@@ -26,34 +28,18 @@
             };
         }
 
-        if (global.postMessage) { // modern browsers
-            var isPostMessageAsync = true;
-            if (global.attachEvent) {
-                var checkAsync = function () {
-                    isPostMessageAsync = false;
-                };
-                global.attachEvent('onmessage', checkAsync);
-                global.postMessage('__checkAsync', '*');
-                global.detachEvent('onmessage', checkAsync);
-            }
-
-            if (isPostMessageAsync) {
-                var msg = '__promise' + Date.now();
-                var onMessage = function (e) {
-                    if (e.data === msg) {
-                        e.stopPropagation && e.stopPropagation();
-                        callFns();
-                    }
-                };
-
-                global.addEventListener ?
-                    global.addEventListener('message', onMessage, true) :
-                    global.attachEvent('onmessage', onMessage);
-
-                return function (fn) {
-                    enqueueFn(fn) && global.postMessage(msg, '*');
-                };
-            }
+        if (global.postMessage && !global.attachEvent) { // modern browsers
+            var msg = '__nextTick' + Date.now();
+            var onMessage = function (e) {
+                if (e.data === msg) {
+                    e.stopPropagation && e.stopPropagation();
+                    callFns();
+                }
+            };
+            global.addEventListener('message', onMessage, true);
+            return function (fn) {
+                enqueueFn(fn) && global.postMessage(msg, '*');
+            };
         }
 
         return function (fn) { // old browsers
