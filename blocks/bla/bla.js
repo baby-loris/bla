@@ -1,4 +1,51 @@
 (function (global) {
+    /**
+     * Borrowed from `next-tick` by Dmitry Filatov.
+     * @see https://github.com/bem/bem-core/blob/v2/common.blocks/next-tick/next-tick.vanilla.js
+     *
+     * Calls a callback function in the next tick.
+     *
+     * @param {Function} callback
+     */
+    var nextTick = (function () {
+        var fns = [];
+        var enqueueFn = function (fn) {
+            return fns.push(fn) === 1;
+        };
+        var callFns = function () {
+            var fnsToCall = fns;
+            var i = 0;
+            var len = fns.length;
+            fns = [];
+            while (i < len) {
+                fnsToCall[i++]();
+            }
+        };
+
+        if (typeof global.setImmediate === 'function') { // ie10
+            return function (fn) {
+                enqueueFn(fn) && global.setImmediate(callFns);
+            };
+        }
+
+        if (global.postMessage && !global.attachEvent) { // modern browsers
+            var msg = '__nextTick' + Date.now();
+            var onMessage = function (e) {
+                if (e.data === msg) {
+                    e.stopPropagation && e.stopPropagation();
+                    callFns();
+                }
+            };
+            global.addEventListener('message', onMessage, true);
+            return function (fn) {
+                enqueueFn(fn) && global.postMessage(msg, '*');
+            };
+        }
+
+        return function (fn) { // old browsers
+            enqueueFn(fn) && setTimeout(callFns, 0);
+        };
+    })();
 
     /**
      * Returns API class based on dependecies.
@@ -173,7 +220,7 @@
                 // The collecting requests for the batch will start when a first request is received.
                 // That's why the batch length is checked there.
                 if (this._batch.length === 1) {
-                    setTimeout(this._sendBatchRequest.bind(this), 0);
+                    nextTick(this._sendBatchRequest.bind(this));
                 }
             },
 
