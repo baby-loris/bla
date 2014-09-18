@@ -12,22 +12,21 @@ modules.define(
 
     describe('bla', function () {
         var api;
+        var server;
 
         beforeEach(function () {
-            this.server = sinon.fakeServer.create();
-            this.clock = sinon.useFakeTimers();
+            server = sinon.fakeServer.create();
             api = new Api('/api/');
         });
 
         afterEach(function () {
-            this.clock.restore();
-            this.server.restore();
+            server.restore();
         });
 
         describe('when batching mode is enabled', function () {
             describe('when the server is working', function () {
                 it('should resolve a promise for a good request', function (callback) {
-                    this.server.respondWith(
+                    server.respondWith(
                         'POST',
                         '/api/bla-batch',
                         [
@@ -45,12 +44,11 @@ modules.define(
                             response.should.be.equal('Hello, world');
                             callback();
                         });
-                    this.clock.tick(1);
-                    this.server.respond();
+                    setTimeout(server.respond.bind(server), 1);
                 });
 
                 it('should reject a promise for a bad request', function (callback) {
-                    this.server.respondWith(
+                    server.respondWith(
                         'POST',
                         '/api/bla-batch',
                         [
@@ -68,14 +66,13 @@ modules.define(
                             error.type.should.be.equal(ApiError.BAD_REQUEST);
                             callback();
                         });
-                    this.clock.tick(1);
-                    this.server.respond();
+                    setTimeout(server.respond.bind(server), 1);
                 });
             });
 
             describe('when nonexistent method is executed', function () {
                 it('should reject a promise with an API error', function (callback) {
-                    this.server.respondWith(
+                    server.respondWith(
                         'POST',
                         '/api/bla-batch',
                         [
@@ -92,36 +89,34 @@ modules.define(
                             error.type.should.be.equal(ApiError.NOT_FOUND);
                             callback();
                         });
-                    this.clock.tick(1);
-                    this.server.respond();
+                    setTimeout(server.respond.bind(server), 1);
                 });
             });
 
             describe('when the server is unavailable', function () {
                 it('should reject a promise with an API error', function (callback) {
-                    this.server.respondWith([500, {}, 'Internal server error']);
+                    server.respondWith([500, {}, 'Internal server error']);
                     api.exec('hello')
                         .fail(function (error) {
                             error.should.be.instanceOf(ApiError);
                             error.type.should.be.equal(ApiError.INTERNAL_ERROR);
                             callback();
                         });
-                    this.clock.tick(1);
-                    this.server.respond();
+                    setTimeout(server.respond.bind(server), 1);
                 });
             });
         });
 
         describe('when batching mode is disabled', function () {
             beforeEach(function () {
-                this.server = sinon.fakeServer.create();
+                server = sinon.fakeServer.create();
                 this.clock = sinon.useFakeTimers();
                 api = new Api('/api/', {disableBatch: true});
             });
 
             describe('when the server is working', function () {
                 it('should resolve a promise for a good request', function (callback) {
-                    this.server.respondWith(
+                    server.respondWith(
                         'POST',
                         '/api/hello-world',
                         [
@@ -138,11 +133,11 @@ modules.define(
                             response.should.be.equal('Hello, world');
                             callback();
                         });
-                    this.server.respond();
+                    server.respond();
                 });
 
                 it('should reject a promise for a bad request', function (callback) {
-                    this.server.respondWith(
+                    server.respondWith(
                         'POST',
                         '/api/hello-world',
                         [
@@ -160,7 +155,7 @@ modules.define(
                             error.type.should.be.equal(ApiError.BAD_REQUEST);
                             callback();
                         });
-                    this.server.respond();
+                    server.respond();
                 });
             });
 
@@ -172,20 +167,20 @@ modules.define(
                             error.type.should.be.equal(ApiError.NOT_FOUND);
                             callback();
                         });
-                    this.server.respond();
+                    server.respond();
                 });
             });
 
             describe('when the server is unavailable', function () {
                 it('should reject a promise with an API error', function (callback) {
-                    this.server.respondWith([500, {}, 'Internal server error']);
+                    server.respondWith([500, {}, 'Internal server error']);
                     api.exec('hello-world', {})
                         .fail(function (error) {
                             error.should.be.instanceOf(ApiError);
                             error.type.should.be.equal(ApiError.INTERNAL_ERROR);
                             callback();
                         });
-                    this.server.respond();
+                    server.respond();
                 });
             });
         });
