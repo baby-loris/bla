@@ -151,4 +151,33 @@ describe('middleware', function (done) {
                 });
         });
     });
+
+    describe('when an non ApiError is occured', function () {
+        var nextSpy;
+
+        beforeEach(function () {
+            nextSpy = sinon.spy();
+            app = express()
+                .use(bodyParser.json())
+                .use('/api/:method?', apiMiddleware(API_FILES_PATH))
+                .use(function (err, req, res, next) {
+                    nextSpy();
+                });
+
+            sinon.stub(console, 'error');
+        });
+
+        afterEach(function () {
+            console.error.restore();
+        });
+
+        it('should proxy an error to the next middleware', function (done) {
+            request(app)
+                .post('/api/bad-method')
+                .end(function (err) {
+                    nextSpy.calledOnce.should.be.true;
+                    done(err);
+                });
+        });
+    });
 });

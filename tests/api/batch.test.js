@@ -2,7 +2,8 @@ require('chai').should();
 var sinon = require('sinon');
 var expressRequest = {};
 
-var Api = require('../../lib/index').Api;
+var Api = require('../../lib').Api;
+var ApiError = require('../../lib').ApiError;
 var HelloMethod = require('../../examples/api/hello.api.js');
 var api = new Api(__dirname + '/../../examples/api/**/*.api.js');
 
@@ -56,5 +57,22 @@ describe('batch.api.js', function () {
                 HelloMethod.exec.calledOnce.should.be.true;
                 HelloMethod.exec.firstCall.calledWithExactly({name: 'Sam'}, expressRequest, api).should.be.true;
             });
+    });
+
+    describe('when non ApiError is occured', function () {
+        beforeEach(function () {
+            sinon.stub(console, 'error');
+        });
+
+        afterEach(function () {
+            console.error.restore();
+        });
+
+        it('should set INTERNAL_TYPE be default', function () {
+            return api.exec('bla-batch', {methods: [{method: 'bad-method'}]})
+                .then(function (res) {
+                    res[0].error.type.should.be.equal(ApiError.INTERNAL_ERROR);
+                });
+        });
     });
 });
