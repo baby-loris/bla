@@ -1,4 +1,4 @@
-var ApiMethod = require('../../lib/index').ApiMethod;
+var ApiMethod = require('../../lib').ApiMethod;
 
 /**
  * Test API which can say hello to you.

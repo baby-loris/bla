@@ -1,4 +1,4 @@
-var bla = require('../../lib/index');
+var bla = require('../../lib');
 
 /**
  * In The Matrix movie only Neo could enter to the Source.

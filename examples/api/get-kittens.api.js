@@ -1,5 +1,5 @@
 var asker = require('vow-asker');
-var bla = require('../../lib/index');
+var bla = require('../../lib');
 
 var FLICKR_API_KEY = '5e4b13a46ba7145a3c3af689ed9c3ac6';
 var FLICK_PHOTO_URL_TEMPLATE = 'https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}_{size}.jpg';

@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var apiMiddleware = require('../../../lib/index').apiMiddleware;
+var apiMiddleware = require('../../../lib').apiMiddleware;
 var jade = require('jade');
 var bodyParser = require('body-parser');
 

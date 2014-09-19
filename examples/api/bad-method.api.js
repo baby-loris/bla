@@ -1,4 +1,4 @@
-var ApiMethod = require('../../lib/index').ApiMethod;
+var ApiMethod = require('../../lib').ApiMethod;
 
 /**
  * The method which throws an error

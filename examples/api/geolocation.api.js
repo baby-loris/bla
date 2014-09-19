@@ -1,5 +1,5 @@
 var asker = require('vow-asker');
-var bla = require('../../lib/index');
+var bla = require('../../lib');
 
 var LOCATOR_URL = 'http://api.lbs.yandex.net/geolocation';
 var LOCATOR_KEY = 'AHpZ_1MBAAAAuWpgBgIARHivoVz39Dac5Bcq_Y0HxT67ikIAAAAAAAAAAABNozWrB1baxG9qshaJBEVaDUsCEw==';
