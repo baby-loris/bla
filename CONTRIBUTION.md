@@ -43,6 +43,11 @@ Only server tests:
 make test-server
 ```
 
+Only examples tests:
+```
+make test-examples
+```
+
 ### Build coverage (only for server side)
 ```
 make coverage

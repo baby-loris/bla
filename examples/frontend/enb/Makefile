@@ -9,7 +9,7 @@ npm:
 
 # Build project
 build:
-	@$(ENB)  make
+	@$(ENB) make
 
 # Run an application
 dev:

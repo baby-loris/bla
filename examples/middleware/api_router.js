@@ -7,6 +7,7 @@ var apiRouter = express.Router()
     .use(bodyParser.json())
     .use('/:method?', apiMiddleware(__dirname + '/../api/**/*.api.js'));
 
+module.exports =
 app
     .use('/api/', apiRouter)
     .listen(8080);

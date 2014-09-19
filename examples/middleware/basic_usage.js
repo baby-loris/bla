@@ -2,6 +2,7 @@ var app = require('express')();
 var bodyParser = require('body-parser');
 var apiMiddleware = require('../../lib').apiMiddleware;
 
+module.exports =
 app
     .use(bodyParser.json())
     .use('/api/:method?', apiMiddleware(__dirname + '/../api/**/*.api.js'))

@@ -4,6 +4,7 @@ var apiMiddleware = require('../../../lib').apiMiddleware;
 var jade = require('jade');
 var bodyParser = require('body-parser');
 
+module.exports =
 app
     .set('views', __dirname)
     .set('view engine', 'jade')

@@ -15,6 +15,7 @@ function buildMethodName(req) {
     ].filter(Boolean).join('-');
 }
 
+module.exports =
 app
     .use(bodyParser.json())
     .use(
