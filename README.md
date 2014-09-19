@@ -229,14 +229,22 @@ helloMethod.addParam({
 #### setAction(action)
 Sets a function which should be executed when method runs.
 
-Declared parameters will be passed to the ```action``` function.
+Declared parameters will be passed to the ```action``` function as a first parameter. If the method is executed through middleware, express request will be passed as a second parameter (```undefined``` for server side execution).
 
 Example:
 ```javascript
-helloMethod.setAction(function (params) {
+helloMethod.setAction(function (params, request) {
     return 'Hello, world';
 });
 ```
+
+A third parameter is an [Api](#class-api) instance. It's very useful in cases when the api method executes other api methods.
+
+Example:
+```javascript
+method.setAction(function (params, request, api) {
+    return api.exec('method1');
+});
 
 #### exec([params], [request])
 Executes an API method with provided ```params```.
