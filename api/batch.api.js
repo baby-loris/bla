@@ -1,6 +1,6 @@
 var vow = require('vow');
 
-var bla = require('../lib/index');
+var bla = require('../lib');
 
 /**
  * @typedef {Object} BatchApiMethod
