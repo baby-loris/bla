@@ -17,7 +17,7 @@ lint:
 	@$(NODE_MODULES_BIN)/jscs .
 
 # Run all tests
-test: test-client test-server
+test: test-client test-server test-examples
 
 # Run client tests
 test-client:
@@ -27,7 +27,12 @@ test-client:
 # Run server tests
 test-server:
 	@echo Run server tests
-	@$(NODE_MODULES_BIN)/mocha $(MOCHA_FLAGS) --recursive tests/lib tests/examples tests/api
+	@$(NODE_MODULES_BIN)/mocha $(MOCHA_FLAGS) --recursive tests/lib tests/api
+
+# Run examples tests
+test-examples:
+	@echo Run examples tests
+	@$(NODE_MODULES_BIN)/mocha $(MOCHA_FLAGS) --recursive tests/examples
 
 # If the first argument is "run"...
 ifeq (run,$(firstword $(MAKECMDGOALS)))
@@ -53,4 +58,4 @@ build:
 		blocks/bla/bla.js > build/bla.js
 	@$(NODE_MODULES_BIN)/uglifyjs build/bla.js > build/bla.min.js
 
-.PHONY: all npm validate lint test test-client test-server run coverage build
+.PHONY: all npm validate lint test test-client test-server test-examples run coverage build

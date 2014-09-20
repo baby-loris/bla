@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var api = require('../backend/export');
 var apiMiddleware = require('../../lib').apiMiddleware;
 
+module.exports =
 app
     .use(bodyParser.json())
     .use('/api/:method?', apiMiddleware(api))
