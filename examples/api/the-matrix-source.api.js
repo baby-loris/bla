@@ -1,4 +1,5 @@
 var bla = require('../../lib');
+var vow = require('vow');
 
 /**
  * In The Matrix movie only Neo could enter to the Source.
@@ -16,7 +17,7 @@ module.exports = new bla.ApiMethod('the-matrix-source')
     })
     .setAction(function (params) {
         if (params.name !== 'Neo') {
-            throw new bla.ApiError('MATRIX_ERROR', params.name + ' has killed by Agent Smith');
+            return vow.reject(new bla.ApiError('MATRIX_ERROR', params.name + ' has killed by Agent Smith'));
         }
         return 'Welcome to the Source, Neo!';
     });

@@ -59,20 +59,20 @@ describe('batch.api.js', function () {
             });
     });
 
-    describe('when non ApiError is occured', function () {
-        beforeEach(function () {
-            sinon.stub(console, 'error');
-        });
+    it('should set INTERNAL_TYPE be default', function () {
+        return api.exec('bla-batch', {methods: [{method: 'api-error'}]})
+            .then(function (res) {
+                res[0].error.type.should.be.equal(ApiError.INTERNAL_ERROR);
+            });
+    });
 
-        afterEach(function () {
-            console.error.restore();
-        });
+    describe('when an error is occured', function () {
+        it('should throw an error', function () {
+            var fn = function () {
+                api.exec('bla-batch', {methods: [{method: 'bad-method'}]});
+            };
 
-        it('should set INTERNAL_TYPE be default', function () {
-            return api.exec('bla-batch', {methods: [{method: 'bad-method'}]})
-                .then(function (res) {
-                    res[0].error.type.should.be.equal(ApiError.INTERNAL_ERROR);
-                });
+            fn.should.throw(Error);
         });
     });
 });

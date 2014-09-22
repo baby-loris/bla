@@ -1,4 +1,5 @@
 var asker = require('vow-asker');
+var vow = require('vow');
 var bla = require('../../lib');
 
 var LOCATOR_URL = 'http://api.lbs.yandex.net/geolocation';
@@ -19,7 +20,7 @@ module.exports = new bla.ApiMethod('geolocation')
         var ip = params.ip || request && request.ip;
 
         if (!ip) {
-            throw new bla.ApiError('BAD_REQUEST', 'IP address is not specified');
+            return vow.reject(new bla.ApiError('BAD_REQUEST', 'IP address is not specified'));
         }
 
         return asker({
