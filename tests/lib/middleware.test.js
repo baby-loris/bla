@@ -52,18 +52,14 @@ describe('middleware', function (done) {
     it('should handle non-existent api method', function (done) {
         request(app)
             .get('/api/non-existent-method')
-            .expect('Content-Type', /json/)
-            .expect('{"error":{"type":"NOT_FOUND","message":"API method non-existent-method wasn\'t found"}}')
-            .expect(200)
+            .expect(404)
             .end(done);
     });
 
     it('shouldn\'t execute methods with executeOnServerOnly option', function (done) {
         request(app)
             .get('/api/the-matrix-source')
-            .expect('Content-Type', /json/)
-            .expect('{"error":{"type":"BAD_REQUEST","message":"Method can be executed only on server side"}}')
-            .expect(200)
+            .expect(404)
             .end(done);
     });
 
@@ -103,9 +99,7 @@ describe('middleware', function (done) {
         it('shouldn\'t generate documentation page if method name was missed', function (done) {
             request(app)
                 .get('/api/')
-                .expect('Content-Type', /json/)
-                .expect('{"error":{"type":"BAD_REQUEST","message":"API method wasn\'t specified"}}')
-                .expect(200)
+                .expect(404)
                 .end(done);
         });
     });
@@ -152,32 +146,18 @@ describe('middleware', function (done) {
         });
     });
 
-    describe('when an non ApiError is occured', function () {
-        var nextSpy;
-
-        beforeEach(function () {
-            nextSpy = sinon.spy();
+    describe('when a generic error is occured', function () {
+        it('should proxy an error to the next middleware', function (done) {
             app = express()
                 .use(bodyParser.json())
                 .use('/api/:method?', apiMiddleware(API_FILES_PATH))
                 .use(function (err, req, res, next) {
-                    nextSpy();
+                    done();
                 });
 
-            sinon.stub(console, 'error');
-        });
-
-        afterEach(function () {
-            console.error.restore();
-        });
-
-        it('should proxy an error to the next middleware', function (done) {
             request(app)
                 .post('/api/bad-method')
-                .end(function (err) {
-                    nextSpy.calledOnce.should.be.true;
-                    done(err);
-                });
+                .end();
         });
     });
 });

@@ -3,7 +3,6 @@ require('chai').should();
 var Api = require('../../lib/api');
 var ApiMethod = require('../../lib/api-method');
 var ApiError = require('../../lib/api-error');
-var sinon = require('sinon');
 
 var api = new Api(__dirname + '/../../examples/api/**/*.api.js');
 
@@ -17,18 +16,13 @@ describe('api', function () {
         fn.should.throw(ApiError);
     });
 
-    describe('when an non ApiError is occured in a method', function () {
-        beforeEach(function () {
-            sinon.stub(console, 'error');
-        });
+    describe('when an error is occured in a method', function () {
+        it('should throw an error', function () {
+            var fn = function () {
+                api.exec('bad-method');
+            };
 
-        afterEach(function () {
-            console.error.restore();
-        });
-
-        it('should log the error', function () {
-            api.exec('bad-method');
-            console.error.calledOnce.should.be.true;
+            fn.should.throw(Error);
         });
     });
 
@@ -40,40 +34,32 @@ describe('api', function () {
 
         it('should throw an error for non-existent api method', function () {
             var fn = function () {
-                api.exec('non-existent-method');
-            };
-
+                api.getMethod('non-existent-method');
+            }
             fn.should.throw(Error);
-            fn.should.throw(ApiError);
         });
 
         it('should throw an error for missed api method', function () {
             var fn = function () {
-                api.exec();
+                api.getMethod();
             }
-
             fn.should.throw(Error);
-            fn.should.throw(ApiError);
         });
     });
 
     describe('exec', function () {
         it('should throw an error for non-existent api method', function () {
             var fn = function () {
-                api.exec('non-existent-method');
-            };
-
+                api.getMethod('non-existent-method');
+            }
             fn.should.throw(Error);
-            fn.should.throw(ApiError);
         });
 
         it('should throw an error for missed api method', function () {
             var fn = function () {
                 api.exec();
             }
-
             fn.should.throw(Error);
-            fn.should.throw(ApiError);
         });
 
         it('should execute a method', function () {

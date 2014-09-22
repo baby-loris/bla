@@ -11,8 +11,7 @@ describe('middleware/without_docpage.js', function () {
     it('shouldn\'t render documentation page', function (done) {
         request(app)
             .get('/api')
-            .expect('Content-Type', /json/)
-            .expect(200)
+            .expect(404)
             .end(done);
     });
 });
