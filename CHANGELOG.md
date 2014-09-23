@@ -1,3 +1,8 @@
+### 0.0.13
+  * Change handling errors. If you throw ApiError in methods, you should return ```vow.reject``` instead. (**breaks backward compatibility**)
+  * Add tests for examples.
+  * Improve batch speed (using next tick for modern browsers).
+
 ### 0.0.12
   * Build on `npm prepublish`
 
