@@ -2,8 +2,8 @@ var bla = require('../../lib');
 var vow = require('vow');
 
 /**
- * In The Matrix movie only Neo could enter to the Source.
- * This method checks can the passed user enter to the Source.
+ * In The Matrix movie only Neo could enter the Source.
+ * This method checks if the user can enter the Source.
  *
  * @see ../../tests/examples/api/the-matrix-source.test.js Tests for the API method.
  */
@@ -17,7 +17,7 @@ module.exports = new bla.ApiMethod('the-matrix-source')
     })
     .setAction(function (params) {
         if (params.name !== 'Neo') {
-            return vow.reject(new bla.ApiError('MATRIX_ERROR', params.name + ' has killed by Agent Smith'));
+            return vow.reject(new bla.ApiError('MATRIX_ERROR', params.name + ' was killed by Agent Smith'));
         }
         return 'Welcome to the Source, Neo!';
     });

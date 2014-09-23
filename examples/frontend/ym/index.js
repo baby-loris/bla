@@ -18,4 +18,4 @@ app
     })
     .listen(8080);
 
-console.log('Go to http://127.0.0.1:8080/ and get fun.');
+console.log('Go to http://127.0.0.1:8080/ and have fun.');

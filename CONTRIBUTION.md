@@ -1,10 +1,10 @@
 ## Pull requests and Code contributions
 
 * Tests must pass.
-* Follow [existing coding style](https://github.com/ymaps/codestyle/blob/master/js.md) (jscs and jshint will help you).
+* Follow [our coding style](https://github.com/ymaps/codestyle/blob/master/js.md) (jscs and jshint will help you).
 * If you fix a bug, add a test.
-* If you cannot fix a bug, add pull request with a test which failed but should not.
-* Makes sure that coverage does not decrease.
+* If you cannot fix a bug, send a pull request with a test which fails, but shouldn't.
+* Make sure that the test coverage doesn't decrease.
 
 ## Library structure
 ```
@@ -25,7 +25,7 @@ cd bla
 make
 ```
 
-**Note.** It is better to create a fork if you plan to make a pull request.
+**Note.** It's better to create a fork, if you plan to make a pull request.
 
 ### Run tests
 All tests:
@@ -58,7 +58,7 @@ make coverage
 
   1. Increment version in [package.json](package.json).
   2. Add a new record to the [CHANGELOG.md](CHANGELOG.md).
-  3. Add a version tag (for example, ```git tag 0.0.12```).
-  4. Push changelog and tag (basically, ```git push && git push --tags```).
+  3. Add a version tag (for example, `git tag 0.0.12`).
+  4. Push changelog and tag (basically, `git push && git push --tags`).
 
 Travis does all other stuff for you.
