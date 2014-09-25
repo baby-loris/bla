@@ -9,10 +9,10 @@ The package is versioned according to [SemVer](http://semver.org).
 ## [View Demo project](https://github.com/baby-loris/weatherpic)
 
 ## Features
-  * Simple integrating to your project.
-  * The same interface of API methods on server and client sides.
-  * Normalization request parameters.
-  * Generating documentation for all declared API methods.
+  * Simple integration.
+  * Consistent interface of API methods on the server and client sides.
+  * Normalization for request parameters.
+  * Automatic documentation generation for all declared API methods.
   * Joining all client requests into one during one tick (see [batch method](#bla-batch)).
   * [Enb builder](examples/frontend/enb) support.
 
@@ -39,7 +39,7 @@ module.exports = new ApiMethod('hello')
     });
 ```
 
-Save it to the file ```hello.api.js``` and move it to ```api``` directory.
+And save it to `api/hello.api.js`.
 
 ### and use it on server side
 ```javascript
@@ -61,11 +61,11 @@ app
     .use('/api/:method?', apiMiddleware(__dirname + '/api/**/*.api.js'));
 ```
 
-Include client library to your project.
+Include the client library to .
 ```html
 <script type="text/javascript" src="build/bla.min.js"></script>
 ```
-or specify ```bla``` as enb dependency in package.json.
+or specify `bla` as enb dependency in package.json.
 ```json
 "enb": {
     "dependencies": [
@@ -102,7 +102,7 @@ api.exec('hello', {name: 'Stepan'}).then(function (response) {
 
 See [Api class](#class-api-bla) for more information.
 
-**Note.** ```express 4.x``` is used in all examples. See [package.json](package.json#L31) for more details.
+**Note.** `express 4.x` is used in all examples. See [package.json](package.json#L31) for more details.
 
 ## Examples
   * Api methods
@@ -134,7 +134,7 @@ make run examples/backend/basic_usage.js
 ### bla-batch
 This method is used on the client side and makes it possible to joint all requests to the server during one tick. It shortens number of request dramatically.
 
-The client side uses this method by default and can be changed with ```disableBatch``` option.
+The client side uses this method by default and can be changed with `disableBatch` option.
 
 ## API Reference
   * Server side
@@ -159,7 +159,7 @@ The client side uses this method by default and can be changed with ```disableBa
 
 ### Class Api
 #### constructor(methodPathPattern)
-Creates a new instance of API and collects all your API methods from ```methodPathPattern``` path. Path supports [minimatch](https://github.com/isaacs/minimatch).
+Creates a new instance of API and collects all your API methods from `methodPathPattern` path. Path supports [minimatch](https://github.com/isaacs/minimatch).
 
 Example:
 ```javascript
@@ -168,9 +168,9 @@ var api = new Api(__dirname + '/api/**/*.api.js');
 ```
 
 #### exec(methodName, [params], [request])
-Executes an API method ```methodName``` with provided ```params```.
+Executes an API method `methodName` with the provided `params`.
 
-An express request can also be passed using ```request``` parameter. [The middleware](#express-middleware) proxies it for you.
+An express request can also be passed using `request` parameter. [The middleware](#express-middleware) proxies it for you.
 
 Returns [vow.Promise](https://github.com/dfilatov/vow).
 Promise will be resolved with a method response or rejected with [ApiError](#class-apierror).
@@ -188,9 +188,9 @@ api.exec('hello', {name: 'Stepan'})
 
 ### Class ApiMethod
 #### constructor(methodName)
-Creates a new instance of API method with provided ```methodName```.
+Creates a new instance of ApiMethod with provided `methodName`.
 
-ApiMethod class supports chaining for methods: ```setDescription```, ```addParam```, and ```setAction```.
+ApiMethod class supports chaining for it's methods: `setDescription`, `addParam`, and `setAction`.
 
 Example:
 ```javascript
@@ -198,7 +198,7 @@ var ApiMethod = require('bla').ApiMethod;
 var helloMethod = new ApiMethod('hello');
 ```
 #### setDescription(description)
-Change method description to provided ```description```.
+Change method description to provided `description`.
 
 Example:
 ```javascript
@@ -214,8 +214,8 @@ API method param is an object with the follow fields:
 | ------------- | ------- | ------------------------------------------------- |
 | name          | String  | Parameter name                                    |
 | description   | String  | Parameter description                             |
-| [type]        | String  | Parameter type (String, Number, Boolean, and etc) |
-| [required]    | Boolean | Parameter should be required                      |
+| \[type\]      | String  | Parameter type (String, Number, Boolean, etc.)    |
+| \[required\]  | Boolean | Should the parameter be made obligatory           |
 
 Example:
 ```javascript
@@ -229,7 +229,7 @@ helloMethod.addParam({
 #### setAction(action)
 Sets a function which should be executed when method runs.
 
-Declared parameters will be passed to the ```action``` function as a first parameter. If the method is executed through middleware, express request will be passed as a second parameter (```undefined``` for server side execution).
+Declared parameters will be passed to the `action` function as a first parameter. If the method is executed via the middleware, expresses request will be passed as a second parameter (`undefined` for server side execution).
 
 Example:
 ```javascript
@@ -245,14 +245,15 @@ Example:
 method.setAction(function (params, request, api) {
     return api.exec('method1');
 });
+```
 
 #### exec([params], [request])
-Executes an API method with provided ```params```.
+Executes an API method with provided `params`.
 
-An express request can also be passed using ```request``` parameter. [The middleware](#express-middleware) proxies it for you.
+An express request can also be passed using `request` parameter. [The middleware](#express-middleware) proxies it for you.
 
 Returns [vow.Promise](https://github.com/dfilatov/vow).
-Promise will be resolved with a method response or rejected with [ApiError](#class-apierror).
+The promise will be resolved with a method response or rejected with [ApiError](#class-apierror).
 
 Example:
 ```javascript
@@ -277,7 +278,7 @@ List of available options:
 
 ### Class ApiError
 #### constructor(type, message)
-ApiError is inherited from Javascript Error class. You can specify ```type``` of the error and ```message``` with human-readable desription of the error.
+ApiError is inherited from JavaScript Error class. You can specify `type` of the error and `message` with human-readable description of the error.
 
 See bellow supported list of errors.
 
@@ -288,38 +289,38 @@ throw new ApiError(ApiError.INTERNAL_ERROR, 'Internal server error');
 ```
 
 #### Error types
-  * ```ApiError.BAD_REQUEST``` — Invalid or missed parameter.
-  * ```ApiError.INTERNAL_ERROR``` — Unspecified error or server logic error.
-  * ```ApiError.NOT_FOUND``` — API method or middleware wasn't found.
+  * `ApiError.BAD_REQUEST` — Invalid or missed parameter.
+  * `ApiError.INTERNAL_ERROR` — Unspecified error or error in server logic.
+  * `ApiError.NOT_FOUND` — API method or middleware wasn't found.
 
 ### Express Middleware
 ```
 var apiMiddleware = require('bla').apiMiddleware(methodPathPattern, options)
 ```
-The middleware adds support API to your Express application. You need to pass ```methodPathPattern``` as you did for Api class or an Api instance itself.
+The middleware adds a route path for API to your Express application. You need to pass `methodPathPattern` as you did for Api class or an Api instance itself.
 
 **Note.** The middleware always proxies an express request to an executed method.
 
 #### Options
-Using the second paremeter ```options``` you can tune the middleware up.
+Using the second paremeter `options` you can tune the middleware up.
 
 | Name              | Type     | Description                                                                                         |
 | ----------------- | -------- | --------------------------------------------------------------------------------------------------- |
-| [disableDocPage]  | Boolean  | Turn off generating page with documentation. See [example](examples/middleware/without_docpage.js). |
-| [buildMethodName] | Function | ```express.Request``` is passed to the function. The function should return a method name. By default methodName is grabbed by executing ```req.param('method')```. See [example](examples/middleware/build_method_name.js). |
+| \[disableDocPage\]  | Boolean  | Turn off generating page with documentation. See [example](examples/middleware/without_docpage.js). |
+| \[buildMethodName\] | Function | `express.Request` is passed to the function. The function should return a method name. By default methodName is grabbed by executing `req.param('method')`. See [example](examples/middleware/build_method_name.js). |
 
 Method parameters are collected from Express request using [req.param](http://expressjs.com/4x/api.html#req.param) method.
 
-A parameter ```myparam``` would be search in the next sources:
-  1. URL path (```/api/:myparam?```).
-  2. Query string (```?myparam=1```).
-  3. Request body.
+For example, the apiMiddleware will look for a parameter named `myparam` in the following order:
+  1. In the URL path (`/api/:myparam?`).
+  2. In the request's query string (`?myparam=1`).
+  3. In the request's body.
 
-That means that you can use ```GET``` and ```POST``` methods from the client side as well.
+The middleware accepts `GET` and `POST` requests from the client.
 
-**Note.** Don't forget to add [body-parser](https://github.com/expressjs/body-parser) middleware because the client module uses ```POST``` requests.
+**Note.** Don't forget to add [body-parser](https://github.com/expressjs/body-parser) middleware, because the provided client module uses `POST` requests.
 
-Also you must specify ```:method?``` parameter in the route path used by this middleware or ```buildMethodName``` function. Otherwise, the middleware couldn't find any API method at all.
+Also you must specify `:method?` parameter in the route path used by this middleware or `buildMethodName` function. Otherwise, the middleware won't find the API method name.
 
 If you don't provide any method name, the middleware will show your the list of all available API methods (special page with documentation). Specified descriptions for methods and params will be used for generating documentation.
 
@@ -337,7 +338,7 @@ app
 You can find a working examples in [example/middleware](examples/middleware) directory.
 
 #### Response
-The middleware returns JSON from the server with ```200``` status (even if an error occured). You can distinguish an error and successful response cheking ```data``` and ```error``` fields in the root object.
+The middleware returns a response with a JSON string and a `200` status code (even if an error occured). You can distinguish an error and successful response by checking the `data` and `error` fields in the root of the response object.
 
 Example of a successful response:
 ```json
@@ -346,7 +347,7 @@ Example of a successful response:
 }
 ```
 
-Example of a error response:
+Example of a response with an error:
 ```json
 {
     "error": {
@@ -361,13 +362,13 @@ Requirements:
   * [vow](https://github.com/dfilatov/vow) — DOM Promise and Promises/A+ implementation for Node.js and browsers.
 
 #### constructor(basePath, [options])
-Creates a new instance of client API. ```basePath``` is used to build path for ajax requests to the server. For example, if you define ```/api``` as a ```basePath``` then all request will be sent at ```https://<your host>/api/<method name>```.
+Creates a new instance of client API. `basePath` is used to build the path for AJAX requests to the server. For example, if you define `/api` as a `basePath` then all request will be sent to `https://<your host>/api/<method name>`.
 
-Also you can specify extra options:
+Also you can specify an extra options:
 
-| Name             | Type    | Description                                                                               |
-| ---------------- | ------- | ----------------------------------------------------------------------------------------- |
-| [disableBatch]   | Boolean | Disable using [batch](#bla-batch) for client requests (```false``` by default) |
+| Name             | Type    | Description                                                                |
+| ---------------- | ------- | -------------------------------------------------------------------------- |
+| \[disableBatch\] | Boolean | Disable using [batch](#bla-batch) for client requests (`false` by default) |
 
 Example:
 ```javascript
@@ -385,7 +386,7 @@ require(['bla'], function (Api) {
 var api = new bla.Api('/api/');
 ```
 #### exec(methodName, [params])
-Sends a request to the server for executing API method with name ```methodName``` and provided ```params```.
+Sends a request to the server for executing API method with name `methodName` and provided `params`.
 
 ### Class ApiError (bla-error)
 
