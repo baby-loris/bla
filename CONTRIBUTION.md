@@ -3,7 +3,7 @@
 * Tests must pass.
 * Follow [our coding style](https://github.com/ymaps/codestyle/blob/master/js.md) (jscs and jshint will help you).
 * If you fix a bug, add a test.
-* If you can't fix a bug, file an [issue](https://github.com/baby-loris/bla/issues/new) with containing the steps to reproduce, the expected and the actual results.
+* If you can't fix a bug, file an [issue](https://github.com/baby-loris/bla/issues/new) with the steps to reproduce, the expected and the actual results.
 * Make sure that the test coverage doesn't decrease.
 
 ## Library structure
