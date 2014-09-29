@@ -2,7 +2,7 @@
 
 \[ [Quick start](#quick-start) • [Examples](#examples) • [Built-in API methods](#built-in-api-methods) • [API Reference](#api-reference) • [Contribution guide](CONTRIBUTION.md) • [Heroes](#thanks)\]
 
-Provides helpers for writing your own API methods and using them from server and client sides.
+Provides helpers for writing your own API methods and using them from server and client sides. See also [bla-presentation](http://baby-loris.github.io/bla-presentation/) for more details.
 
 The package is versioned according to [SemVer](http://semver.org).
 
@@ -135,6 +135,8 @@ make run examples/backend/basic_usage.js
 This method is used on the client side and makes it possible to joint all requests to the server during one tick. It shortens number of request dramatically.
 
 The client side uses this method by default and can be changed with `disableBatch` option.
+
+Do you want the proves that batch is effective? See [bla-benchmark](https://github.com/baby-loris/bla-benchmark).
 
 ## API Reference
   * Server side
