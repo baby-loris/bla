@@ -16,6 +16,9 @@ The package is versioned according to [SemVer](http://semver.org).
   * Joining all client requests into one during one tick (see [batch method](#bla-batch)).
   * [Enb builder](examples/frontend/enb) support.
 
+# Browser support
+![Sauce Test Status](https://saucelabs.com/browser-matrix/tarmolov.svg?auth=ad5038c7f6135eddcb1faab252c1c8f3)
+
 ## Installation
 ```
 npm install bla --save

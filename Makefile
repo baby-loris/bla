@@ -58,4 +58,8 @@ build:
 		blocks/bla/bla.js > build/bla.js
 	@$(NODE_MODULES_BIN)/uglifyjs build/bla.js > build/bla.min.js
 
-.PHONY: all npm validate lint test test-client test-server test-examples run coverage build
+sauce:
+	curl -L https://gist.githubusercontent.com/henrikhodne/9322897/raw/sauce-connect.sh | bash
+	@node tests/blocks/sauce-runner.js
+
+.PHONY: all npm validate lint test test-client test-server test-examples run coverage build sauce
