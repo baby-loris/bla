@@ -60,4 +60,8 @@ build:
 		blocks/bla/bla.js > build/bla.js
 	$(v)$(NODE_MODULES_BIN)/uglifyjs build/bla.js > build/bla.min.js
 
-.PHONY: all npm validate lint test test-client test-server test-examples run coverage build
+# Mark a new release
+minor patch:
+	$(v)node tools/release.js $(RELEASE_TOOL_FLAGS) $@
+
+.PHONY: all npm validate lint test test-client test-server test-examples run coverage build minor patch
