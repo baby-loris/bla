@@ -15,6 +15,7 @@ build                   Built version of the frontend code
 examples                Usage examples
 lib                     Server side code
 tests                   Tests
+tools                   Some usefull (or useless) tools
 ```
 
 ## How to develop
@@ -56,9 +57,7 @@ make coverage
 ## How to publish a new version to npm
 **Note.** Only for maintainers.
 
-  1. Increment version in [package.json](package.json).
-  2. Add a new record to the [CHANGELOG.md](CHANGELOG.md).
-  3. Add a version tag (for example, `git tag 0.0.12`).
-  4. Push changelog and tag (basically, `git push && git push --tags`).
+  1. Update changlelog, `package.json`, commit them and tag with version number via `make patch` or `make minor` commands (it'll increment patch or minor version respectively).
+  2. Push changelog and tag (basically, `git push && git push --tags`).
 
 Travis does all other stuff for you.
