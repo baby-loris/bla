@@ -111,7 +111,7 @@ modules.define(
             beforeEach(function () {
                 server = sinon.fakeServer.create();
                 this.clock = sinon.useFakeTimers();
-                api = new Api('/api/', {disableBatch: true});
+                api = new Api('/api/', {noBatching: true});
             });
 
             describe('when the server is working', function () {

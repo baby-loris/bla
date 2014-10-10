@@ -92,12 +92,14 @@
          *
          * @param {String} basePath Url path to the middleware root.
          * @param {Object} [options] Extra options.
-         * @param {Boolean} [options.disableBatch=false] Disable using batch mode.
+         * @param {Boolean} [options.noBatching=false] Disable using batch mode.
+         * @param {String[]} [options.noBatchingForMethods] Disable batching for separate methods only.
          */
         function Api(basePath, options) {
             this._basePath = basePath;
             this._options = {
-                disableBatch: options && options.disableBatch
+                noBatching: options && options.noBatching,
+                noBatchingForMethods: options && !options.noBatching && options.noBatchingForMethods
             };
             this._batch = [];
             this._deferreds = {};
@@ -114,7 +116,9 @@
              * @returns {vow.Promise}
              */
             exec: function (methodName, params) {
-                return this._options.disableBatch ?
+                var options = this._options;
+                return options.noBatching ||
+                    (options.noBatchingForMethods && options.noBatchingForMethods.indexOf(methodName) !== -1) ?
                     this._execWithoutBatching(methodName, params) :
                     this._execWithBatching(methodName, params);
             },

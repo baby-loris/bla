@@ -134,7 +134,7 @@ make run examples/backend/basic_usage.js
 ### bla-batch
 This method is used on the client side and makes it possible to joint all requests to the server during one tick. It shortens number of request dramatically.
 
-The client side uses this method by default and can be changed with `disableBatch` option.
+The client side uses this method by default and can be changed with `noBatching` option or you can stop including a request in the batching by adding its name in the `noBatchingForMethods` option of [Api class constructor](#constructorbasepath-options).
 
 Do you want the proves that batch is effective? See [bla-benchmark](https://github.com/baby-loris/bla-benchmark).
 
@@ -368,9 +368,10 @@ Creates a new instance of client API. `basePath` is used to build the path for A
 
 Also you can specify an extra options:
 
-| Name             | Type    | Description                                                                |
-| ---------------- | ------- | -------------------------------------------------------------------------- |
-| \[disableBatch\] | Boolean | Disable using [batch](#bla-batch) for client requests (`false` by default) |
+| Name                       | Type       | Description                                                                   |
+| -------------------------- | ---------- | ----------------------------------------------------------------------------- |
+| \[noBatching\]             | Boolean    | Disable using [batch](#bla-batch) for client requests (`false` by default)    |
+| \[noBatchingForMethods\]   | String\[\] | Disable using [batch](#bla-batch) only for methods, which names in this array |
 
 Example:
 ```javascript
