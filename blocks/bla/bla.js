@@ -87,19 +87,25 @@
             404: new ApiError(ApiError.NOT_FOUND, 'API middleware wasn\'t found')
         };
 
+        function isArray(arg) {
+            return arg && (Array.isArray ? Array.isArray(arg) : (arg.length && arg instanceof Array));
+        }
+
         /**
          * Api provider.
          *
          * @param {String} basePath Url path to the middleware root.
          * @param {Object} [options] Extra options.
-         * @param {Boolean} [options.noBatching=false] Disable using batch mode.
-         * @param {String[]} [options.noBatchingForMethods] Disable batching for separate methods only.
+         * @param {Boolean|String[]} [options.noBatching=false] Disable using batch mode. If the option has non
+         * falsy value and is not an array batching will be disabled for all methods. If the option contains an
+         * array, it is considered the elements of the array represent method names, which shouldn't be batched
+         * with other methods' requests.
          */
         function Api(basePath, options) {
             this._basePath = basePath;
             this._options = {
-                noBatching: options && options.noBatching,
-                noBatchingForMethods: options && !options.noBatching && options.noBatchingForMethods
+                noBatching: options && !isArray(options.noBatching) && options.noBatching,
+                noBatchingForMethods: options && isArray(options.noBatching) && options.noBatching
             };
             this._batch = [];
             this._deferreds = {};
@@ -113,12 +119,15 @@
              *
              * @param {String} methodName Method name.
              * @param {Object} params Data should be sent to the method.
+             * @param {Object} [execOptions] Exec-specific options.
+             * @param {Boolean} [execOptions.noBatching=false] Should the current call of the method be batched.
              * @returns {vow.Promise}
              */
-            exec: function (methodName, params) {
+            exec: function (methodName, params, execOptions) {
                 var options = this._options;
                 return options.noBatching ||
-                    (options.noBatchingForMethods && options.noBatchingForMethods.indexOf(methodName) !== -1) ?
+                    (options.noBatchingForMethods && options.noBatchingForMethods.indexOf(methodName) !== -1) ||
+                    (execOptions && execOptions.noBatching) ?
                     this._execWithoutBatching(methodName, params) :
                     this._execWithBatching(methodName, params);
             },
