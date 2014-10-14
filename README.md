@@ -134,7 +134,7 @@ make run examples/backend/basic_usage.js
 ### bla-batch
 This method is used on the client side and makes it possible to joint all requests to the server during one tick. It shortens number of request dramatically.
 
-The client side uses this method by default and can be changed with `noBatching` option or you can stop including a request in the batching by adding its name in the `noBatchingForMethods` option of [Api class constructor](#constructorbasepath-options).
+The client side uses this method by default and can be changed with `noBatching` option of [Api class constructor](#constructorbasepath-options) or the `noBatching` option of the [Api.exec method](#execmethodname-params-request).
 
 Do you want the proves that batch is effective? See [bla-benchmark](https://github.com/baby-loris/bla-benchmark).
 
@@ -368,10 +368,9 @@ Creates a new instance of client API. `basePath` is used to build the path for A
 
 Also you can specify an extra options:
 
-| Name                       | Type       | Description                                                                   |
-| -------------------------- | ---------- | ----------------------------------------------------------------------------- |
-| \[noBatching\]             | Boolean    | Disable using [batch](#bla-batch) for client requests (`false` by default)    |
-| \[noBatchingForMethods\]   | String\[\] | Disable using [batch](#bla-batch) only for methods, which names in this array |
+| Name           | Type               | Description                                                                                                                                                               |
+| -------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| \[noBatching\] | Boolean|String\[\] | Disable using [batch](#bla-batch) for all client requests (`false` by default), or if an string array is passed, disable batching only for the method names in the array. |
 
 Example:
 ```javascript
@@ -388,8 +387,12 @@ require(['bla'], function (Api) {
 // without module system
 var api = new bla.Api('/api/');
 ```
-#### exec(methodName, [params])
-Sends a request to the server for executing API method with name `methodName` and provided `params`.
+#### exec(methodName, [params], [execOptions])
+Sends a request to the server for executing API method with name `methodName` and provided `params`. The options argument is used for changing the method behavior.
+
+| Name           | Type    | Description                                                                |
+| -------------- | ------- | -------------------------------------------------------------------------- |
+| \[noBatching\] | Boolean | Disable using [batch](#bla-batch) for current request (`false` by default) |
 
 ### Class ApiError (bla-error)
 
