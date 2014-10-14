@@ -87,6 +87,13 @@
             404: new ApiError(ApiError.NOT_FOUND, 'API middleware wasn\'t found')
         };
 
+        /**
+         * Checks if the passed argument is an Array. This util function uses Array.isArray if present, if not
+         * checks if the length property exists and if the Object was created using the Array.prototype.constructor.
+         *
+         * @param {*} arg
+         * @returns {Boolean}
+         */
         function isArray(arg) {
             return arg && (Array.isArray ? Array.isArray(arg) : (arg.length && arg instanceof Array));
         }
@@ -103,9 +110,12 @@
          */
         function Api(basePath, options) {
             this._basePath = basePath;
+            options = options || {};
             this._options = {
-                noBatching: options && !isArray(options.noBatching) && options.noBatching,
-                noBatchingForMethods: options && isArray(options.noBatching) && options.noBatching
+                // if the 'noBatching' option is not an Array is considered Boolean.
+                noBatching: !isArray(options.noBatching) && Boolean(options.noBatching),
+                // if the 'noBatching' option is an Array set the noBatchingForMethods option
+                noBatchingForMethods: isArray(options.noBatching) ? options.noBatching : []
             };
             this._batch = [];
             this._deferreds = {};
@@ -125,11 +135,15 @@
              */
             exec: function (methodName, params, execOptions) {
                 var options = this._options;
-                return options.noBatching ||
-                    (options.noBatchingForMethods && options.noBatchingForMethods.indexOf(methodName) !== -1) ||
-                    (execOptions && execOptions.noBatching) ?
-                    this._execWithoutBatching(methodName, params) :
-                    this._execWithBatching(methodName, params);
+                if (options.noBatching ||
+                    execOptions && execOptions.noBatching ||
+                    options.noBatchingForMethods.indexOf(methodName) !== -1
+                ) {
+                    return this._execWithoutBatching(methodName, params);
+                }
+
+                // If the batching is not disabled by any of the possible means, just batch.
+                return this._execWithBatching(methodName, params);
             },
 
             /**
