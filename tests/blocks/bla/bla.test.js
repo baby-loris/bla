@@ -107,7 +107,7 @@ modules.define(
             });
         });
 
-        describe('when batching mode is disabled', function () {
+        describe('when batching mode is disabled globally', function () {
             beforeEach(function () {
                 server = sinon.fakeServer.create();
                 this.clock = sinon.useFakeTimers();
@@ -182,6 +182,108 @@ modules.define(
                         });
                     server.respond();
                 });
+            });
+        });
+
+        describe('when batching mode is disabled per method', function () {
+            it('should batch every other method except "slow-method"', function (callback) {
+                server = sinon.fakeServer.create();
+                this.clock = sinon.useFakeTimers();
+                api = new Api('/api/', {noBatching: ['slow-method']});
+                server.respondWith(
+                    'POST',
+                    '/api/bla-batch',
+                    [
+                        200,
+                        {
+                            'Content-Type': 'application/json'
+                        },
+                        '{"data": [{"data": "Hello, world"}]}'
+                    ]
+                );
+
+                server.respondWith(
+                    'POST',
+                    '/api/slow-method',
+                    [
+                        200,
+                        {
+                            'Content-Type': 'application/json'
+                        },
+                        '{"data": "Long text"}'
+                    ]
+                );
+
+                api.exec('any-other-method', {})
+                    .then(function (response) {
+                        response.should.eq('Hello, world');
+                        callback();
+                    })
+                    .fail(function (reason) {
+                        callback(reason);
+                    });
+
+                api.exec('slow-method')
+                    .then(function (response) {
+                        response.should.eq('Long text');
+                        callback();
+                    })
+                    .fail(function (reason) {
+                        callback(reason);
+                    });
+
+                server.respond();
+            });
+        });
+
+        describe('when batching mode is disabled per exec', function () {
+            it('should batch every method, except those with execOptions.noBatching=true', function (callback) {
+                server = sinon.fakeServer.create();
+                this.clock = sinon.useFakeTimers();
+                api = new Api('/api/');
+                server.respondWith(
+                    'POST',
+                    '/api/bla-batch',
+                    [
+                        200,
+                        {
+                            'Content-Type': 'application/json'
+                        },
+                        '{"data": [{"data": "Hello, world"}]}'
+                    ]
+                );
+
+                server.respondWith(
+                    'POST',
+                    '/api/slow-method',
+                    [
+                        200,
+                        {
+                            'Content-Type': 'application/json'
+                        },
+                        '{"data": "Long text"}'
+                    ]
+                );
+
+                api.exec('any-other-method')
+                    .then(function (response) {
+                        response.should.eq('Hello, world');
+                        callback();
+                    })
+                    .fail(function (reason) {
+                        callback(reason);
+                    });
+
+                api.exec('slow-method', {}, {noBatching: true})
+                    .then(function (response) {
+                        response.should.eq('Long text');
+                        callback();
+                    })
+                    .fail(function (reason) {
+                        callback(reason);
+                    });
+
+                server.respond();
             });
         });
     });
