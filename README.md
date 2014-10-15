@@ -370,7 +370,7 @@ Also you can specify an extra options:
 
 | Name           | Type               | Description                                                                                                                                                               |
 | -------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| \[noBatching\] | Boolean|String\[\] | Disable using [batch](#bla-batch) for all client requests (`false` by default), or if an string array is passed, disable batching only for the method names in the array. |
+| \[noBatching\] | Boolean|String\[\] | Disable using [batch](#bla-batch) for all client requests (`false` by default), or if an array of strings is passed, disable batching only for specific methods. |
 
 You can use the client-side bundle of bla with different module system. For example:
 ```javascript
