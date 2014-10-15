@@ -156,7 +156,7 @@ Do you want the proves that batch is effective? See [bla-benchmark](https://gith
   * Frontend side
     * [Class Api (bla)](#class-api-bla)
       * [constructor(basePath, [options])](#constructorbasepath-options)
-      * [exec(methodName, [params])](#execmethodname-params)
+      * [exec(methodName, [params], [execOptions])](#execmethodname-params-execoptions)
     * [Class ApiError (bla-error)](#class-apierror-bla-error)
 
 ### Class Api
@@ -417,6 +417,13 @@ api.exec('hello')
         // Even when rejected, a gentleman shouldn't lose his temper. Do something with the 'reason'.
         // ...
     });
+```
+If you want to disable the batching for a single `api.exec()` call:
+```javascript
+// method 'slow-poke' won't be batched for this call only
+api.exec('slow-poke', {}, {noBatching: true}).then(function () {
+    // ...
+});
 ```
 ### Class ApiError (bla-error)
 
