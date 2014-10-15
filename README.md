@@ -372,7 +372,7 @@ Also you can specify an extra options:
 | -------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | \[noBatching\] | Boolean|String\[\] | Disable using [batch](#bla-batch) for all client requests (`false` by default), or if an string array is passed, disable batching only for the method names in the array. |
 
-Example:
+You can use the client-side bundle of bla with different module system. For example:
 ```javascript
 // ym
 modules.require('bla', function (Api) {
@@ -387,13 +387,37 @@ require(['bla'], function (Api) {
 // without module system
 var api = new bla.Api('/api/');
 ```
+There are two ways for using the `noBatching` parameter.
+Disable batching globally:
+```javascript
+// all api.exec() calls will NOT be batched
+var api = new Api('/api/', {noBatching: true});
+```
+Disable batching per method:
+```javascript
+// api.exec() calls with method name argument 'slow-poke' will not be batched
+var api = new Api('/api/', {noBatching: ['slow-poke']});
+```
 #### exec(methodName, [params], [execOptions])
 Sends a request to the server for executing API method with name `methodName` and provided `params`. The options argument is used for changing the method behavior.
+The method returns a [vow.Promise](http://dfilatov.github.io/vow/).
 
 | Name           | Type    | Description                                                                |
 | -------------- | ------- | -------------------------------------------------------------------------- |
 | \[noBatching\] | Boolean | Disable using [batch](#bla-batch) for current request (`false` by default) |
 
+For example:
+```javascript
+api.exec('hello')
+    .then(function (response) {
+        // Be polite! Handle the 'response' properly.
+        // ...
+    })
+    .fail(function (reason) {
+        // Even when rejected, a gentleman shouldn't lose his temper. Do something with the 'reason'.
+        // ...
+    });
+```
 ### Class ApiError (bla-error)
 
 It works absolutely the same as [the server version of ApiError](#class-apierror).

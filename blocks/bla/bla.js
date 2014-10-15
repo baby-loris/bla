@@ -89,13 +89,16 @@
 
         /**
          * Checks if the passed argument is an Array. This util function uses Array.isArray if present, if not
-         * checks if the length property exists and if the Object was created using the Array.prototype.constructor.
+         * uses a polyfill suggest at the MDN JS API documentation.
+         * @see https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
          *
          * @param {*} arg
          * @returns {Boolean}
          */
         function isArray(arg) {
-            return arg && (Array.isArray ? Array.isArray(arg) : (arg.length && arg instanceof Array));
+            return arg && (Array.isArray ?
+                           Array.isArray(arg) :
+                           Object.prototype.toString.call(arg) === '[object Array]');
         }
 
         /**
@@ -103,20 +106,18 @@
          *
          * @param {String} basePath Url path to the middleware root.
          * @param {Object} [options] Extra options.
-         * @param {Boolean|String[]} [options.noBatching=false] Disable using batch mode. If the option has non
-         * falsy value and is not an array batching will be disabled for all methods. If the option contains an
-         * array, it is considered the elements of the array represent method names, which shouldn't be batched
-         * with other methods' requests.
+         * @param {Boolean|String[]} [options.noBatching=false] Turns off batching. Accepts a boolean value, for all
+         * methods, or an array with the specific methods that shouldn't be batched.
          */
         function Api(basePath, options) {
             this._basePath = basePath;
             options = options || {};
             this._options = {
                 // if the 'noBatching' option is not an Array is considered Boolean.
-                noBatching: !isArray(options.noBatching) && Boolean(options.noBatching),
-                // if the 'noBatching' option is an Array set the noBatchingForMethods option
-                noBatchingForMethods: isArray(options.noBatching) ? options.noBatching : []
+                noBatching: !isArray(options.noBatching) && Boolean(options.noBatching)
             };
+            // if the 'noBatching' option is an Array set the noBatchingForMethods option
+            this._noBatchingForMethods = isArray(options.noBatching) ? options.noBatching : [];
             this._batch = [];
             this._deferreds = {};
         }
@@ -134,10 +135,9 @@
              * @returns {vow.Promise}
              */
             exec: function (methodName, params, execOptions) {
-                var options = this._options;
-                if (options.noBatching ||
+                if (this._options.noBatching ||
                     execOptions && execOptions.noBatching ||
-                    options.noBatchingForMethods.indexOf(methodName) !== -1
+                    this._noBatchingForMethods.indexOf(methodName) !== -1
                 ) {
                     return this._execWithoutBatching(methodName, params);
                 }
