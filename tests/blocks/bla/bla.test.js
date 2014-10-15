@@ -109,7 +109,6 @@ modules.define(
 
         describe('when batching mode is disabled globally', function () {
             beforeEach(function () {
-                server = sinon.fakeServer.create();
                 this.clock = sinon.useFakeTimers();
                 api = new Api('/api/', {noBatching: true});
             });
@@ -187,7 +186,6 @@ modules.define(
 
         describe('when batching mode is disabled per-method or per-exec', function () {
             beforeEach(function () {
-                server = sinon.fakeServer.create();
                 server.respondWith(
                     'POST',
                     '/api/bla-batch',
