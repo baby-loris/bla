@@ -368,11 +368,11 @@ Creates a new instance of client API. `basePath` is used to build the path for A
 
 Also you can specify an extra options:
 
-| Name           | Type               | Description                                                                                                                                                               |
-| -------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| \[noBatching\] | Boolean|String\[\] | Disable using [batch](#bla-batch) for all client requests (`false` by default), or if an array of strings is passed, disable batching only for specific methods. |
+| Name           | Type                | Description                                                                                                                                                               |
+| -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| \[noBatching\] | Boolean\|String\[\] | Disable using [batch](#bla-batch) for all client requests (`false` by default), or if an array of strings is passed, disable batching only for specific methods. |
 
-You can use the client-side bundle of bla with different module system. For example:
+You can use the client-side bundle of bla with different module systems. For example:
 ```javascript
 // ym
 modules.require('bla', function (Api) {
