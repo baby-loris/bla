@@ -134,7 +134,7 @@ make run examples/backend/basic_usage.js
 ### bla-batch
 This method is used on the client side and makes it possible to joint all requests to the server during one tick. It shortens number of request dramatically.
 
-The client side uses this method by default and can be changed with `disableBatch` option.
+The client side uses this method by default and can be changed with `noBatching` option of [Api class constructor](#constructorbasepath-options) or the `noBatching` option of the [Api.exec method](#execmethodname-params-request).
 
 Do you want the proves that batch is effective? See [bla-benchmark](https://github.com/baby-loris/bla-benchmark).
 
@@ -156,7 +156,7 @@ Do you want the proves that batch is effective? See [bla-benchmark](https://gith
   * Frontend side
     * [Class Api (bla)](#class-api-bla)
       * [constructor(basePath, [options])](#constructorbasepath-options)
-      * [exec(methodName, [params])](#execmethodname-params)
+      * [exec(methodName, [params], [execOptions])](#execmethodname-params-execoptions)
     * [Class ApiError (bla-error)](#class-apierror-bla-error)
 
 ### Class Api
@@ -368,11 +368,11 @@ Creates a new instance of client API. `basePath` is used to build the path for A
 
 Also you can specify an extra options:
 
-| Name             | Type    | Description                                                                |
-| ---------------- | ------- | -------------------------------------------------------------------------- |
-| \[disableBatch\] | Boolean | Disable using [batch](#bla-batch) for client requests (`false` by default) |
+| Name           | Type                | Description                                                                                                                                                               |
+| -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| \[noBatching\] | Boolean\|String\[\] | Disable using [batch](#bla-batch) for all client requests (`false` by default), or if an array of strings is passed, disable batching only for specific methods. |
 
-Example:
+You can use the client-side bundle of bla with different module systems. For example:
 ```javascript
 // ym
 modules.require('bla', function (Api) {
@@ -387,9 +387,44 @@ require(['bla'], function (Api) {
 // without module system
 var api = new bla.Api('/api/');
 ```
-#### exec(methodName, [params])
-Sends a request to the server for executing API method with name `methodName` and provided `params`.
+There are two ways for using the `noBatching` parameter.
+Disable batching globally:
+```javascript
+// all api.exec() calls will NOT be batched
+var api = new Api('/api/', {noBatching: true});
+```
+Disable batching per method:
+```javascript
+// api.exec() calls with method name argument 'slow-poke' will not be batched
+var api = new Api('/api/', {noBatching: ['slow-poke']});
+```
+#### exec(methodName, [params], [execOptions])
+Sends a request to the server for executing API method with name `methodName` and provided `params`. The options argument is used for changing the method behavior.
+The method returns a [vow.Promise](http://dfilatov.github.io/vow/).
 
+| Name           | Type    | Description                                                                |
+| -------------- | ------- | -------------------------------------------------------------------------- |
+| \[noBatching\] | Boolean | Disable using [batch](#bla-batch) for current request (`false` by default) |
+
+For example:
+```javascript
+api.exec('hello')
+    .then(function (response) {
+        // Be polite! Handle the 'response' properly.
+        // ...
+    })
+    .fail(function (reason) {
+        // Even when rejected, a gentleman shouldn't lose his temper. Do something with the 'reason'.
+        // ...
+    });
+```
+If you want to disable the batching for a single `api.exec()` call:
+```javascript
+// method 'slow-poke' won't be batched for this call only
+api.exec('slow-poke', {}, {noBatching: true}).then(function () {
+    // ...
+});
+```
 ### Class ApiError (bla-error)
 
 It works absolutely the same as [the server version of ApiError](#class-apierror).

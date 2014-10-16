@@ -107,11 +107,10 @@ modules.define(
             });
         });
 
-        describe('when batching mode is disabled', function () {
+        describe('when batching mode is disabled globally', function () {
             beforeEach(function () {
-                server = sinon.fakeServer.create();
                 this.clock = sinon.useFakeTimers();
-                api = new Api('/api/', {disableBatch: true});
+                api = new Api('/api/', {noBatching: true});
             });
 
             describe('when the server is working', function () {
@@ -182,6 +181,82 @@ modules.define(
                         });
                     server.respond();
                 });
+            });
+        });
+
+        describe('when batching mode is disabled per-method or per-exec', function () {
+            beforeEach(function () {
+                server.respondWith(
+                    'POST',
+                    '/api/bla-batch',
+                    [
+                        200,
+                        {
+                            'Content-Type': 'application/json'
+                        },
+                        '{"data": [{"data": "Hello, world"}]}'
+                    ]
+                );
+
+                server.respondWith(
+                    'POST',
+                    '/api/slow-method',
+                    [
+                        200,
+                        {
+                            'Content-Type': 'application/json'
+                        },
+                        '{"data": "Long text"}'
+                    ]
+                );
+            });
+
+            it('should batch every other method except "slow-method"', function (callback) {
+                api = new Api('/api/', {noBatching: ['slow-method']});
+
+                api.exec('slow-method')
+                    .then(function (response) {
+                        response.should.eq('Long text');
+                        callback();
+                    })
+                    .fail(function (reason) {
+                        callback(reason);
+                    });
+
+                api.exec('any-other-method')
+                    .then(function (response) {
+                        response.should.eq('Hello, world');
+                        callback();
+                    })
+                    .fail(function (reason) {
+                        callback(reason);
+                    });
+
+                server.respond();
+            });
+
+            it('should batch every method, except those with execOptions.noBatching=true', function (callback) {
+                api = new Api('/api/');
+
+                api.exec('slow-method', {}, {noBatching: true})
+                    .then(function (response) {
+                        response.should.eq('Long text');
+                        callback();
+                    })
+                    .fail(function (reason) {
+                        callback(reason);
+                    });
+
+                api.exec('any-other-method')
+                    .then(function (response) {
+                        response.should.eq('Hello, world');
+                        callback();
+                    })
+                    .fail(function (reason) {
+                        callback(reason);
+                    });
+
+                server.respond();
             });
         });
     });
