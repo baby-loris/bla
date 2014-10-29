@@ -2,7 +2,7 @@ require.config({
     paths: {
         'bla-error': 'blocks/bla-error/bla-error',
         bla: 'blocks/bla/bla',
-        vow: 'node_modules/vow/vow.min'
+        vow: 'node_modules/vow/lib/vow'
     }
 });
 
