@@ -43,6 +43,7 @@
     "mocha-phantomjs": "3.5.0",
     "nock": "0.42.1",
     "optimist": "0.6.1",
+    "phantomjs": "1.9.7-12",
     "requirejs": "2.1.14",
     "semver": "^4.0.3",
     "sinon": "1.10.2",
