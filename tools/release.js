@@ -79,7 +79,7 @@ function versionTags() {
             })
             .filter(function (tag) {
                 return semver.valid(tag);
-            })
+            });
     });
 }
 
@@ -205,7 +205,7 @@ lastVersion()
                     })
                     .then(function () {
                         return argv.edit !== false ?
-                            runEditor(tmpFile) :
+                            runEditor(changelogFile) :
                             vow.resolve();
                     });
             });
