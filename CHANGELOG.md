@@ -1,3 +1,10 @@
+### 0.0.14
+  * Add `noBatching` option for `api.exec`. [#52](../../pull/52)
+  * Rename option `noBatch` to `noBatching` for `Api` constructor. [#52](../../pull/52) (**breaks backward compatibility**)
+  * Throw an error if body-parser is missed. [#55](../../pull/55)
+  * Add an awesome release tool. Maintainers are happy :) [#51](../../pull/51)
+  * And also a lot of small fixes and improvments were added. Enjoy the new version!
+
 ### 0.0.13
   * Change handling errors. If you throw ApiError in methods, you should return ```vow.reject``` instead. (**breaks backward compatibility**)
   * Add tests for examples.
