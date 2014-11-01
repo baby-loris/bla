@@ -160,4 +160,18 @@ describe('middleware', function (done) {
                 .end();
         });
     });
+
+    describe('when a body-parser is missed', function () {
+        it('should throw an error', function (done) {
+            app = express()
+                .use('/api/:method?', apiMiddleware(API_FILES_PATH))
+                .use(function (err, req, res, next) {
+                    done();
+                });
+
+            request(app)
+                .post('/api/')
+                .end();
+        });
+    });
 });
