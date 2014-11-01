@@ -162,19 +162,10 @@ describe('middleware', function (done) {
     });
 
     describe('when a body-parser is missed', function () {
-        beforeEach(function () {
-            sinon.stub(console, 'warn');
-        });
-
-        afterEach(function () {
-            console.warn.restore();
-        });
-
-        it('should execute next and show warning', function (done) {
+        it('should throw an error', function (done) {
             app = express()
                 .use('/api/:method?', apiMiddleware(API_FILES_PATH))
-                .use(function () {
-                    console.warn.calledOnce.should.be.true;
+                .use(function (err, req, res, next) {
                     done();
                 });
 
