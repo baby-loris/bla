@@ -27,16 +27,19 @@ Write API method declaration.
 ```javascript
 var ApiMethod = require('bla').ApiMethod;
 
-module.exports = new ApiMethod('hello')
-    .setDescription('Hello API method')
-    .addParam({
-        name: 'name',
-        description: 'User name',
-        required: true
-    })
-    .setAction(function (params) {
+module.exports = new ApiMethod({
+    name: 'hello',
+    description: 'Returns greeting from server',
+    params: {
+        name: {
+            description: 'User name',
+            required: true
+        }
+    },
+    action: function (params) {
         return 'Hello, ' + params.name;
-    });
+    }
+});
 ```
 
 And save it to `api/hello.api.js`.
@@ -144,12 +147,8 @@ Do you want the proves that batch is effective? See [bla-benchmark](https://gith
       * [constructor(methodPathPattern)](#constructormethodpathpattern)
       * [exec(methodName, [params], [request])](#execmethodname-params-request)
     * [Class ApiMethod](#class-apimethod)
-      * [constructor(methodName)](#constructormethodname)
-      * [setDescription(description)](#setdescriptiondescription)
-      * [addParam(param)](#addparamparam)
-      * [setAction(action)](#setactionaction)
+      * [constructor(method)](#constructormethod)
       * [exec([params], [request])](#execparams-request)
-      * [setOption(name, value)](#setoptionname-value)
     * [Class ApiError](#class-apierror)
       * [Error types](#error-types)
     * [Express middleware](#express-middleware)
@@ -189,65 +188,79 @@ api.exec('hello', {name: 'Stepan'})
 ```
 
 ### Class ApiMethod
-#### constructor(methodName)
-Creates a new instance of ApiMethod with provided `methodName`.
+#### constructor(method)
+Creates a new instance of ApiMethod with provided data.
 
-ApiMethod class supports chaining for it's methods: `setDescription`, `addParam`, and `setAction`.
+`method` is an object described a method.
+
+| Name                    | Type     | Description                                        |
+| ----------------------- | -------- | -------------------------------------------------- |
+| name                    | String   | Method name                                        |
+| [action](#action)       | Function | Function which should be executed when method runs |
+| \[description\]         | String   | Method description                                 |
+| [\[params\]](#params)   | Object   | Declarations of method parameters                  |
+| [\[options\]](#options) | Object   | Method options                                     |
 
 Example:
 ```javascript
 var ApiMethod = require('bla').ApiMethod;
-var helloMethod = new ApiMethod('hello');
-```
-#### setDescription(description)
-Change method description to provided `description`.
-
-Example:
-```javascript
-helloMethod.setDescription('This is a hello method');
-```
-
-#### addParam(param)
-Add a new param declaration.
-
-API method param is an object with the follow fields:
-
-| Name          | Type    | Description                                       |
-| ------------- | ------- | ------------------------------------------------- |
-| name          | String  | Parameter name                                    |
-| description   | String  | Parameter description                             |
-| \[type\]      | String  | Parameter type (String, Number, Boolean, etc.)    |
-| \[required\]  | Boolean | Should the parameter be made obligatory           |
-
-Example:
-```javascript
-helloMethod.addParam({
-    name: 'name',
-    description: 'User name',
-    required: true
+var helloMethod = new ApiMethod({
+    name: 'hello',
+    action: function () {
+        return 'Hello, world!';
+    }
 });
 ```
 
-#### setAction(action)
-Sets a function which should be executed when method runs.
-
+##### action
 Declared parameters will be passed to the `action` function as a first parameter. If the method is executed via the middleware, expresses request will be passed as a second parameter (`undefined` for server side execution).
-
-Example:
-```javascript
-helloMethod.setAction(function (params, request) {
-    return 'Hello, world';
-});
-```
 
 A third parameter is an [Api](#class-api) instance. It's very useful in cases when the api method executes other api methods.
 
 Example:
 ```javascript
-method.setAction(function (params, request, api) {
-    return api.exec('method1');
+var helloMethod = new ApiMethod({
+    name: 'hello',
+    action: function (params, request, api) {
+        return api.exec('method1');
+    }
 });
 ```
+
+##### params
+API method param is an object with the follow fields:
+
+| Name            | Type    | Description                                       |
+| --------------- | ------- | ------------------------------------------------- |
+| name            | String  | Parameter name                                    |
+| \[description\] | String  | Parameter description                             |
+| \[type\]        | String  | Parameter type (String, Number, Boolean, etc.)    |
+| \[required\]    | Boolean | Should the parameter be made obligatory           |
+
+Example:
+```javascript
+var helloMethod = new ApiMethod({
+    name: 'hello',
+    params: {
+        name: {
+            type: 'String',
+            description: 'User name'
+            required: true
+        }
+    },
+    action: function () {
+        return 'Hello, world!';
+    }
+});
+```
+
+##### options
+List of available `options`:
+
+| Name                | Type     | Description                                    |
+| ------------------- | -------- | ---------------------------------------------- |
+| hiddenOnDocPage     | Boolean  | Hides the API method in built documentation.   |
+| executeOnServerOnly | Boolean  | Permit to execute method only on server side . |
 
 #### exec([params], [request])
 Executes an API method with provided `params`.
@@ -267,16 +280,6 @@ helloMethod.exec({name: 'Stepan'})
         console.log(error.message);
     });
 ```
-
-#### setOption(name, value)
-Sets an extra option for the method.
-
-List of available options:
-
-| Name                | Type     | Description                                    |
-| ------------------- | -------- | ---------------------------------------------- |
-| hiddenOnDocPage     | Boolean  | Hides the API method in built documentation.   |
-| executeOnServerOnly | Boolean  | Permit to execute method only on server side . |
 
 ### Class ApiError
 #### constructor(type, message)

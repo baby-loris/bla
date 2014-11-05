@@ -14,17 +14,21 @@ var bla = require('../lib');
  * }
  */
 
-module.exports = new bla.ApiMethod('bla-batch')
-    .setDescription('Executes a set of methods')
-    .setOption('hiddenOnDocPage', true)
-    .addParam({
+module.exports = new bla.ApiMethod({
+    name: 'bla-batch',
+    description: 'Executes a set of methods',
+    options: {
+        hiddenOnDocPage: true
+    },
+    params: {
         // Methods are passed as an array of BatchApiMethod objects.
-        name: 'methods',
-        type: 'Array',
-        description: 'Set of methods with a data',
-        required: true
-    })
-    .setAction(function (params, request, api) {
+        methods: {
+            type: 'Array',
+            description: 'Set of methods',
+            required: true
+        }
+    },
+    action: function (params, request, api) {
         return vow.allResolved(params.methods.map(function (method) {
             return api.exec(method.method, method.params, request, api);
         })).then(function (response) {
@@ -45,4 +49,5 @@ module.exports = new bla.ApiMethod('bla-batch')
                 };
             });
         });
-    });
+    }
+});
