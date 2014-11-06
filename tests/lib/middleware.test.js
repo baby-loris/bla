@@ -8,6 +8,7 @@ var should = require('chai').should();
 var sinon = require('sinon');
 
 var API_FILES_PATH = __dirname + '/../../examples/api/**/*.api.js';
+var API_TEST_FILES_PATH = __dirname + '/../_data/api/**/*.api.js';
 
 describe('middleware', function (done) {
     var app;
@@ -150,7 +151,7 @@ describe('middleware', function (done) {
         it('should proxy an error to the next middleware', function (done) {
             app = express()
                 .use(bodyParser.json())
-                .use('/api/:method?', apiMiddleware(API_FILES_PATH))
+                .use('/api/:method?', apiMiddleware(API_TEST_FILES_PATH))
                 .use(function (err, req, res, next) {
                     done();
                 });

@@ -10,13 +10,15 @@ var LOCATOR_KEY = 'AHpZ_1MBAAAAuWpgBgIARHivoVz39Dac5Bcq_Y0HxT67ikIAAAAAAAAAAABNo
  *
  * @see ../../tests/examples/api/geolocation.test.js Tests for the API method.
  */
-module.exports = new bla.ApiMethod('geolocation')
-    .setDescription('Returns geolocation by IP address')
-    .addParam({
-        name: 'ip',
-        description: 'IP address',
-    })
-    .setAction(function (params, request) {
+module.exports = new bla.ApiMethod({
+    name: 'geolocation',
+    description: 'Returns geolocation by IP address',
+    params: {
+        ip: {
+            description: 'IP address'
+        }
+    },
+    action: function (params, request) {
         var ip = params.ip || request && request.ip;
 
         if (!ip) {
@@ -57,4 +59,5 @@ module.exports = new bla.ApiMethod('geolocation')
                     throw new bla.ApiError(bla.ApiError.INTERNAL_ERROR, error.message);
                 }
             });
-    });
+    }
+});

@@ -60,6 +60,7 @@ describe('batch.api.js', function () {
     });
 
     it('should set INTERNAL_TYPE be default', function () {
+        var api = new Api(__dirname + '/../_data/api/**/*.api.js');
         return api.exec('bla-batch', {methods: [{method: 'api-error'}]})
             .then(function (res) {
                 res[0].error.type.should.be.equal(ApiError.INTERNAL_ERROR);
@@ -68,6 +69,7 @@ describe('batch.api.js', function () {
 
     describe('when an error is occured', function () {
         it('should throw an error', function () {
+            var api = new Api(__dirname + '/../_data/api/**/*.api.js');
             var fn = function () {
                 api.exec('bla-batch', {methods: [{method: 'bad-method'}]});
             };

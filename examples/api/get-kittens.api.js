@@ -23,10 +23,12 @@ function getPhotoUrl(data) {
 /**
  * Returns photos of kittens using Flickr API.
  */
-module.exports = new bla.ApiMethod('get-kittens')
-    .setDescription('Returns photos of kittens using Flickr API')
-    .setOption('hiddenOnDocPage', true)
-    .setAction(function () {
+module.exports = new bla.ApiMethod({
+    name: 'get-kittens',
+    options: {
+        hiddenOnDocPage: true
+    },
+    action: function () {
         return asker({
             host: 'api.flickr.com',
             protocol: 'https:',
@@ -53,4 +55,5 @@ module.exports = new bla.ApiMethod('get-kittens')
             .fail(function (error) {
                 throw new bla.ApiError(bla.ApiError.INTERNAL_ERROR, error.message);
             });
-    });
+    }
+});

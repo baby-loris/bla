@@ -5,13 +5,16 @@ var ApiMethod = require('../../lib').ApiMethod;
  *
  * @see ../../tests/examples/api/hello.test.js Tests for the API method.
  */
-module.exports = new ApiMethod('hello')
-    .setDescription('Returns greeting from server')
-    .addParam({
-        name: 'name',
-        description: 'User name',
-        required: true
-    })
-    .setAction(function (params) {
+module.exports = new ApiMethod({
+    name: 'hello',
+    description: 'Returns greeting from server',
+    params: {
+        name: {
+            description: 'User name',
+            required: true
+        }
+    },
+    action: function (params) {
         return 'Hello, ' + params.name;
-    });
+    }
+});
