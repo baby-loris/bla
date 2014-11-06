@@ -15,6 +15,7 @@ module.exports = new bla.ApiMethod({
     description: 'Returns geolocation by IP address',
     params: {
         ip: {
+            type: 'String',
             description: 'IP address'
         }
     },
