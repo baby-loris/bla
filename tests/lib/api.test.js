@@ -5,6 +5,7 @@ var ApiMethod = require('../../lib/api-method');
 var ApiError = require('../../lib/api-error');
 
 var api = new Api(__dirname + '/../../examples/api/**/*.api.js');
+var sinon = require('sinon');
 
 describe('api', function () {
     it('should throw an error if no api method is found', function () {
@@ -91,6 +92,21 @@ describe('api', function () {
                 .then(function (help) {
                     help.should.not.contain('get-kittens');
                 });
+        });
+    });
+
+    describe('when deprecated ApiMethod interface is used', function () {
+        beforeEach(function () {
+            sinon.stub(console, 'warn');
+        });
+
+        afterEach(function () {
+            console.warn.restore();
+        });
+
+        it('should show a warning', function () {
+            api = new Api(__dirname + '/../_data/api-deprecated/**/*.api.js');
+            console.warn.calledOnce.should.be.true;
         });
     });
 });
