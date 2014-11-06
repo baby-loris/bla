@@ -230,12 +230,13 @@ var helloMethod = new ApiMethod({
 ##### params
 API method param is an object with the follow fields:
 
-| Name            | Type    | Description                                       |
-| --------------- | ------- | ------------------------------------------------- |
-| name            | String  | Parameter name                                    |
-| \[description\] | String  | Parameter description                             |
-| \[type\]        | String  | Parameter type (String, Number, Boolean, etc.)    |
-| \[required\]    | Boolean | Should the parameter be made obligatory           |
+| Name             | Type    | Description                                       |
+| ---------------- | ------- | ------------------------------------------------- |
+| name             | String  | Parameter name                                    |
+| description      | String  | Parameter description                             |
+| \[type\]         | String  | Parameter type (String, Number, Boolean, etc.)    |
+| \[defaultValue\] | Any     | Default value of the parameter                    |
+| \[required\]     | Boolean | Should the parameter be made obligatory           |
 
 Example:
 ```javascript

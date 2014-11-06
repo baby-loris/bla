@@ -53,6 +53,23 @@ describe('api-method', function () {
         apiMethod.getParamsDeclarations().testParam.should.be.eq(paramDeclaration);
     });
 
+    it('should use default value for parameter', function () {
+        var actionStub = sinon.stub();
+        var apiMethod = new ApiMethod({
+            name: 'test',
+            params: {
+                value: {type: 'Number', defaultValue: 10}
+            },
+            action: actionStub
+        });
+
+        apiMethod.exec({value: 1});
+        actionStub.firstCall.args[0].value.should.equal(1)
+
+        apiMethod.exec();
+        actionStub.secondCall.args[0].value.should.equal(10)
+    });
+
     it('should run an action with normalized parameters', function () {
         var spy = sinon.spy();
         var apiMethod = new ApiMethod({
