@@ -1,3 +1,8 @@
+### 0.0.15
+  * Change interface for declaring ApiMethod [#56](../../pull/56). The old one is deprecated and will be removed in the next version.
+  * Add defaultValue for method parameters [#57](../../pull/57).
+  * Add string type to method parameters [#58](../../pull/58).
+
 ### 0.0.14
   * Add `noBatching` option for `api.exec`. [#52](../../pull/52)
   * Rename option `noBatch` to `noBatching` for `Api` constructor. [#52](../../pull/52) (**breaks backward compatibility**)
