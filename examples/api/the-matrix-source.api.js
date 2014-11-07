@@ -15,6 +15,7 @@ module.exports = new bla.ApiMethod({
     },
     params: {
         name: {
+            type: 'String',
             description: 'User name (only "Neo" value is allowed)',
             required: true
         }

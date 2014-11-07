@@ -10,6 +10,7 @@ module.exports = new ApiMethod({
     description: 'Returns greeting from server',
     params: {
         name: {
+            type: 'String',
             description: 'User name',
             required: true
         }
