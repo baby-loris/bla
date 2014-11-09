@@ -5,7 +5,8 @@
         ".git/**",
         "examples/frontend/enb/.enb/tmp/**",
         "examples/frontend/enb/node_modules/**",
-        "examples/frontend/enb/build/**",
+        "examples/frontend/enb/pages/**",
+        "examples/frontend/enb/blocks/vow/**",
         "node_modules/**",
         "build/**",
         "coverage/**"
