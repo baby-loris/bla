@@ -163,7 +163,7 @@ describe('middleware', function (done) {
     });
 
     describe('when a body-parser is missed', function () {
-        it('should throw an error', function (done) {
+        it('should throw an error for POST requests', function (done) {
             app = express()
                 .use('/api/:method?', apiMiddleware(API_FILES_PATH))
                 .use(function (err, req, res, next) {
@@ -173,6 +173,15 @@ describe('middleware', function (done) {
             request(app)
                 .post('/api/')
                 .end();
+        });
+
+        it('shouldn\'t throw an error for GET requests', function (done) {
+            app = express()
+                .use('/api/:method?', apiMiddleware(API_FILES_PATH));
+
+            request(app)
+                .get('/api/')
+                .end(done);
         });
     });
 });
