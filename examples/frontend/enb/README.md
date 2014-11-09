@@ -14,9 +14,9 @@ make
 ```
 
 ## BEViS
-if you use a [BEViS approach](https://github.com/bevis-ui/docs) you're lucky.
+If you are using [BEViS approach](https://github.com/bevis-ui/docs) you're lucky.
 
-Just add `bla` dependecy in your `package.json`.
+Just add `bla` dependency in your `package.json`.
 ```json
 "enb": {
     "dependencies": [
