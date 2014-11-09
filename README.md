@@ -141,6 +141,8 @@ The client side uses this method by default and can be changed with `noBatching`
 
 Do you want the proves that batch is effective? See [bla-benchmark](https://github.com/baby-loris/bla-benchmark).
 
+Also don't forget to install [a special chrome extension](https://github.com/baby-loris/bla-batch-chrome-extension) ;).
+
 ## API Reference
   * Server side
     * [Class Api](#class-api)
