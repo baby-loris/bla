@@ -18,7 +18,7 @@ module.exports = function (bh) {
                         elem: 'head',
                         content: [
                             {tag: 'title', content: json.title},
-                            json.styles,
+                            json.styles
                         ]
                     },
                     json
