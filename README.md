@@ -14,7 +14,7 @@ The package is versioned according to [SemVer](http://semver.org).
   * Normalization for request parameters.
   * Automatic documentation generation for all declared API methods.
   * Joining all client requests into one during one tick (see [batch method](#bla-batch)).
-  * [Enb builder](examples/frontend/enb) support.
+  * Works with the most popular module systems.
 
 ## Installation
 ```

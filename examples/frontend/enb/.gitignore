@@ -1,3 +1,4 @@
 /.enb/tmp
-/build
+/pages/*/*.*
+!/pages/*/*.bemjson.js
 /node_modules

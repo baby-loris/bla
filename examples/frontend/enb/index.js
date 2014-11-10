@@ -1,22 +1,14 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-
 var apiMiddleware = require('../../../lib').apiMiddleware;
-var enbServerMiddleware = require('enb/lib/server/server-middleware');
-var dropRequireCache = require('enb/lib/fs/drop-require-cache');
-var enbBuilder = enbServerMiddleware.createBuilder();
 
 app
-    .use(enbServerMiddleware.createMiddleware())
     .use(bodyParser.json())
     .use('/api/:method?', apiMiddleware(__dirname + '/../../api/**/*.api.js'))
+    .use('/pages', express.static(__dirname + '/pages'))
     .get('/', function (req, res) {
-        enbBuilder('/build/example/example.bt.js').then(function (fileName) {
-            dropRequireCache(require, fileName);
-            var bt = require(fileName);
-            res.end(bt.apply({block: 'example-page'}));
-        });
+        res.sendFile(__dirname + '/pages/index/index.html');
     })
     .listen(8080);
 
