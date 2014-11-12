@@ -5,7 +5,7 @@ var apiMiddleware = require('../../lib').apiMiddleware;
 
 var apiRouter = express.Router()
     .use(bodyParser.json())
-    .use('/:method?', apiMiddleware(__dirname + '/../api/**/*.api.js', {disableDocPage: true}));
+    .use('/:method?', apiMiddleware(__dirname + '/../api/**/*.api.js', {enableDocPage: false}));
 
 module.exports =
 app
