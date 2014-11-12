@@ -90,21 +90,6 @@ describe('middleware', function (done) {
         });
     });
 
-    describe('when generating documentations is turned off', function () {
-        beforeEach(function () {
-            app = express()
-                .use(bodyParser.json())
-                .use('/api/:method?', apiMiddleware(API_FILES_PATH, {disableDocPage: true}));
-        });
-
-        it('shouldn\'t generate documentation page if method name was missed', function (done) {
-            request(app)
-                .get('/api/')
-                .expect(404)
-                .end(done);
-        });
-    });
-
     describe('when Api instance is passed', function () {
         beforeEach(function () {
             var api = new Api(API_FILES_PATH);
@@ -181,6 +166,68 @@ describe('middleware', function (done) {
 
             request(app)
                 .get('/api/')
+                .end(done);
+        });
+    });
+
+    describe('documentation page options', function () {
+        var warnStub;
+        beforeEach(function () {
+            warnStub = sinon.stub(console, 'warn');
+        });
+
+        afterEach(function () {
+            console.warn.restore();
+        });
+
+        it('should generate documentation with `disableDocPage` option set to `false`', function (done) {
+            app = express()
+                .use('/api/:method?', apiMiddleware(API_FILES_PATH, {disableDocPage: false}));
+            request(app)
+                .get('/api')
+                .expect(200)
+                .end(function (err) {
+                    warnStub.calledOnce.should.be.true;
+                    done(err);
+                });
+        });
+
+        it('should generate documentation with `enableDocPage` option set to `true`', function (done) {
+            app = express()
+                .use('/api/:method?', apiMiddleware(API_FILES_PATH, {enableDocPage: true}));
+            request(app)
+                .get('/api')
+                .expect(200)
+                .end(done);
+        });
+
+        it('should generate documentation without options', function (done) {
+            app = express()
+                .use('/api/:method?', apiMiddleware(API_FILES_PATH));
+            request(app)
+                .get('/api')
+                .expect(200)
+                .end(done);
+        });
+
+        it('should not generate documentation with `disableDocPage` option set to `true`', function (done) {
+            app = express()
+                .use('/api/:method?', apiMiddleware(API_FILES_PATH, {disableDocPage: true}));
+            request(app)
+                .get('/api')
+                .expect(404)
+                .end(function (err) {
+                    warnStub.calledOnce.should.be.true;
+                    done(err);
+                });
+        });
+
+        it('should not generate documentation page with `enableDocPage` option set to `false`', function (done) {
+            app = express()
+                .use('/api/:method?', apiMiddleware(API_FILES_PATH, {enableDocPage: false}));
+            request(app)
+                .get('/api')
+                .expect(404)
                 .end(done);
         });
     });
