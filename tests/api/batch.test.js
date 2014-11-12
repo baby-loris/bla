@@ -40,6 +40,15 @@ describe('batch.api.js', function () {
             });
     });
 
+    it('should execute api methods passed as a string', function () {
+        return api.exec('bla-batch', {methods: '[{"method": "hello", "params": {"name": "Sam"}}]'})
+            .then(function (response) {
+                HelloMethod.exec.calledOnce.should.be.true;
+
+                response[0].data.should.be.equal('Hello, Sam');
+            });
+    });
+
     it('should return error for api method', function () {
         return api.exec('bla-batch', {methods: [{method: 'hello'}]})
             .then(function (response) {

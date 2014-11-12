@@ -22,14 +22,15 @@ module.exports = new bla.ApiMethod({
     },
     params: {
         // Methods are passed as an array of BatchApiMethod objects.
+        // Also it can be a string if request body is urlencoded.
         methods: {
-            type: 'Array',
             description: 'Set of methods',
             required: true
         }
     },
     action: function (params, request, api) {
-        return vow.allResolved(params.methods.map(function (method) {
+        var methods = typeof params.methods === 'string' ? JSON.parse(params.methods) : params.methods;
+        return vow.allResolved([].concat(methods).map(function (method) {
             return api.exec(method.method, method.params, request, api);
         })).then(function (response) {
             return response.map(function (promise) {
