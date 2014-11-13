@@ -93,7 +93,30 @@ describe('api-method', function () {
             });
     });
 
-    it('should reject promise with an API error for missing required parameter', function () {
+    it('should handle required parameter', function () {
+        var spy = sinon.spy();
+        var apiMethod = new ApiMethod({
+            name: 'test-method',
+            params: {
+                param1: {type: 'Number', required: true},
+                param2: {type: 'Boolean', required: true},
+                param3: {type: 'String', required: true},
+                param4: {required: true},
+                param5: {type: 'Array', required: true}
+            },
+            action: spy
+        });
+
+        return apiMethod.exec({
+            param1: 0,
+            param2: false,
+            param3: '',
+            param4: null,
+            param5: []
+        });
+    });
+
+    it('should reject promise with an API error for missing required parameter', function (done) {
         var spy = sinon.spy();
         var apiMethod = new ApiMethod({
             name: 'test-method',
@@ -103,14 +126,15 @@ describe('api-method', function () {
             action: spy
         });
 
-        return apiMethod.exec()
+        apiMethod.exec()
             .fail(function (error) {
                 error.should.be.instanceOf(ApiError);
                 spy.calledOnce.should.be.false;
+                done();
             });
     });
 
-    it('should reject an API error for a invalid parameter', function () {
+    it('should reject an API error for a invalid parameter', function (done) {
         var spy = sinon.spy();
         var apiMethod = new ApiMethod({
             name: 'test-method',
@@ -120,10 +144,11 @@ describe('api-method', function () {
             action: spy
         });
 
-        return apiMethod.exec({param1: 'nan'})
+        apiMethod.exec({param1: 'nan'})
             .fail(function (error) {
                 error.should.be.instanceOf(ApiError);
                 spy.calledOnce.should.be.false;
+                done();
             });
     });
 
@@ -199,7 +224,7 @@ describe('api-method', function () {
                 });
         });
 
-        it('should reject promise with an API error for missing required parameter', function () {
+        it('should reject promise with an API error for missing required parameter', function (done) {
             var spy = sinon.spy();
             var apiMethod = new ApiMethod('test-method')
                 .addParam({
@@ -209,14 +234,15 @@ describe('api-method', function () {
                 })
                 .setAction(spy);
 
-            return apiMethod.exec()
+            apiMethod.exec()
                 .fail(function (error) {
                     error.should.be.instanceOf(ApiError);
                     spy.calledOnce.should.be.false;
+                    done();
                 });
         });
 
-        it('should reject an API error for a invalid parameter', function () {
+        it('should reject an API error for a invalid parameter', function (done) {
             var spy = sinon.spy();
             var apiMethod = new ApiMethod('test-method')
                 .addParam({
@@ -225,10 +251,11 @@ describe('api-method', function () {
                 })
                 .setAction(spy);
 
-            return apiMethod.exec({param1: 'nan'})
+            apiMethod.exec({param1: 'nan'})
                 .fail(function (error) {
                     error.should.be.instanceOf(ApiError);
                     spy.calledOnce.should.be.false;
+                    done();
                 });
         });
 
