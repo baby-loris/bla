@@ -29,7 +29,7 @@ test-client:
 # Run server tests
 test-server:
 	$(v)echo Run server tests
-	$(v)$(NODE_MODULES_BIN)/mocha $(MOCHA_FLAGS) --recursive tests/lib tests/api
+	$(v)NO_DEPRECATION=BLA $(NODE_MODULES_BIN)/mocha $(MOCHA_FLAGS) --recursive tests/lib tests/api
 
 # Run examples tests
 test-examples:

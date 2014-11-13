@@ -94,19 +94,4 @@ describe('api', function () {
                 });
         });
     });
-
-    describe('when deprecated ApiMethod interface is used', function () {
-        beforeEach(function () {
-            sinon.stub(console, 'warn');
-        });
-
-        afterEach(function () {
-            console.warn.restore();
-        });
-
-        it('should show a warning', function () {
-            api = new Api(__dirname + '/../_data/api-deprecated/**/*.api.js');
-            console.warn.calledOnce.should.be.true;
-        });
-    });
 });

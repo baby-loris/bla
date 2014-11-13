@@ -171,15 +171,6 @@ describe('middleware', function (done) {
     });
 
     describe('documentation page options', function () {
-        var warnStub;
-        beforeEach(function () {
-            warnStub = sinon.stub(console, 'warn');
-        });
-
-        afterEach(function () {
-            console.warn.restore();
-        });
-
         it('should generate documentation with `disableDocPage` option set to `false`', function (done) {
             app = express()
                 .use('/api/:method?', apiMiddleware(API_FILES_PATH, {disableDocPage: false}));
@@ -187,7 +178,6 @@ describe('middleware', function (done) {
                 .get('/api')
                 .expect(200)
                 .end(function (err) {
-                    warnStub.calledOnce.should.be.true;
                     done(err);
                 });
         });
@@ -217,7 +207,6 @@ describe('middleware', function (done) {
                 .get('/api')
                 .expect(404)
                 .end(function (err) {
-                    warnStub.calledOnce.should.be.true;
                     done(err);
                 });
         });
