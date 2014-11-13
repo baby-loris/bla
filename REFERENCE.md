@@ -115,10 +115,10 @@ var helloMethod = new ApiMethod({
 #### options
 List of available `options`:
 
-| Name                | Type     | Description                                    |
-| ------------------- | -------- | ---------------------------------------------- |
-| hiddenOnDocPage     | Boolean  | Hides the API method in built documentation.   |
-| executeOnServerOnly | Boolean  | Permit to execute method only on server side . |
+| Name                | Type     | Description                                                    |
+| ------------------- | -------- | -------------------------------------------------------------- |
+| showOnDocPage       | Boolean  | Show API method on the documentation page. Defaults to `true`. |
+| executeOnServerOnly | Boolean  | Permit to execute method only on server side .                 |
 
 ### exec([params], [request])
 Executes an API method with provided `params`.
@@ -167,9 +167,9 @@ The middleware adds a route path for API to your Express application. You need t
 ### Options
 Using the second paremeter `options` you can tune the middleware up.
 
-| Name              | Type     | Description                                                                                         |
-| ----------------- | -------- | --------------------------------------------------------------------------------------------------- |
-| \[enableDocPage\]  | Boolean  | Generate documentation page. Defaults to `true`. See [example](examples/middleware/without_docpage.js). |
+| Name                | Type     | Description                                                                                             |
+| -----------------   | -------- | ------------------------------------------------------------------------------------------------------- |
+| \[enableDocPage\]   | Boolean  | Generate documentation page. Defaults to `true`. See [example](examples/middleware/without_docpage.js). |
 | \[buildMethodName\] | Function | `express.Request` is passed to the function. The function should return a method name. By default methodName is grabbed by executing `req.param('method')`. See [example](examples/middleware/build_method_name.js). |
 
 Method parameters are collected from Express request using [req.param](http://expressjs.com/4x/api.html#req.param) method.

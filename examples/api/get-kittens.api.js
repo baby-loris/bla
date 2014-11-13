@@ -26,7 +26,7 @@ function getPhotoUrl(data) {
 module.exports = new bla.ApiMethod({
     name: 'get-kittens',
     options: {
-        hiddenOnDocPage: true
+        showOnDocPage: false
     },
     action: function () {
         return asker({

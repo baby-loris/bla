@@ -131,12 +131,12 @@ describe('api-method', function () {
         var apiMethod = new ApiMethod({
             name: 'test-method',
             options: {
-                hiddenOnDocPage: true
+                showOnDocPage: false
             },
             action: sinon.spy()
         });
 
-        apiMethod.getOption('hiddenOnDocPage').should.be.true;
+        apiMethod.getOption('showOnDocPage').should.be.false;
     });
 
     describe('tests for deprecated methods', function () {
@@ -235,8 +235,8 @@ describe('api-method', function () {
         it('should set method option', function () {
             var apiMethod = new ApiMethod('test-method');
 
-            apiMethod.setOption('hiddenOnDocPage', true);
-            apiMethod.getOption('hiddenOnDocPage').should.be.true;
+            apiMethod.setOption('showOnDocPage', true);
+            apiMethod.getOption('showOnDocPage').should.be.true;
         });
     });
 });

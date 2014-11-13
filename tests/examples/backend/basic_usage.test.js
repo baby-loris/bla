@@ -16,6 +16,6 @@ describe('backend/basic_usage.js', function () {
         setTimeout(function () {
             console.log.calledOnce.should.be.true;
             done();
-        }, 3); // because of promise
+        }, 5); // because of promise
     });
 });
