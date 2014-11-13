@@ -1,3 +1,13 @@
+### 0.1.0
+  * Fix bug in normalizing parameters (incorrect handling `null` or `false` values).
+  * Remove `hiddenOnDocPage` option. Use `showOnDocPage` option instead. (**breaks backward compatibility**)
+  * Support `enableDocPage` option (`disableDocPage` is deprecated).
+  * Refactor enb example. Use BEM methodology by default.
+  * Move reference to [a separate page](REFERENCE.md).
+  * Show `asis` type in docpage instead of `String`.
+  * Show warning about `body-parser` only for post requests.
+  * Add link to [chrome extension](https://github.com/baby-loris/bla-batch-chrome-extension).
+
 ### 0.0.15
   * Change interface for declaring ApiMethod [#56](../../pull/56). The old one is deprecated and will be removed in the next version.
   * Add defaultValue for method parameters [#57](../../pull/57).
