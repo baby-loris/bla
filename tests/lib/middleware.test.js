@@ -231,4 +231,23 @@ describe('middleware', function (done) {
                 .end(done);
         });
     });
+
+    describe('when bodyParser.urlencoded is used', function () {
+        it('should accept urlencoded request', function (done) {
+            app = express()
+                .use(bodyParser.urlencoded({extended: true}))
+                .use('/api/:method?', apiMiddleware(API_FILES_PATH));
+
+            request(app)
+                .post('/api/bla-batch')
+                .type('form')
+                .send({
+                    methods: JSON.stringify([{method: 'hello', params: {name: 'Stepan'}}])
+                })
+                .expect('Content-Type', /json/)
+                .expect('{"data":[{"data":"Hello, Stepan"}]}')
+                .expect(200)
+                .end(done);
+        });
+    });
 });
