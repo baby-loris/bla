@@ -107,13 +107,15 @@
          *
          * @param {String} basePath Url path to the middleware root.
          * @param {Object} [options] Extra options.
-         * @param {Boolean|String[]} [options.noBatching=false] Turns off batching. Accepts a boolean value, for all
-         * methods, or an array with the specific methods that shouldn't be batched.
+         * @param {Boolean} [options.enableBatching=true] Enables batching.
+         * @param {Boolean|String[]} [options.noBatching=false] @deprecated Turns off batching.
+         * Accepts a boolean value, for all methods, or an array with the specific methods that shouldn't be batched.
          */
         function Api(basePath, options) {
             this._basePath = basePath;
             options = options || {};
             this._options = {
+                enableBatching: options.enableBatching,
                 // if the 'noBatching' option is not an Array is considered Boolean.
                 noBatching: !isArray(options.noBatching) && Boolean(options.noBatching)
             };
@@ -132,19 +134,30 @@
              * @param {String} methodName Method name.
              * @param {Object} params Data should be sent to the method.
              * @param {Object} [execOptions] Exec-specific options.
-             * @param {Boolean} [execOptions.noBatching=false] Should the current call of the method be batched.
+             * @param {Boolean} [execOptions.enableBatching=true] Should the current call of the method be batched.
+             * @param {Boolean} [execOptions.noBatching=false] @deprecated Should the current call of the
+             * method be batched.
              * @returns {vow.Promise}
              */
             exec: function (methodName, params, execOptions) {
-                if (this._options.noBatching ||
-                    execOptions && execOptions.noBatching ||
-                    this._noBatchingForMethods.indexOf(methodName) !== -1
-                ) {
-                    return this._execWithoutBatching(methodName, params);
+                execOptions = execOptions || {};
+
+                var enableBatching;
+                if (execOptions.hasOwnProperty('enableBatching')) {
+                    enableBatching = execOptions.enableBatching;
+                } else if (this._options.enableBatching !== undefined) {
+                    enableBatching = this._options.enableBatching;
+                } else {
+                    // Check deprecated option.
+                    // Defaults to `true` if no batching option specified.
+                    enableBatching = !this._options.noBatching &&
+                        !execOptions.noBatching &&
+                        this._noBatchingForMethods.indexOf(methodName) === -1;
                 }
 
-                // If the batching is not disabled by any of the possible means, just batch.
-                return this._execWithBatching(methodName, params);
+                return enableBatching ?
+                    this._execWithBatching(methodName, params) :
+                    this._execWithoutBatching(methodName, params);
             },
 
             /**

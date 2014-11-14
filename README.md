@@ -112,7 +112,7 @@ make run examples/backend/basic_usage.js
 ### bla-batch
 This method is used on the client side and makes it possible to joint all requests to the server during one tick. It shortens number of request dramatically.
 
-The client side uses this method by default and can be changed with `noBatching` option of [Api class constructor](REFERENCE.md#constructorbasepath-options) or the `noBatching` option of the [Api.exec method](REFERENCE.md#execmethodname-params-request).
+The client side uses this method by default and can be changed with `enableBatching` option of [Api class constructor](REFERENCE.md#constructorbasepath-options) or the `enableBatching` option of the [Api.exec method](REFERENCE.md#execmethodname-params-request).
 
 Do you want the proves that batch is effective? See [bla-benchmark](https://github.com/baby-loris/bla-benchmark).
 

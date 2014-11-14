@@ -231,9 +231,9 @@ Creates a new instance of client API. `basePath` is used to build the path for A
 
 Also you can specify an extra options:
 
-| Name           | Type                | Description                                                                                                                                                               |
-| -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| \[noBatching\] | Boolean\|String\[\] | Disable using [batch](#bla-batch) for all client requests (`false` by default), or if an array of strings is passed, disable batching only for specific methods. |
+| Name               | Type    | Description                                                                             |
+| ------------------ | ------- | --------------------------------------------------------------------------------------- |
+| \[enableBatching\] | Boolean | Configure [batching](#bla-batch) globally. Pass `false` to disable. Defaults to `true`. |
 
 You can use the client-side bundle of bla with different module systems. For example:
 ```javascript
@@ -250,24 +250,21 @@ require(['bla'], function (Api) {
 // without module system
 var api = new bla.Api('/api/');
 ```
-There are two ways for using the `noBatching` parameter.
 Disable batching globally:
 ```javascript
 // all api.exec() calls will NOT be batched
-var api = new Api('/api/', {noBatching: true});
+var api = new Api('/api/', {enableBatching: false});
 ```
-Disable batching per method:
-```javascript
-// api.exec() calls with method name argument 'slow-poke' will not be batched
-var api = new Api('/api/', {noBatching: ['slow-poke']});
-```
+
 ### exec(methodName, [params], [execOptions])
 Sends a request to the server for executing API method with name `methodName` and provided `params`. The options argument is used for changing the method behavior.
 The method returns a [vow.Promise](http://dfilatov.github.io/vow/).
 
-| Name           | Type    | Description                                                                |
-| -------------- | ------- | -------------------------------------------------------------------------- |
-| \[noBatching\] | Boolean | Disable using [batch](#bla-batch) for current request (`false` by default) |
+execOptions:
+
+| Name               | Type    | Description                                                                                            |
+| ------------------ | ------- | ------------------------------------------------------------------------------------------------------ |
+| \[enableBatching\] | Boolean | Configure [batching](#bla-batch) for the current request. Pass `false` to disable. Defaults to `true`. |
 
 For example:
 ```javascript
@@ -284,7 +281,7 @@ api.exec('hello')
 If you want to disable the batching for a single `api.exec()` call:
 ```javascript
 // method 'slow-poke' won't be batched for this call only
-api.exec('slow-poke', {}, {noBatching: true}).then(function () {
+api.exec('slow-poke', {}, {enableBatching: false}).then(function () {
     // ...
 });
 ```
