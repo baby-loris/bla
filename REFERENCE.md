@@ -5,7 +5,7 @@
       * [exec(methodName, [params], [request])](#execmethodname-params-request)
     * [Class ApiMethod](#class-apimethod)
       * [constructor(method)](#constructormethod)
-      * [exec([params], [request])](#execparams-request)
+      * [exec([params], [request], [api])](#execparams-request-api)
     * [Class ApiError](#class-apierror)
       * [Error types](#error-types)
     * [Express middleware](#express-middleware)
@@ -115,15 +115,17 @@ var helloMethod = new ApiMethod({
 #### options
 List of available `options`:
 
-| Name                | Type     | Description                                                    |
-| ------------------- | -------- | -------------------------------------------------------------- |
-| showOnDocPage       | Boolean  | Show API method on the documentation page. Defaults to `true`. |
-| executeOnServerOnly | Boolean  | Permit to execute method only on server side .                 |
+| Name                | Type     | Description                                                         |
+| ------------------- | -------- | ------------------------------------------------------------------- |
+| showOnDocPage       | Boolean  | Show API method on the documentation page. Defaults to `true`.      |
+| executeOnServerOnly | Boolean  | Permit to execute method only on server side . Defaults to `false`. |
 
-### exec([params], [request])
+### exec([params], [request], [api])
 Executes an API method with provided `params`.
 
 An express request can also be passed using `request` parameter. [The middleware](#express-middleware) proxies it for you.
+
+`api` is an instance of [Api class](#class-api). You can use it to execute methods inside a method.
 
 Returns [vow.Promise](https://github.com/dfilatov/vow).
 The promise will be resolved with a method response or rejected with [ApiError](#class-apierror).
