@@ -50,7 +50,7 @@ run: npm
 
 # Build coverage
 coverage:
-	$(v)$(NODE_MODULES_BIN)/istanbul cover $(NODE_MODULES_BIN)/_mocha tests/lib tests/examples tests/api -- --recursive $(MOCHA_FLAGS)
+	$(v)NO_DEPRECATION=BLA $(NODE_MODULES_BIN)/istanbul cover $(NODE_MODULES_BIN)/_mocha tests/lib tests/examples tests/api -- --recursive $(MOCHA_FLAGS)
 
 # Build a new version of the library
 build:

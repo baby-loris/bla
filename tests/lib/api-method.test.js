@@ -50,6 +50,7 @@ describe('api-method', function () {
             action: sinon.spy()
         });
 
+        apiMethod.getParams().testParam.should.be.eq(paramDeclaration);
         apiMethod.getParamsDeclarations().testParam.should.be.eq(paramDeclaration);
     });
 
@@ -184,8 +185,10 @@ describe('api-method', function () {
                 description: 'There is a method param'
             };
 
+            apiMethod.getParams().should.be.empty;
             apiMethod.getParamsDeclarations().should.be.empty;
             apiMethod.addParam(paramDeclaration);
+            apiMethod.getParams()[paramDeclaration.name].should.be.eq(paramDeclaration);
             apiMethod.getParamsDeclarations()[paramDeclaration.name].should.be.eq(paramDeclaration);
         });
 
