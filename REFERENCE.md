@@ -141,6 +141,30 @@ helloMethod.exec({name: 'Stepan'})
     });
 ```
 
+## Validation
+By default all parameter types are cast according to the declared types.
+Also default values are automatically set, if declared. See [params](#params).
+
+It is possible to use custom parameters validation. It can be achieved by creating an ApiMethod subclass and overriding its protected method `_normalizeParams`.
+
+In the following example [inherit](https://github.com/dfilatov/inherit) library is used to create a subclass.
+```javascript
+ var CustomMethod = inherit(ApiMethod, {
+    _normalizeParams: function (values, params) {
+        // perform any actions
+
+        // call parent method if necessary
+        return this.__base(values, params);
+     }
+ });
+
+ var customMethod = new CustomMethod({
+     // method declaration
+ });
+
+```
+ Please, refer to the [_normalizeParams method code](https://github.com/baby-loris/bla/blob/master/lib/api-method.js) for more details.
+
 ## Class ApiError
 ### constructor(type, message)
 ApiError is inherited from JavaScript Error class. You can specify `type` of the error and `message` with human-readable description of the error.
@@ -224,7 +248,7 @@ Requirements:
 ### constructor(basePath, [options])
 Creates a new instance of client API. `basePath` is used to build the path for AJAX requests to the server. For example, if you define `/api` as a `basePath` then all request will be sent to `https://<your host>/api/<method name>`.
 
-Also you can specify an extra options:
+Also you can specify extra options:
 
 | Name               | Type    | Description                                                                             |
 | ------------------ | ------- | --------------------------------------------------------------------------------------- |

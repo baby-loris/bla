@@ -1,6 +1,7 @@
 var ApiMethod = require('../../lib/api-method');
 var ApiError = require('../../lib/api-error');
 var sinon = require('sinon');
+var inherit = require('inherit');
 var should = require('chai').should();
 
 describe('api-method', function () {
@@ -151,6 +152,32 @@ describe('api-method', function () {
                 spy.calledOnce.should.be.false;
                 done();
             });
+    });
+
+    it('should use custom validation for the param', function (done) {
+        var CustomMethod = inherit(ApiMethod, {
+            _normalizeParams: function (values, params) {
+                values.num *= 2;
+                return this.__base(values, params);
+            }
+        });
+        var apiMethod = new CustomMethod({
+            name: 'custom-method',
+            params: {
+                num: {type: 'Number'}
+            },
+            action: function (params) {
+                // returned value should be multiplied by 2
+                return params.num;
+            }
+        });
+
+        apiMethod.exec({num: 2})
+            .then(function (res) {
+                res.should.equal(4);
+                done();
+            })
+            .fail(done);
     });
 
     it('should set method option', function () {
