@@ -32,12 +32,22 @@ describe('normalize', function () {
     });
 
     it('should normalize value to array', function () {
-        normalize('42', 'Array').should.be.deep.equal(['42']);
+        normalize('42', 'Array').should.be.deep.equal([42]);
     });
 
     it('should return value as is if type is skipped', function () {
         normalize(42).should.be.equal(42);
         normalize([42]).should.be.deep.equal([42]);
         normalize({a: 42}).should.be.deep.equal({a: 42});
+    });
+
+    describe('when object or array are passed as a string', function () {
+        it('should parse JSON', function () {
+            var obj = {a: 42};
+            normalize(JSON.stringify(obj), 'object').should.be.deep.equal(obj);
+
+            var arr = [{geoObject: {name: 'Moscow', accuracy: 0.07}}];
+            normalize(JSON.stringify(arr), 'array').should.be.deep.equal(arr);
+        });
     });
 });
