@@ -13,7 +13,14 @@ describe('api', function () {
             var api = new Api('/some-non-existent-path/api/**/*.api.js');
         };
 
-        fn.should.throw(Error);
+        fn.should.throw(ApiError);
+    });
+
+    it('should throw an error for a redeclared method', function () {
+        var fn = function () {
+            var api = new Api(__dirname + '/../_data/api-redeclared/**/*.api.js');
+        };
+
         fn.should.throw(ApiError);
     });
 
