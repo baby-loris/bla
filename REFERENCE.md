@@ -174,12 +174,7 @@ Using the second paremeter `options` you can tune the middleware up.
 | \[enableDocPage\]   | Boolean  | Generate documentation page. Defaults to `true`. See [example](examples/middleware/without_docpage.js). |
 | \[buildMethodName\] | Function | `express.Request` is passed to the function. The function should return a method name. By default methodName is grabbed by executing `req.param('method')`. See [example](examples/middleware/build_method_name.js). |
 
-Method parameters are collected from Express request using [req.param](http://expressjs.com/4x/api.html#req.param) method.
-
-For example, the apiMiddleware will look for a parameter named `myparam` in the following order:
-  1. In the URL path (`/api/:myparam?`).
-  2. In the request's query string (`?myparam=1`).
-  3. In the request's body.
+Method parameters are `req.query` extended by `req.body`.
 
 The middleware accepts `GET` and `POST` requests from the client.
 
