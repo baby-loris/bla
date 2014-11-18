@@ -1,3 +1,8 @@
+### 0.1.1
+  * Support `enableBatching` option [#73](../../pull/73).
+  * Rename `getParamsDeclarations` -> `getParams` [#80](../../pull/80).
+  * Proxy query and post body to `api.exec` [#80](../../pull/80).
+
 ### 0.1.0
   * Fix bug in normalizing parameters (incorrect handling `null` or `false` values).
   * Remove `hiddenOnDocPage` option. Use `showOnDocPage` option instead. (**breaks backward compatibility**)
