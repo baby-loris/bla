@@ -49,5 +49,12 @@ describe('normalize', function () {
             var arr = [{geoObject: {name: 'Moscow', accuracy: 0.07}}];
             normalize(JSON.stringify(arr), 'array').should.be.deep.equal(arr);
         });
+
+        it('should throw an error for bad JSON', function () {
+            var fn = function () {
+                normalize('{a:42}', 'object');
+            };
+            fn.should.throw(ApiError);
+        });
     });
 });
