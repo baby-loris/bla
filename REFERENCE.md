@@ -115,10 +115,36 @@ var helloMethod = new ApiMethod({
 #### options
 List of available `options`:
 
-| Name                | Type     | Description                                                         |
-| ------------------- | -------- | ------------------------------------------------------------------- |
-| showOnDocPage       | Boolean  | Show API method on the documentation page. Defaults to `true`.      |
-| executeOnServerOnly | Boolean  | Permit to execute method only on server side . Defaults to `false`. |
+| Name                 | Type              | Description                                                         |
+| -------------------- | ----------------- | ------------------------------------------------------------------- |
+| showOnDocPage        | Boolean           | Show API method on the documentation page. Defaults to `true`.      |
+| executeOnServerOnly  | Boolean           | Permit to execute method only on server side. Defaults to `false`.  |
+| paramsValidation     | String | Function | Preprocessing method parameters. Defaults to `normalize`.           |
+
+The option `paramsValidation` makes it possible to change default parameter preprocessing. `normalize` mode tries to convert each parameter value to its declared type if it is possible.
+
+Also you can implement your own `paramsValidation` function.
+```javascript
+var helloMethod = new ApiMethod({
+    name: 'hello',
+    params: {
+        name: {type: 'String'}
+    },
+    options: {
+        paramsValidation: function (paramValue, paramType, paramName) {
+            return paramValue; // don't use validation at all
+        }
+    },
+    action: function () {}
+});
+
+```
+where
+  * `paramValue` — parameter value which should validate.
+  * `paramType` — parameter type such as `string`, `number`, and so on.
+  * `paramName` — parameter name (it will be useful when you throw an error).
+
+**Note.** It is strongly recommended to throw ApiErrors only.
 
 ### exec([params], [request], [api])
 Executes an API method with provided `params`.

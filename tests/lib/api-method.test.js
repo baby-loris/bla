@@ -207,6 +207,42 @@ describe('api-method', function () {
         apiMethod.getOption('showOnDocPage').should.be.false;
     });
 
+    it('should throw error if validator is not found', function () {
+        var fn = function () {
+            var apiMethod = new ApiMethod({
+                name: 'test-method',
+                options: {
+                    paramsValidation: 'non-existent-validation-mode'
+                }
+            });
+        };
+        fn.should.throw(ApiError);
+    });
+
+    it('should use custom validator', function () {
+        var spy = sinon.spy();
+        var apiMethod = new ApiMethod({
+            name: 'test-method',
+            params: {
+                param1: {type: 'String'}
+            },
+            options: {
+                paramsValidation: function (paramValue, paramType, paramName) {
+                    return 'baking bread';
+                }
+            },
+            action: spy
+        });
+
+        return apiMethod.exec({param1: 'breaking bad'})
+            .then(function (response) {
+                spy.alwaysCalledWith({
+                    param1: 'baking bread'
+                }).should.be.true;
+                spy.calledOnce.should.be.true;
+            });
+    });
+
     describe('tests for deprecated methods', function () {
 
         it('should return name', function () {

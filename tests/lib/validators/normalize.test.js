@@ -1,4 +1,4 @@
-var normalize = require('../../../lib/utils/normalize');
+var normalize = require('../../../lib/validators/normalize');
 var ApiError = require('../../../lib/api-error');
 var should = require('chai').should();
 
