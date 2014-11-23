@@ -38,7 +38,7 @@ describe('middleware', function (done) {
 
     it('should handle batch requests', function (done) {
         request(app)
-            .post('/api/bla-batch')
+            .post('/api/batch')
             .send({
                 methods: [
                     {method: 'hello', params: {name: 'Stepan'}}
@@ -228,7 +228,7 @@ describe('middleware', function (done) {
                 .use('/api/:method?', apiMiddleware(API_FILES_PATH));
 
             request(app)
-                .post('/api/bla-batch')
+                .post('/api/batch')
                 .type('form')
                 .send({
                     methods: JSON.stringify([{method: 'hello', params: {name: 'Stepan'}}])
