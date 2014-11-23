@@ -136,7 +136,7 @@ describe('api-method', function () {
             });
     });
 
-    it('should reject an API error for a invalid parameter', function (done) {
+    it('should reject promise for a invalid parameter', function (done) {
         var spy = sinon.spy();
         var apiMethod = new ApiMethod({
             name: 'test-method',
@@ -147,6 +147,21 @@ describe('api-method', function () {
         });
 
         apiMethod.exec({param1: 'nan'})
+            .fail(function (error) {
+                error.should.be.instanceOf(ApiError);
+                spy.calledOnce.should.be.false;
+                done();
+            });
+    });
+
+    it('should reject promise for an undeclared parameter', function (done) {
+        var spy = sinon.spy();
+        var apiMethod = new ApiMethod({
+            name: 'test-method',
+            action: spy
+        });
+
+        apiMethod.exec({param1: 'test'})
             .fail(function (error) {
                 error.should.be.instanceOf(ApiError);
                 spy.calledOnce.should.be.false;
