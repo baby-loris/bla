@@ -11,8 +11,8 @@ var api = new bla.Api(__dirname + '/../api/**/*.api.js');
  */
 function buildMethodName(req) {
     return [
-        req.param('service'),
-        req.param('subservice')
+        req.params.service,
+        req.params.subservice
     ].filter(Boolean).join('-');
 }
 

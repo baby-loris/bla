@@ -196,7 +196,7 @@ Using the second paremeter `options` you can tune the middleware up.
 | Name                | Type     | Description                                                                                             |
 | -----------------   | -------- | ------------------------------------------------------------------------------------------------------- |
 | \[enableDocPage\]   | Boolean  | Generate documentation page. Defaults to `true`. See [example](examples/middleware/without_docpage.js). |
-| \[buildMethodName\] | Function | `express.Request` is passed to the function. The function should return a method name. By default methodName is grabbed by executing `req.param('method')`. See [example](examples/middleware/build_method_name.js). |
+| \[buildMethodName\] | Function | `express.Request` is passed to the function. The function should return a method name. By default methodName is taken from the `req.params.method`. See [example](examples/middleware/build_method_name.js). |
 
 Method parameters are `req.query` extended by `req.body`.
 
