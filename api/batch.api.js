@@ -15,7 +15,7 @@ var bla = require('../lib');
  */
 
 module.exports = new bla.ApiMethod({
-    name: 'bla-batch',
+    name: 'batch',
     description: 'Executes a set of methods',
     options: {
         showOnDocPage: false

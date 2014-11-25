@@ -221,7 +221,7 @@
              * Performs batch request.
              */
             _sendBatchRequest: function () {
-                var url = this._basePath + 'bla-batch';
+                var url = this._basePath + 'batch';
                 var data = JSON.stringify({methods: this._batch});
                 sendAjaxRequest(url, data).then(
                     this._resolvePromises.bind(this, this._batch),

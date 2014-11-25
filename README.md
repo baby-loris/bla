@@ -13,7 +13,7 @@ The package is versioned according to [SemVer](http://semver.org).
   * Consistent interface of API methods on the server and client sides.
   * Normalization for request parameters.
   * Automatic documentation generation for all declared API methods.
-  * Joining all client requests into one during one tick (see [batch method](#bla-batch)).
+  * Joining all client requests into one during one tick (see [batch method](#batch)).
   * Works with the most popular module systems.
 
 ## Installation
@@ -109,7 +109,7 @@ make run examples/backend/basic_usage.js
 **Note.** `express 4.x` is used in all examples. See [package.json](package.json#L31) for more details.
 
 ## Built-in API methods
-### bla-batch
+### batch
 This method is used on the client side and makes it possible to joint all requests to the server during one tick. It shortens number of request dramatically.
 
 The client side uses this method by default and can be changed with `enableBatching` option of [Api class constructor](REFERENCE.md#constructorbasepath-options) or the `enableBatching` option of the [Api.exec method](REFERENCE.md#execmethodname-params-request).

@@ -28,7 +28,7 @@ modules.define(
                 it('should resolve a promise for a good request', function (callback) {
                     server.respondWith(
                         'POST',
-                        '/api/bla-batch',
+                        '/api/batch',
                         [
                             200,
                             {
@@ -52,7 +52,7 @@ modules.define(
                 it('should reject a promise for a bad request', function (callback) {
                     server.respondWith(
                         'POST',
-                        '/api/bla-batch',
+                        '/api/batch',
                         [
                             200,
                             {
@@ -76,7 +76,7 @@ modules.define(
                 it('should reject a promise with an API error', function (callback) {
                     server.respondWith(
                         'POST',
-                        '/api/bla-batch',
+                        '/api/batch',
                         [
                             200,
                             {
@@ -268,7 +268,7 @@ modules.define(
             beforeEach(function () {
                 server.respondWith(
                     'POST',
-                    '/api/bla-batch',
+                    '/api/batch',
                     [
                         200,
                         {

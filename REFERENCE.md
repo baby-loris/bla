@@ -252,7 +252,7 @@ Also you can specify extra options:
 
 | Name               | Type    | Description                                                                             |
 | ------------------ | ------- | --------------------------------------------------------------------------------------- |
-| \[enableBatching\] | Boolean | Configure [batching](#bla-batch) globally. Pass `false` to disable. Defaults to `true`. |
+| \[enableBatching\] | Boolean | Configure [batching](README.md#batch) globally. Pass `false` to disable. Defaults to `true`. |
 
 You can use the client-side bundle of bla with different module systems. For example:
 ```javascript
@@ -283,7 +283,7 @@ execOptions:
 
 | Name               | Type    | Description                                                                                            |
 | ------------------ | ------- | ------------------------------------------------------------------------------------------------------ |
-| \[enableBatching\] | Boolean | Configure [batching](#bla-batch) for the current request. Pass `false` to disable. Defaults to `true`. |
+| \[enableBatching\] | Boolean | Configure [batching](README.md#batch) for the current request. Pass `false` to disable. Defaults to `true`. |
 
 For example:
 ```javascript
