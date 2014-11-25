@@ -10,8 +10,8 @@ var apiMiddleware = require('../../lib').apiMiddleware;
  */
 function buildMethodName(req) {
     return [
-        req.param('service'),
-        req.param('subservice')
+        req.params.service,
+        req.params.subservice
     ].filter(Boolean).join('-');
 }
 
