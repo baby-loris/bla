@@ -131,7 +131,7 @@ var helloMethod = new ApiMethod({
         name: {type: 'String'}
     },
     options: {
-        paramsValidation: function (paramValue, paramType, paramName) {
+        paramsValidation: function (paramValue, paramDeclaration) {
             return paramValue; // don't use validation at all
         }
     },
@@ -141,8 +141,7 @@ var helloMethod = new ApiMethod({
 ```
 where
   * `paramValue` — parameter value which should validate.
-  * `paramType` — parameter type such as `string`, `number`, and so on.
-  * `paramName` — parameter name (it will be useful when you throw an error).
+  * `paramDeclaration` — [parameter declaration](#params).
 
 **Note.** It is strongly recommended to throw ApiErrors only.
 
