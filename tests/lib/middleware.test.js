@@ -12,10 +12,12 @@ var API_TEST_FILES_PATH = __dirname + '/../_data/api/**/*.api.js';
 
 describe('middleware', function (done) {
     var app;
+    var api;
     beforeEach(function () {
+        api = new Api(API_FILES_PATH);
         app = express()
             .use(bodyParser.json())
-            .use('/api/:method?', apiMiddleware(API_FILES_PATH));
+            .use('/api/:method?', apiMiddleware(api));
     });
 
     it('should response to a right request', function (done) {
@@ -77,7 +79,7 @@ describe('middleware', function (done) {
         beforeEach(function () {
             app = express()
                 .use(bodyParser.json())
-                .use('/api/:method?', apiMiddleware(API_FILES_PATH, {buildMethodName: stub}));
+                .use('/api/:method?', apiMiddleware(api, {buildMethodName: stub}));
         });
 
         it('should build a custom methodname', function (done) {
@@ -85,24 +87,6 @@ describe('middleware', function (done) {
                 .get('/api/any/method/?name=Stepan')
                 .expect('Content-Type', /json/)
                 .expect('{"data":"Hello, Stepan"}')
-                .expect(200)
-                .end(done);
-        });
-    });
-
-    describe('when Api instance is passed', function () {
-        beforeEach(function () {
-            var api = new Api(API_FILES_PATH);
-            app = express()
-                .use(bodyParser.json())
-                .use('/api/:method?', apiMiddleware(api));
-        });
-
-        it('should response to a right request', function (done) {
-            request(app)
-                .get('/api/hello?name=Alexander')
-                .expect('Content-Type', /json/)
-                .expect('{"data":"Hello, Alexander"}')
                 .expect(200)
                 .end(done);
         });
@@ -134,9 +118,10 @@ describe('middleware', function (done) {
 
     describe('when a generic error is occured', function () {
         it('should proxy an error to the next middleware', function (done) {
+            var api = new Api(API_TEST_FILES_PATH);
             app = express()
                 .use(bodyParser.json())
-                .use('/api/:method?', apiMiddleware(API_TEST_FILES_PATH))
+                .use('/api/:method?', apiMiddleware(api))
                 .use(function (err, req, res, next) {
                     done();
                 });
@@ -150,7 +135,7 @@ describe('middleware', function (done) {
     describe('when a body-parser is missed', function () {
         it('should throw an error for POST requests', function (done) {
             app = express()
-                .use('/api/:method?', apiMiddleware(API_FILES_PATH))
+                .use('/api/:method?', apiMiddleware(api))
                 .use(function (err, req, res, next) {
                     done();
                 });
@@ -162,7 +147,7 @@ describe('middleware', function (done) {
 
         it('shouldn\'t throw an error for GET requests', function (done) {
             app = express()
-                .use('/api/:method?', apiMiddleware(API_FILES_PATH));
+                .use('/api/:method?', apiMiddleware(api));
 
             request(app)
                 .get('/api/')
@@ -173,7 +158,7 @@ describe('middleware', function (done) {
     describe('documentation page options', function () {
         it('should generate documentation with `disableDocPage` option set to `false`', function (done) {
             app = express()
-                .use('/api/:method?', apiMiddleware(API_FILES_PATH, {disableDocPage: false}));
+                .use('/api/:method?', apiMiddleware(api, {disableDocPage: false}));
             request(app)
                 .get('/api')
                 .expect(200)
@@ -184,7 +169,7 @@ describe('middleware', function (done) {
 
         it('should generate documentation with `enableDocPage` option set to `true`', function (done) {
             app = express()
-                .use('/api/:method?', apiMiddleware(API_FILES_PATH, {enableDocPage: true}));
+                .use('/api/:method?', apiMiddleware(api, {enableDocPage: true}));
             request(app)
                 .get('/api')
                 .expect(200)
@@ -193,7 +178,7 @@ describe('middleware', function (done) {
 
         it('should generate documentation without options', function (done) {
             app = express()
-                .use('/api/:method?', apiMiddleware(API_FILES_PATH));
+                .use('/api/:method?', apiMiddleware(api));
             request(app)
                 .get('/api')
                 .expect(200)
@@ -202,7 +187,7 @@ describe('middleware', function (done) {
 
         it('should not generate documentation with `disableDocPage` option set to `true`', function (done) {
             app = express()
-                .use('/api/:method?', apiMiddleware(API_FILES_PATH, {disableDocPage: true}));
+                .use('/api/:method?', apiMiddleware(api, {disableDocPage: true}));
             request(app)
                 .get('/api')
                 .expect(404)
@@ -213,7 +198,7 @@ describe('middleware', function (done) {
 
         it('should not generate documentation page with `enableDocPage` option set to `false`', function (done) {
             app = express()
-                .use('/api/:method?', apiMiddleware(API_FILES_PATH, {enableDocPage: false}));
+                .use('/api/:method?', apiMiddleware(api, {enableDocPage: false}));
             request(app)
                 .get('/api')
                 .expect(404)
@@ -225,7 +210,7 @@ describe('middleware', function (done) {
         it('should accept urlencoded request', function (done) {
             app = express()
                 .use(bodyParser.urlencoded({extended: true}))
-                .use('/api/:method?', apiMiddleware(API_FILES_PATH));
+                .use('/api/:method?', apiMiddleware(api));
 
             request(app)
                 .post('/api/bla-batch')

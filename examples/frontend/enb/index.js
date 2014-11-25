@@ -1,11 +1,12 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var apiMiddleware = require('../../../lib').apiMiddleware;
+var bla = require('../../../lib');
+var api = new bla.Api(__dirname + '/../../api/**/*.api.js');
 
 app
     .use(bodyParser.json())
-    .use('/api/:method?', apiMiddleware(__dirname + '/../../api/**/*.api.js'))
+    .use('/api/:method?', bla.apiMiddleware(api))
     .use('/pages', express.static(__dirname + '/pages'))
     .get('/', function (req, res) {
         res.sendFile(__dirname + '/pages/index/index.html');

@@ -184,9 +184,9 @@ throw new ApiError(ApiError.INTERNAL_ERROR, 'Internal server error');
 
 ## Express Middleware
 ```
-var apiMiddleware = require('bla').apiMiddleware(methodPathPattern, options)
+var apiMiddleware = require('bla').apiMiddleware(api, options)
 ```
-The middleware adds a route path for API to your Express application. You need to pass `methodPathPattern` as you did for Api class or an Api instance itself.
+The middleware adds a route path for API to your Express application. You need to pass Api instance.
 
 **Note.** The middleware always proxies an express request to an executed method.
 
@@ -212,11 +212,12 @@ Example:
 ```
 var app = require('express')();
 var bodyParser = require('body-parser');
-var apiMiddleware = require('bla').apiMiddleware;
+var bla = require('bla');
+var api = new bla.Api(__dirname + '/../api/**/*.api.js');
 
 app
     .use(bodyParser.json())
-    .use('/api/:method?', apiMiddleware(__dirname + '/../api/**/*.api.js'))
+    .use('/api/:method?', bla.apiMiddleware(api))
 ```
 
 You can find a working examples in [example/middleware](examples/middleware) directory.
