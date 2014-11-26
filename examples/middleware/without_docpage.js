@@ -1,11 +1,12 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var apiMiddleware = require('../../lib').apiMiddleware;
+var bla = require('../../lib');
+var api = new bla.Api(__dirname + '/../api/**/*.api.js');
 
 var apiRouter = express.Router()
     .use(bodyParser.json())
-    .use('/:method?', apiMiddleware(__dirname + '/../api/**/*.api.js', {enableDocPage: false}));
+    .use('/:method?', bla.apiMiddleware(api, {enableDocPage: false}));
 
 module.exports =
 app

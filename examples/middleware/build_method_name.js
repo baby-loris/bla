@@ -1,6 +1,7 @@
 var app = require('express')();
 var bodyParser = require('body-parser');
-var apiMiddleware = require('../../lib').apiMiddleware;
+var bla = require('../../lib');
+var api = new bla.Api(__dirname + '/../api/**/*.api.js');
 
 /**
  * Build a custom method name.
@@ -20,7 +21,7 @@ app
     .use(bodyParser.json())
     .use(
         '/api/:service?/:subservice?',
-        apiMiddleware(__dirname + '/../api/**/*.api.js', {buildMethodName: buildMethodName})
+        bla.apiMiddleware(api, {buildMethodName: buildMethodName})
     )
     .listen(8080);
 

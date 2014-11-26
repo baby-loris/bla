@@ -5,10 +5,11 @@ var nock = require('nock');
 var request = require('supertest');
 var sinon = require('sinon');
 
-var GeolocationApiMethod = require('../../../examples/api/geolocation.api.js');
-var apiMiddleware = require('../../../lib/middleware');
-var ApiError = require('../../../lib/api-error');
 var API_FILES_PATH = __dirname + '/../../../examples/api/**/*.api.js';
+
+var GeolocationApiMethod = require('../../../examples/api/geolocation.api.js');
+var bla = require('../../../lib');
+var api = new bla.Api(API_FILES_PATH);
 
 var yandexLocator = nock('http://api.lbs.yandex.net').post('/geolocation');
 var successResponse = {
@@ -58,7 +59,7 @@ describe('geolocation.api.js', function () {
             yandexLocator.reply(404, errorResponse);
             GeolocationApiMethod.exec({ip: '77.88.19.18'})
                 .fail(function (error) {
-                    error.type.should.equal(ApiError.NOT_FOUND);
+                    error.type.should.equal(bla.ApiError.NOT_FOUND);
                     done();
                 })
                 .done();
@@ -70,7 +71,7 @@ describe('geolocation.api.js', function () {
                 sinon.spy(GeolocationApiMethod, 'exec');
                 app = express()
                     .use(bodyParser.json())
-                    .use('/api/:method?', apiMiddleware(API_FILES_PATH));
+                    .use('/api/:method?', bla.apiMiddleware(api));
             });
             afterEach(function () {
                 GeolocationApiMethod.exec.restore();
@@ -93,7 +94,7 @@ describe('geolocation.api.js', function () {
             yandexLocator.reply(500, errorResponse);
             GeolocationApiMethod.exec({ip: '77.88.19.18'})
                 .fail(function (error) {
-                    error.type.should.equal(ApiError.INTERNAL_ERROR);
+                    error.type.should.equal(bla.ApiError.INTERNAL_ERROR);
                     done();
                 })
                 .done();
