@@ -146,7 +146,7 @@ function commitAllChanges(msg) {
  *      subject strings.
  */
 function changelog(from, to) {
-    return vowExec(util.format('git log --format="%%s" %s..%s^1', from, to))
+    return vowExec(util.format('git log --format="%%s" %s..%s', from, to))
         .then(function (stdout) {
             return stdout.split('\n');
         });
