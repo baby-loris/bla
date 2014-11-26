@@ -2,7 +2,6 @@ var request = require('supertest');
 var express = require('express');
 var bodyParser = require('body-parser');
 var Api = require('../../lib/api');
-var HelloMethod = require('../../examples/api/hello.api.js');
 var apiMiddleware = require('../../lib/middleware');
 var should = require('chai').should();
 var sinon = require('sinon');
@@ -13,11 +12,21 @@ var API_TEST_FILES_PATH = __dirname + '/../_data/api/**/*.api.js';
 describe('middleware', function (done) {
     var app;
     var api;
+    var HelloMethod;
     beforeEach(function () {
         api = new Api(API_FILES_PATH);
         app = express()
             .use(bodyParser.json())
             .use('/api/:method?', apiMiddleware(api));
+         HelloMethod = require('../../examples/api/hello.api.js');
+    });
+
+    afterEach(function () {
+        Object.keys(require.cache).forEach(function (filename) {
+            if (filename.indexOf('.api.js') !== -1) {
+                delete require.cache[filename];
+            }
+        });
     });
 
     it('should response to a right request', function (done) {

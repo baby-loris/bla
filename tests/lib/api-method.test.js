@@ -52,7 +52,7 @@ describe('api-method', function () {
         });
 
         apiMethod.getParams().testParam.should.be.eq(paramDeclaration);
-        apiMethod.getParamsDeclarations().testParam.should.be.eq(paramDeclaration);
+        apiMethod.getParams().testParam.should.be.eq(paramDeclaration);
     });
 
     it('should use default value for parameter', function () {
@@ -211,6 +211,7 @@ describe('api-method', function () {
         var fn = function () {
             var apiMethod = new ApiMethod({
                 name: 'test-method',
+                action: sinon.spy(),
                 options: {
                     paramsValidation: 'non-existent-validation-mode'
                 }
@@ -227,7 +228,7 @@ describe('api-method', function () {
                 param1: {type: 'String'}
             },
             options: {
-                paramsValidation: function (paramValue, paramType, paramName) {
+                paramsValidation: function () {
                     return 'baking bread';
                 }
             },
@@ -264,10 +265,10 @@ describe('api-method', function () {
             };
 
             apiMethod.getParams().should.be.empty;
-            apiMethod.getParamsDeclarations().should.be.empty;
+            apiMethod.getParams().should.be.empty;
             apiMethod.addParam(paramDeclaration);
             apiMethod.getParams()[paramDeclaration.name].should.be.eq(paramDeclaration);
-            apiMethod.getParamsDeclarations()[paramDeclaration.name].should.be.eq(paramDeclaration);
+            apiMethod.getParams()[paramDeclaration.name].should.be.eq(paramDeclaration);
         });
 
         it('should throw an error for redefining a parameter', function () {

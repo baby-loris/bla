@@ -1,7 +1,7 @@
 # API Reference
   * Server side
     * [Class Api](#class-api)
-      * [constructor(methodPathPattern)](#constructormethodpathpattern)
+      * [constructor(methodPathPattern, [options])](#constructormethodpathpattern-options)
       * [exec(methodName, [params], [request])](#execmethodname-params-request)
     * [Class ApiMethod](#class-apimethod)
       * [constructor(method)](#constructormethod)
@@ -16,7 +16,7 @@
     * [Class ApiError (bla-error)](#class-apierror-bla-error)
 
 ## Class Api
-### constructor(methodPathPattern)
+### constructor(methodPathPattern, options)
 Creates a new instance of API and collects all your API methods from `methodPathPattern` path. Path supports [minimatch](https://github.com/isaacs/minimatch).
 
 Example:
@@ -24,6 +24,12 @@ Example:
 var Api = require('bla').Api;
 var api = new Api(__dirname + '/api/**/*.api.js');
 ```
+
+Also you can pass extra `options`:
+
+| Name                 | Type               | Description                                                                                 |
+| -------------------- | ------------------ | ------------------------------------------------------------------------------------------- |
+| paramsValidation     | String \| Function | Preprocessing method parameters. Defaults to `normalize`. See [ApiMethod](#class-apimethod) |
 
 ### exec(methodName, [params], [request])
 Executes an API method `methodName` with the provided `params`.
@@ -115,11 +121,11 @@ var helloMethod = new ApiMethod({
 #### options
 List of available `options`:
 
-| Name                 | Type              | Description                                                         |
-| -------------------- | ----------------- | ------------------------------------------------------------------- |
-| showOnDocPage        | Boolean           | Show API method on the documentation page. Defaults to `true`.      |
-| executeOnServerOnly  | Boolean           | Permit to execute method only on server side. Defaults to `false`.  |
-| paramsValidation     | String | Function | Preprocessing method parameters. Defaults to `normalize`.           |
+| Name                 | Type               | Description                                                         |
+| -------------------- | ------------------ | ------------------------------------------------------------------- |
+| showOnDocPage        | Boolean            | Show API method on the documentation page. Defaults to `true`.      |
+| executeOnServerOnly  | Boolean            | Permit to execute method only on server side. Defaults to `false`.  |
+| paramsValidation     | String \| Function | Preprocessing method parameters. Defaults to `normalize`.           |
 
 The option `paramsValidation` makes it possible to change default parameter preprocessing. `normalize` mode tries to convert each parameter value to its declared type if it is possible.
 
@@ -140,7 +146,7 @@ var helloMethod = new ApiMethod({
 
 ```
 where
-  * `paramValue` — parameter value which should validate.
+  * `paramValue` — a parameter value which should be validated.
   * `paramDeclaration` — [parameter declaration](#params).
 
 **Note.** It is strongly recommended to throw ApiErrors only.
