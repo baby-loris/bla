@@ -165,17 +165,6 @@ describe('middleware', function (done) {
     });
 
     describe('documentation page options', function () {
-        it('should generate documentation with `disableDocPage` option set to `false`', function (done) {
-            app = express()
-                .use('/api/:method?', apiMiddleware(api, {disableDocPage: false}));
-            request(app)
-                .get('/api')
-                .expect(200)
-                .end(function (err) {
-                    done(err);
-                });
-        });
-
         it('should generate documentation with `enableDocPage` option set to `true`', function (done) {
             app = express()
                 .use('/api/:method?', apiMiddleware(api, {enableDocPage: true}));
@@ -192,17 +181,6 @@ describe('middleware', function (done) {
                 .get('/api')
                 .expect(200)
                 .end(done);
-        });
-
-        it('should not generate documentation with `disableDocPage` option set to `true`', function (done) {
-            app = express()
-                .use('/api/:method?', apiMiddleware(api, {disableDocPage: true}));
-            request(app)
-                .get('/api')
-                .expect(404)
-                .end(function (err) {
-                    done(err);
-                });
         });
 
         it('should not generate documentation page with `enableDocPage` option set to `false`', function (done) {

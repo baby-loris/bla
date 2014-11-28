@@ -46,39 +46,20 @@
         };
 
         /**
-         * Checks if the passed argument is an Array. This util function uses Array.isArray if present, if not
-         * uses a polyfill suggest at the MDN JS API documentation.
-         * @see https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
-         *
-         * @param {*} arg
-         * @returns {Boolean}
-         */
-        function isArray(arg) {
-            return arg && (Array.isArray ?
-                Array.isArray(arg) :
-                Object.prototype.toString.call(arg) === '[object Array]'
-            );
-        }
-
-        /**
          * Api provider.
          *
          * @param {String} basePath Url path to the middleware root.
          * @param {Object} [options] Extra options.
          * @param {Boolean} [options.enableBatching=true] Enables batching.
-         * @param {Boolean|String[]} [options.noBatching=false] @deprecated Turns off batching.
-         * Accepts a boolean value, for all methods, or an array with the specific methods that shouldn't be batched.
          */
         function Api(basePath, options) {
             this._basePath = basePath;
             options = options || {};
             this._options = {
-                enableBatching: options.enableBatching,
-                // if the 'noBatching' option is not an Array is considered Boolean.
-                noBatching: !isArray(options.noBatching) && Boolean(options.noBatching)
+                enableBatching: options.hasOwnProperty('enableBatching') ?
+                    options.enableBatching :
+                    true
             };
-            // if the 'noBatching' option is an Array set the noBatchingForMethods option
-            this._noBatchingForMethods = isArray(options.noBatching) ? options.noBatching : [];
             this._batch = [];
             this._deferreds = {};
         }
@@ -93,25 +74,15 @@
              * @param {Object} params Data should be sent to the method.
              * @param {Object} [execOptions] Exec-specific options.
              * @param {Boolean} [execOptions.enableBatching=true] Should the current call of the method be batched.
-             * @param {Boolean} [execOptions.noBatching=false] @deprecated Should the current call of the
              * method be batched.
              * @returns {vow.Promise}
              */
             exec: function (methodName, params, execOptions) {
                 execOptions = execOptions || {};
 
-                var enableBatching;
-                if (execOptions.hasOwnProperty('enableBatching')) {
-                    enableBatching = execOptions.enableBatching;
-                } else if (this._options.enableBatching !== undefined) {
-                    enableBatching = this._options.enableBatching;
-                } else {
-                    // Check deprecated option.
-                    // Defaults to `true` if no batching option specified.
-                    enableBatching = !this._options.noBatching &&
-                        !execOptions.noBatching &&
-                        this._noBatchingForMethods.indexOf(methodName) === -1;
-                }
+                var enableBatching = execOptions.hasOwnProperty('enableBatching') ?
+                    execOptions.enableBatching :
+                    this._options.enableBatching;
 
                 return enableBatching ?
                     this._execWithBatching(methodName, params) :
