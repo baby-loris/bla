@@ -49,7 +49,6 @@ describe('strict validator', function () {
     it('should allow boolean values only', function () {
         var strictBooleanFn = strictFn('boolean');
 
-        strictBooleanFn('false').should.throw(ApiError);
         strictBooleanFn('foobar').should.throw(ApiError);
         strictBooleanFn([4, 2]).should.throw(ApiError);
         strictBooleanFn({4: 2}).should.throw(ApiError);
@@ -57,6 +56,16 @@ describe('strict validator', function () {
 
         strictBooleanFn(true)().should.be.equal(true);
         strictBooleanFn(false)().should.be.equal(false);
+    });
+
+    it('should allow boolean values passed as strings', function () {
+        var strictBooleanFn = strictFn('boolean');
+
+        strictBooleanFn('True').should.throw(ApiError);
+        strictBooleanFn('False').should.throw(ApiError);
+
+        strictBooleanFn('true')().should.be.equal(true);
+        strictBooleanFn('false')().should.be.equal(false);
     });
 
     it('should allow arrays only', function () {
