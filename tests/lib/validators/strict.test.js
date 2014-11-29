@@ -14,7 +14,6 @@ describe('strict validator', function () {
     it('should allow numbers only', function () {
         var strictNumberFn = strictFn('number');
 
-        strictNumberFn('42').should.throw(ApiError);
         strictNumberFn('foobar').should.throw(ApiError);
         strictNumberFn([4, 2]).should.throw(ApiError);
         strictNumberFn({4: 2}).should.throw(ApiError);
@@ -22,6 +21,17 @@ describe('strict validator', function () {
         strictNumberFn(null).should.throw(ApiError);
 
         strictNumberFn(42)().should.be.equal(42);
+    });
+
+    it('should allow numbers passed as strings', function () {
+        var strictNumberFn = strictFn('number');
+
+        strictNumberFn('42foo').should.throw(ApiError);
+        strictNumberFn('0042').should.throw(ApiError);
+
+        strictNumberFn('42')().should.be.equal(42);
+        strictNumberFn('1e6')().should.be.equal(1e6);
+        strictNumberFn('-0.042')().should.be.equal(-0.042);
     });
 
     it('should allow strings only', function () {
