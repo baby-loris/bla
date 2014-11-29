@@ -127,7 +127,7 @@ List of available `options`:
 | executeOnServerOnly  | Boolean            | Permit to execute method only on server side. Defaults to `false`.  |
 | paramsValidation     | String \| Function | Preprocessing method parameters. Defaults to `normalize`.           |
 
-The option `paramsValidation` makes it possible to change default parameter preprocessing. `normalize` mode tries to convert each parameter value to its declared type if it is possible.
+The option `paramsValidation` makes it possible to change default parameter preprocessing. `normalize` mode tries to convert each parameter value to its declared type if it is possible. `strict` mode strictly checks if parameter value corresponds to its declared type.
 
 Also you can implement your own `paramsValidation` function.
 ```javascript
