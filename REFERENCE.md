@@ -137,7 +137,7 @@ var helloMethod = new ApiMethod({
         name: {type: 'String'}
     },
     options: {
-        paramsValidation: function (paramValue, paramDeclaration) {
+        paramsValidation: function (paramValue, paramName, paramDeclaration) {
             return paramValue; // don't use validation at all
         }
     },

@@ -5,7 +5,7 @@ var should = require('chai').should();
 var strictFn = function (type) {
     return function (value) {
         return function () {
-            return strict(value, {type: type});
+            return strict(value, 'paramName', {type: type});
         }
     }
 };
