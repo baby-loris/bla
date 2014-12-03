@@ -1,3 +1,15 @@
+### 1.0.0
+  * Remove all deprecated methods and options [#92](../../pull/92). (**breaks backward compatibility**)
+  * Throw an error for redeclared methods [#82](../../pull/92).
+  * Support urlencoded params [#83](../../pull/83).
+  * Prevent passing undeclared parameters [#85](../../pull/85).
+  * Remove peerDependency for vow [#86](../../pull/86).
+  * Rename bla-batch -> batch [#88](../../pull/88).
+  * Pass only an Api instance to the middleware, not methodPathPattern [#89](../../pull/89). (**breaks backward compatibility**)
+  * Add validators for method parameters [#87](../../pull/87).
+  * Add strict type validator [#93](../../pull/93).
+  * and a lot of fixes and improvements.
+
 ### 0.1.1
   * Support `enableBatching` option [#73](../../pull/73).
   * Rename `getParamsDeclarations` -> `getParams` [#80](../../pull/80).
