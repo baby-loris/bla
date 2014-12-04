@@ -169,6 +169,19 @@ describe('api-method', function () {
             });
     });
 
+    it('should apply allowUndeclaredParams option', function () {
+        var spy = sinon.spy();
+        var apiMethod = new ApiMethod({
+            name: 'test-method',
+            action: spy,
+            options: {
+                allowUndeclaredParams: true
+            }
+        });
+
+        return apiMethod.exec({param1: 'test'});
+    });
+
     it('should use custom validation for the param', function (done) {
         var CustomMethod = inherit(ApiMethod, {
             _normalizeParams: function (values, params) {

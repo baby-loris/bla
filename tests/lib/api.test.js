@@ -125,7 +125,7 @@ describe('api', function () {
         });
     });
 
-    describe('when paramsValidation is specified', function () {
+    describe('when Api options are specified', function () {
         var api;
         beforeEach(function () {
             api = new Api(API_FILES_PATH, {
@@ -142,7 +142,7 @@ describe('api', function () {
                 });
         });
 
-        describe('and the method already has paramsValidation option', function () {
+        describe('and the method already has the same option', function () {
             var HelloMethod;
 
             beforeEach(function () {

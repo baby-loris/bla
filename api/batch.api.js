@@ -18,8 +18,9 @@ module.exports = new bla.ApiMethod({
     name: 'batch',
     description: 'Executes a set of methods',
     options: {
-        showOnDocPage: false,
-        paramsValidation: 'normalize'
+        allowUndeclaredParams: true,
+        paramsValidation: 'normalize',
+        showOnDocPage: false
     },
     params: {
         // Methods are passed as an array of BatchApiMethod objects.

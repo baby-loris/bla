@@ -27,9 +27,10 @@ var api = new Api(__dirname + '/api/**/*.api.js');
 
 Also you can pass extra `options`:
 
-| Name                 | Type               | Description                                                                                 |
-| -------------------- | ------------------ | ------------------------------------------------------------------------------------------- |
-| paramsValidation     | String \| Function | Preprocessing method parameters. Defaults to `normalize`. See [ApiMethod](#class-apimethod) |
+| Name                  | Type               | Description                                                                                 |
+| --------------------- | ------------------ | ------------------------------------------------------------------------------------------- |
+| allowUndeclaredParams | Boolean            | Tolerates undeclared parameters. Defaults to `false`. See [ApiMethod](#class-apimethod)     |
+| paramsValidation      | String \| Function | Preprocessing method parameters. Defaults to `normalize`. See [ApiMethod](#class-apimethod) |
 
 ### exec(methodName, [params], [request])
 Executes an API method `methodName` with the provided `params`.
@@ -121,11 +122,14 @@ var helloMethod = new ApiMethod({
 #### options
 List of available `options`:
 
-| Name                 | Type               | Description                                                         |
-| -------------------- | ------------------ | ------------------------------------------------------------------- |
-| showOnDocPage        | Boolean            | Show API method on the documentation page. Defaults to `true`.      |
-| executeOnServerOnly  | Boolean            | Permit to execute method only on server side. Defaults to `false`.  |
-| paramsValidation     | String \| Function | Preprocessing method parameters. Defaults to `normalize`.           |
+| Name                  | Type               | Description                                                         |
+| --------------------- | ------------------ | ------------------------------------------------------------------- |
+| showOnDocPage         | Boolean            | Show API method on the documentation page. Defaults to `true`.      |
+| executeOnServerOnly   | Boolean            | Permit to execute method only on server side. Defaults to `false`.  |
+| allowUndeclaredParams | Boolean            | Tolerates undeclared parameters. Defaults to `false`.               |
+| paramsValidation      | String \| Function | Preprocessing method parameters. Defaults to `normalize`.           |
+
+By default all passed undeclared paramters cause an error. The option `allowUndeclaredParams` disable this behaviour and makes it possible to pass undeclared parameters.
 
 The option `paramsValidation` makes it possible to change default parameter preprocessing. `normalize` mode tries to convert each parameter value to its declared type if it is possible. `strict` mode strictly checks if parameter value corresponds to its declared type.
 
