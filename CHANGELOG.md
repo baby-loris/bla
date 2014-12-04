@@ -1,3 +1,6 @@
+### 1.1.0
+  * Add 'allowUndeclaredParams' option for methods [#95](../../pull/95).
+
 ### 1.0.0
   * Remove all deprecated methods and options [#92](../../pull/92). (**breaks backward compatibility**)
   * Throw an error for redeclared methods [#82](../../pull/92).
