@@ -58,10 +58,12 @@ First, include [API middleware](REFERENCE.md#express-middleware) to your express
 ```javascript
 var app = require('express')();
 var bodyParser = require('body-parser');
-var apiMiddleware = require('bla').apiMiddleware;
+var bla = require('bla');
+var api = new bla.Api(__dirname + '/../api/**/*.api.js');
+
 app
     .use(bodyParser.json())
-    .use('/api/:method?', apiMiddleware(__dirname + '/api/**/*.api.js'));
+    .use('/api/:method?', bla.apiMiddleware(api));
 ```
 Include the client library to your page.
 ```html
