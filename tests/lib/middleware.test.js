@@ -101,6 +101,33 @@ describe('middleware', function (done) {
         });
     });
 
+    describe('when extendResponse option is set', function () {
+        var stub = sinon.stub().returns({extended: 'hello'});
+        beforeEach(function () {
+            app = express()
+                .use(bodyParser.json())
+                .use('/api/:method?', apiMiddleware(api, {extendResponse: stub}));
+        });
+
+        it('should return extended response', function (done) {
+            request(app)
+                .get('/api/hello/?name=Stepan')
+                .expect('Content-Type', /json/)
+                .expect('{"extended":"hello"}')
+                .expect(200)
+                .end(done);
+        });
+
+        it('should extend response for a bad request', function (done) {
+            request(app)
+                .post('/api/hello')
+                .expect('Content-Type', /json/)
+                .expect('{"extended":"hello"}')
+                .expect(200)
+                .end(done);
+        });
+    });
+
     describe('when middleware is executed', function () {
         beforeEach(function () {
             sinon.spy(HelloMethod, 'exec');
