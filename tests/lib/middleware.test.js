@@ -102,18 +102,21 @@ describe('middleware', function (done) {
     });
 
     describe('when extendResponse option is set', function () {
-        var stub = sinon.stub().returns({extended: 'hello'});
+        var extendResponse = function (response) {
+            response.extended = 'hello';
+            return response;
+        };
         beforeEach(function () {
             app = express()
                 .use(bodyParser.json())
-                .use('/api/:method?', apiMiddleware(api, {extendResponse: stub}));
+                .use('/api/:method?', apiMiddleware(api, {extendResponse: extendResponse}));
         });
 
         it('should return extended response', function (done) {
             request(app)
                 .get('/api/hello/?name=Stepan')
                 .expect('Content-Type', /json/)
-                .expect('{"extended":"hello"}')
+                .expect('{"data":"Hello, Stepan","extended":"hello"}')
                 .expect(200)
                 .end(done);
         });
@@ -122,7 +125,7 @@ describe('middleware', function (done) {
             request(app)
                 .post('/api/hello')
                 .expect('Content-Type', /json/)
-                .expect('{"extended":"hello"}')
+                .expect('{"error":{"type":"BAD_REQUEST","message":"missing name parameter"},"extended":"hello"}')
                 .expect(200)
                 .end(done);
         });
