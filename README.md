@@ -16,6 +16,9 @@ The package is versioned according to [SemVer](http://semver.org).
   * Joining all client requests into one during one tick (see [batch method](#batch)).
   * Works with the most popular module systems.
 
+## Browser support
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/baby-loris.svg)](https://saucelabs.com/u/baby-loris)
+
 ## Installation
 ```
 npm install bla --save

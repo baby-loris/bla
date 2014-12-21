@@ -48,7 +48,8 @@
     "uglify-js": "2.4.15",
     "vow": "~0.4.4",
     "vow-asker": "0.6.6",
-    "ym": "0.1.0"
+    "ym": "0.1.0",
+    "zuul": "^1.13.1"
   },
   "main": "lib/index",
   "files": [

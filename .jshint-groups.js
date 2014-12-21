@@ -36,7 +36,7 @@ module.exports = {
                 node: true
             },
             includes: [
-                'tools/**/*.js',
+                'tools/release.js',
                 'api/**/*.js',
                 'examples/api/*.js',
                 'examples/backend/*.js',

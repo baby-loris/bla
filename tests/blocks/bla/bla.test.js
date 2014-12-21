@@ -24,11 +24,12 @@ modules.define(
         });
 
         describe('when batching mode is enabled', function () {
+            var TIMEOUT = window.TIMEOUT || 1;
             describe('when the server is working', function () {
                 it('should resolve a promise for a good request', function (callback) {
                     server.respondWith(
                         'POST',
-                        '/api/batch',
+                        '/api1/batch',
                         [
                             200,
                             {
@@ -38,7 +39,10 @@ modules.define(
                         ]
                     );
 
-                    var api = new Api('/api/');
+                    // With async responses different paths should be used, because sinon stores them is a closure
+                    // and match them by URLs and methods only. This results in responding with the latest queued
+                    // response that match and causes errors. Note, the `restore()` is triggered synchronously.
+                    var api = new Api('/api1/');
                     api.exec('hello')
                         .then(function (response) {
                             response.should.be.equal('Hello, world');
@@ -46,13 +50,13 @@ modules.define(
                         });
 
                     // API request is executed in the next tick, so we should wait until it is queued.
-                    setTimeout(server.respond.bind(server), 1);
+                    setTimeout(server.respond.bind(server), TIMEOUT);
                 });
 
                 it('should reject a promise for a bad request', function (callback) {
                     server.respondWith(
                         'POST',
-                        '/api/batch',
+                        '/api2/batch',
                         [
                             200,
                             {
@@ -62,13 +66,14 @@ modules.define(
                         ]
                     );
 
+                    var api = new Api('/api2/');
                     api.exec('hello')
                         .fail(function (error) {
                             error.should.be.instanceOf(ApiError);
                             error.type.should.be.equal(ApiError.BAD_REQUEST);
                             callback();
                         });
-                    setTimeout(server.respond.bind(server), 1);
+                    setTimeout(server.respond.bind(server), TIMEOUT);
                 });
             });
 
@@ -76,7 +81,7 @@ modules.define(
                 it('should reject a promise with an API error', function (callback) {
                     server.respondWith(
                         'POST',
-                        '/api/batch',
+                        '/api3/batch',
                         [
                             200,
                             {
@@ -85,13 +90,15 @@ modules.define(
                             '{"data":[{"error":{"type":"NOT_FOUND","message":"API method was\'t found"}}]}'
                         ]
                     );
+
+                    var api = new Api('/api3/');
                     api.exec('nonexistent-method')
                         .fail(function (error) {
                             error.should.be.instanceOf(ApiError);
                             error.type.should.be.equal(ApiError.NOT_FOUND);
                             callback();
                         });
-                    setTimeout(server.respond.bind(server), 1);
+                    setTimeout(server.respond.bind(server), TIMEOUT);
                 });
             });
 
@@ -104,14 +111,13 @@ modules.define(
                             error.type.should.be.equal(ApiError.INTERNAL_ERROR);
                             callback();
                         });
-                    setTimeout(server.respond.bind(server), 1);
+                    setTimeout(server.respond.bind(server), TIMEOUT);
                 });
             });
         });
 
         describe('when batching mode is disabled globally with `enableBatching` option', function () {
             beforeEach(function () {
-                this.clock = sinon.useFakeTimers();
                 api = new Api('/api/', {enableBatching: false});
             });
 
