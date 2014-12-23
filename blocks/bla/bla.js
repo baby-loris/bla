@@ -290,4 +290,4 @@
         global.bla.Api = createApiClass(global.vow, global.bla.ApiError);
     }
 
-}(this));
+}(window));

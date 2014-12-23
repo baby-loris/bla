@@ -26,6 +26,14 @@ test-client:
 	$(v)echo Run client tests
 	$(v)$(NODE_MODULES_BIN)/mocha-phantomjs $(MOCHA_FLAGS) tests/blocks/run-tests.html
 
+# Run tests via zuul locally
+zuul-local:
+	$(v)$(NODE_MODULES_BIN)/zuul --local 8080 -- tools/zuul.js
+
+# Run tests via zuul in the sause cloud
+zuul:
+	$(v)$(NODE_MODULES_BIN)/zuul -- tools/zuul.js
+
 # Run server tests
 test-server:
 	$(v)echo Run server tests

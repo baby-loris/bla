@@ -64,4 +64,4 @@
         global.bla.ApiError = ApiError;
     }
 
-}(this));
+}(window));
