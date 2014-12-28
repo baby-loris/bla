@@ -29,7 +29,7 @@ modules.define(
                 it('should resolve a promise for a good request', function (callback) {
                     server.respondWith(
                         'POST',
-                        '/api1/batch',
+                        '/api/batch',
                         [
                             200,
                             {
@@ -39,10 +39,6 @@ modules.define(
                         ]
                     );
 
-                    // With async responses different paths should be used, because sinon stores them is a closure
-                    // and match them by URLs and methods only. This results in responding with the latest queued
-                    // response that match and causes errors. Note, the `restore()` is triggered synchronously.
-                    var api = new Api('/api1/');
                     api.exec('hello')
                         .then(function (response) {
                             response.should.be.equal('Hello, world');
@@ -56,7 +52,7 @@ modules.define(
                 it('should reject a promise for a bad request', function (callback) {
                     server.respondWith(
                         'POST',
-                        '/api2/batch',
+                        '/api/batch',
                         [
                             200,
                             {
@@ -66,7 +62,6 @@ modules.define(
                         ]
                     );
 
-                    var api = new Api('/api2/');
                     api.exec('hello')
                         .fail(function (error) {
                             error.should.be.instanceOf(ApiError);
@@ -81,7 +76,7 @@ modules.define(
                 it('should reject a promise with an API error', function (callback) {
                     server.respondWith(
                         'POST',
-                        '/api3/batch',
+                        '/api/batch',
                         [
                             200,
                             {
@@ -91,7 +86,6 @@ modules.define(
                         ]
                     );
 
-                    var api = new Api('/api3/');
                     api.exec('nonexistent-method')
                         .fail(function (error) {
                             error.should.be.instanceOf(ApiError);
