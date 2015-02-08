@@ -70,8 +70,10 @@ app
 ```
 Include the client library to your page.
 ```html
-<script type="text/javascript" src="build/bla.min.js"></script>
+<script type="text/javascript" src="path/to/bla/build/bla.min.js"></script>
 ```
+You can use [cdnjs](https://cdnjs.com/libraries/bla) as well.
+
 Then execute any declared ApiMethod.
 ```javascript
 var api = new bla.Api('/api/');
