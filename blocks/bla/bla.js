@@ -285,6 +285,17 @@
         defineAsGlobal = false;
     }
 
+    /**
+     * Common JS.
+     * @see http://wiki.commonjs.org/wiki/Modules/1.1.1
+     */
+    if (typeof require === 'function' && typeof module === 'object' && typeof module.exports === 'object') {
+        var vow = require('vow');
+        var ApiError = require('../bla-error/bla-error.js');
+        module.exports = createApiClass(vow, ApiError);
+        defineAsGlobal = false;
+    }
+
     if (defineAsGlobal) {
         global.bla = global.bla || {};
         global.bla.Api = createApiClass(global.vow, global.bla.ApiError);

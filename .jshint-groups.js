@@ -19,7 +19,7 @@ module.exports = {
         client: {
             options: {
                 browser: true,
-                predef: ['modules', 'define', 'require', 'bla']
+                predef: ['modules', 'define', 'require', 'bla', 'module']
             },
             includes: [
                 'blocks/**/*.js',
