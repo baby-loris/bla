@@ -1,3 +1,11 @@
+### 1.2.0
+  * Add default editor to release tool
+  * Add Common JS support
+  * Add link to cdnjs
+  * Use svg instead of png to get better image quality
+  * Update tests
+  * Add zuul support
+
 ### 1.1.0
   * Add 'allowUndeclaredParams' option for methods [#95](../../pull/95).
 
