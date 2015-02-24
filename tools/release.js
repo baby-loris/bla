@@ -56,7 +56,8 @@ function vowExec(cmd) {
  */
 function runEditor(file) {
     var defer = vow.defer();
-    child_process.spawn(process.env.EDITOR, [file], {stdio: 'inherit'})
+    var editor = process.env.EDITOR || 'vim';
+    child_process.spawn(editor, [file], {stdio: 'inherit'})
         .on('exit', function (code) {
             if (code === 0) {
                 defer.resolve();
