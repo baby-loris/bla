@@ -128,7 +128,7 @@ function tagHead(name) {
  * @returns {vow.Promise} Promise that'll be fulfilled on success.
  */
 function commitAllChanges(msg) {
-    return vowExec(util.format('git commit -a -m "%s"', msg))
+    return vowExec(util.format('git commit -a -m "%s" -n', msg))
         .fail(function (res) {
             return vow.reject('Commit failed:\n' + res.stderr);
         });
