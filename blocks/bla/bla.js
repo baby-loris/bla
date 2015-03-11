@@ -51,6 +51,7 @@
          * @param {String} basePath Url path to the middleware root.
          * @param {Object} [options] Extra options.
          * @param {Boolean} [options.enableBatching=true] Enables batching.
+         * @param {Object} [options.defaultParams] Params, that will be passed along with every request.
          */
         function Api(basePath, options) {
             this._basePath = basePath;
@@ -60,6 +61,7 @@
                     options.enableBatching :
                     true
             };
+            this._defaultParams = options.defaultParams || {};
             this._batch = [];
             this._deferreds = {};
         }
@@ -99,7 +101,7 @@
             _execWithoutBatching: function (methodName, params) {
                 var defer = vow.defer();
                 var url = this._basePath + methodName;
-                var data = JSON.stringify(params);
+                var data = JSON.stringify(this._appendDefaultParams(params));
 
                 sendAjaxRequest(url, data).then(
                     this._resolvePromise.bind(this, defer),
@@ -193,7 +195,7 @@
              */
             _sendBatchRequest: function () {
                 var url = this._basePath + 'batch';
-                var data = JSON.stringify({methods: this._batch});
+                var data = JSON.stringify(this._appendDefaultParams({methods: this._batch}));
                 sendAjaxRequest(url, data).then(
                     this._resolvePromises.bind(this, this._batch),
                     this._rejectPromises.bind(this, this._batch)
@@ -256,6 +258,21 @@
                     this._rejectPromise(this._deferreds[requestId], xhr);
                     delete this._deferreds[requestId];
                 }
+            },
+
+            /**
+             * Adds default params to the specified params object.
+             *
+             * @param {Object} params
+             * @returns {Object}
+             */
+            _appendDefaultParams: function (params) {
+                for (var prop in this._defaultParams) {
+                    if (this._defaultParams.hasOwnProperty(prop) && !params.hasOwnProperty(prop)) {
+                        params[prop] = this._defaultParams[prop];
+                    }
+                }
+                return params;
             }
         };
 
