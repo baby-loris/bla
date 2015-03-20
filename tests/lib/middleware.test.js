@@ -42,7 +42,7 @@ describe('middleware', function (done) {
         request(app)
             .post('/api/hello')
             .expect('Content-Type', /json/)
-            .expect('{"error":{"type":"BAD_REQUEST","message":"missing name parameter"}}')
+            .expect('{"error":{"name":"ApiError","type":"BAD_REQUEST","message":"missing name parameter"}}')
             .expect(200)
             .end(done);
     });

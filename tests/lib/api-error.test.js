@@ -35,4 +35,12 @@ describe('api-error', function () {
         fn.should.throw(Error);
         fn.should.throw(ApiError);
     });
+
+    it('should stringify into json', function () {
+        error.toJson().should.deep.equal({
+            message: 'Something bad just happened',
+            name: 'ApiError',
+            type: 'BAD_TIMES'
+        });
+    });
 });
