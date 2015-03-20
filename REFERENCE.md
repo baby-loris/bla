@@ -229,7 +229,7 @@ var apiMethod = new bla.ApiMethod({
             return {
                 type: 'BAD_ERROR',
                 message: 'Something bad is happened',
-                reason: 'It was Loki\'s fail'
+                reason: 'It was Loki\'s fault'
             };
         };
 
