@@ -1,3 +1,6 @@
+### 1.3.0
+  * Add `toJson` method to ApiError [#101](../../pull/101).
+
 ### 1.2.0
   * Add default editor to release tool
   * Add Common JS support
