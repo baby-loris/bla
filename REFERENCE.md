@@ -7,6 +7,8 @@
       * [constructor(method)](#constructormethod)
       * [exec([params], [request], [api])](#execparams-request-api)
     * [Class ApiError](#class-apierror)
+      * [constructor(type, message)](#constructortype-message)
+      * [toJson](#tojson)
       * [Error types](#error-types)
     * [Express middleware](#express-middleware)
   * Frontend side
@@ -210,6 +212,27 @@ Example:
 ```javascript
 var ApiError = require('bla').ApiError;
 throw new ApiError(ApiError.INTERNAL_ERROR, 'Internal server error');
+```
+
+### toJson()
+Stringify an ApiError into a json object. It's used by [middleware](#express-middleware).
+
+You can specify your own `toJson` implementation if you want to pass extra parameters to the client side.
+```javascript
+var apiMethod = new bla.ApiMethod({
+    name: 'method',
+    action: function () {
+        return vow.reject({
+            toJson: function () {
+                return {
+                    type: 'BAD_ERROR',
+                    message: 'Something bad is happened',
+                    reason: 'It was Loki\'s fail'
+                };
+            }
+        });
+    }
+});
 ```
 
 ### Error types
