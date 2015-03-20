@@ -167,6 +167,8 @@ An express request can also be passed using `request` parameter. [The middleware
 Returns [vow.Promise](https://github.com/dfilatov/vow).
 The promise will be resolved with a method response or rejected with [ApiError](#class-apierror).
 
+**We strongly recommend to reject promises only with [ApiError](#class-apierror) instances.**
+
 Example:
 ```javascript
 helloMethod.exec({name: 'Stepan'})
@@ -222,15 +224,16 @@ You can specify your own `toJson` implementation if you want to pass extra param
 var apiMethod = new bla.ApiMethod({
     name: 'method',
     action: function () {
-        return vow.reject({
-            toJson: function () {
-                return {
-                    type: 'BAD_ERROR',
-                    message: 'Something bad is happened',
-                    reason: 'It was Loki\'s fail'
-                };
-            }
-        });
+        var error = new Error('Something bad is happened');
+        error.toJson = function ()  {
+            return {
+                type: 'BAD_ERROR',
+                message: 'Something bad is happened',
+                reason: 'It was Loki\'s fail'
+            };
+        };
+
+        return vow.reject(error);
     }
 });
 ```
