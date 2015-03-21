@@ -315,6 +315,7 @@ Also you can specify extra options:
 | Name               | Type    | Description                                                                             |
 | ------------------ | ------- | --------------------------------------------------------------------------------------- |
 | \[enableBatching\] | Boolean | Configure [batching](README.md#batch) globally. Pass `false` to disable. Defaults to `true`. |
+| \[defaultParams\]  | Object  | Params that will be added to every request.                                                  |
 
 You can use the client-side bundle of bla with different module systems. For example:
 ```javascript
@@ -331,10 +332,16 @@ require(['bla'], function (Api) {
 // without module system
 var api = new bla.Api('/api/');
 ```
+
 Disable batching globally:
 ```javascript
 // all api.exec() calls will NOT be batched
 var api = new Api('/api/', {enableBatching: false});
+```
+
+Specify default params:
+```javascript
+var api = new Api('/api/', {defaultParams: {csrfToken: csrfToken}});
 ```
 
 ### exec(methodName, [params], [execOptions])
