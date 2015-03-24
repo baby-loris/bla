@@ -1,6 +1,7 @@
 var vow = require('vow');
 
 var bla = require('../lib');
+var responseFormatter = require('../lib/utils/response-formatter');
 
 /**
  * @typedef {Object} BatchApiMethod
@@ -38,17 +39,10 @@ module.exports = new bla.ApiMethod({
                 var data = promise.valueOf();
 
                 if (promise.isFulfilled()) {
-                    return {
-                        data: data
-                    };
+                    return responseFormatter.formatResponse(data);
                 }
 
-                return {
-                    error: {
-                        type: data.type || bla.ApiError.INTERNAL_ERROR,
-                        message: data.message
-                    }
-                };
+                return responseFormatter.formatError(data);
             });
         });
     }
