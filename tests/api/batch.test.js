@@ -68,7 +68,7 @@ describe('batch.api.js', function () {
             });
     });
 
-    it('should set INTERNAL_TYPE be default', function () {
+    it('should set INTERNAL_TYPE by default', function () {
         var api = new Api(__dirname + '/../_data/api/**/*.api.js');
         return api.exec('batch', {methods: [{method: 'api-error'}]})
             .then(function (res) {
