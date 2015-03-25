@@ -1,3 +1,8 @@
+### 1.3.1
+  * Add toJson support for batch method [#102](../../pull/102).
+  * Fix misprint in an error message.
+  * Add recommendation to use ApiError.
+
 ### 1.3.0
   * Add `toJson` method to ApiError [#101](../../pull/101).
 
