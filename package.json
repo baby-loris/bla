@@ -33,7 +33,7 @@
     "express": "^4.2.0",
     "git-hooks": "0.0.7",
     "istanbul": "0.3.0",
-    "jscs": "^1.5.8",
+    "jscs": "1.5.8",
     "jshint": "^2.5.2",
     "jshint-groups": "^0.6.2",
     "mocha": "^2.2.1",

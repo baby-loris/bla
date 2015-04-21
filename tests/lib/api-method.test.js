@@ -256,4 +256,24 @@ describe('api-method', function () {
                 spy.calledOnce.should.be.true;
             });
     });
+
+    describe('when preventThrowingErrors option is set', function () {
+        it('should return reject promise for syntax error', function (done) {
+            var apiMethod = new ApiMethod({
+                name: 'test-method',
+                options: {
+                    preventThrowingErrors: true
+                },
+                action: function () {
+                    abrakadabra;
+                }
+            });
+
+            apiMethod.exec()
+                .fail(function (error) {
+                    error.should.be.an.instanceof(ReferenceError);
+                    done();
+                });
+        });
+    });
 });
