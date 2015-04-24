@@ -32,6 +32,7 @@ Also you can pass extra `options`:
 | Name                  | Type               | Description                                                                                 |
 | --------------------- | ------------------ | ------------------------------------------------------------------------------------------- |
 | allowUndeclaredParams | Boolean            | Tolerates undeclared parameters. Defaults to `false`. See [ApiMethod](#class-apimethod)     |
+| preventThrowingErrors | Boolean            | Wraps api call in promise to prevent throwing errors. Defaults to `false`. See [ApiMethod](#class-apimethod |
 | paramsValidation      | String \| Function | Preprocessing method parameters. Defaults to `normalize`. See [ApiMethod](#class-apimethod) |
 
 ### exec(methodName, [params], [request])
@@ -124,14 +125,17 @@ var helloMethod = new ApiMethod({
 #### options
 List of available `options`:
 
-| Name                  | Type               | Description                                                         |
-| --------------------- | ------------------ | ------------------------------------------------------------------- |
-| showOnDocPage         | Boolean            | Show API method on the documentation page. Defaults to `true`.      |
-| executeOnServerOnly   | Boolean            | Permit to execute method only on server side. Defaults to `false`.  |
-| allowUndeclaredParams | Boolean            | Tolerates undeclared parameters. Defaults to `false`.               |
-| paramsValidation      | String \| Function | Preprocessing method parameters. Defaults to `normalize`.           |
+| Name                  | Type               | Description                                                                |
+| --------------------- | ------------------ | -------------------------------------------------------------------------- |
+| showOnDocPage         | Boolean            | Show API method on the documentation page. Defaults to `true`.             |
+| executeOnServerOnly   | Boolean            | Permit to execute method only on server side. Defaults to `false`.         |
+| allowUndeclaredParams | Boolean            | Tolerates undeclared parameters. Defaults to `false`.                      |
+| preventThrowingErrors | Boolean            | Wraps api call in promise to prevent throwing errors. Defaults to `false`. |
+| paramsValidation      | String \| Function | Preprocessing method parameters. Defaults to `normalize`.                  |
 
 By default all passed undeclared paramters cause an error. The option `allowUndeclaredParams` disable this behaviour and makes it possible to pass undeclared parameters.
+
+The `preventThrowingErrors` option is good for production environment because all errors which occur in api methods (even SyntaxError) will be safely wrapped in a promise. So it breaks the developed service more gracefully.
 
 The option `paramsValidation` makes it possible to change default parameter preprocessing. `normalize` mode tries to convert each parameter value to its declared type if it is possible. `strict` mode strictly checks if parameter value corresponds to its declared type.
 
