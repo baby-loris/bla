@@ -1,3 +1,6 @@
+### 1.4.0
+  * Add preventThrowingErrors option [#106](../../pull/106).
+
 ### 1.3.1
   * Add toJson support for batch method [#102](../../pull/102).
   * Fix misprint in an error message.
