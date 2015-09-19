@@ -1,3 +1,7 @@
+### 1.4.1
+  * Fix bla for commonjs.
+  * Remove `NO_DEPRECATION` flag.
+
 ### 1.4.0
   * Add preventThrowingErrors option [#106](../../pull/106).
 
