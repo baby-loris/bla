@@ -64,7 +64,7 @@
      * @see http://wiki.commonjs.org/wiki/Modules/1.1.1
      */
     if (typeof require === 'function' && typeof module === 'object' && typeof module.exports === 'object') {
-        module.exports = ApiError;
+        module.exports.ApiError = ApiError;
         defineAsGlobal = false;
     }
 
