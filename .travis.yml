@@ -1,6 +1,7 @@
 language: node_js
 node_js:
 - '0.10'
+sudo: false
 script: "npm run travis"
 after_success:
 - "npm install coveralls@2.11.1 && cat ./coverage/lcov.info | coveralls"
