@@ -291,7 +291,8 @@
      */
     if (typeof require === 'function' && typeof module === 'object' && typeof module.exports === 'object') {
         var vow = require('vow');
-        module.exports = createApiClass(vow, module.exports.ApiError);
+        var ApiError = require('../bla-error/bla-error.js');
+        module.exports = createApiClass(vow, ApiError);
         defineAsGlobal = false;
     }
 
