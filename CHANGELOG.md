@@ -1,3 +1,9 @@
+### 1.4.3
+  * Remove vow from devDeps.
+  * Add licence field.
+  * Freeze dependencies in package.json.
+  * Use container-base infrastructure.
+
 ### 1.4.1
   * Fix bla for commonjs.
   * Remove `NO_DEPRECATION` flag.
