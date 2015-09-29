@@ -46,7 +46,6 @@
     "supertest": "0.13.0",
     "supervisor": "0.5.7",
     "uglify-js": "2.4.15",
-    "vow": "0.4.4",
     "vow-asker": "0.6.6",
     "ym": "0.1.0",
     "zuul": "1.13.1"
@@ -63,12 +62,7 @@
     "prepublish": "make build",
     "travis": "npm test && make coverage"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/baby-loris/bla/blob/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "enb": {
     "dependencies": [
       "vow"
