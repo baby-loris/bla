@@ -102,7 +102,7 @@ modules.define(
                     api.exec('hello')
                         .fail(function (error) {
                             error.should.be.instanceOf(ApiError);
-                            error.type.should.be.equal(ApiError.INTERNAL_ERROR);
+                            error.type.should.be.equal(500);
                             callback();
                         });
                     setTimeout(server.respond.bind(server), TIMEOUT);
@@ -165,7 +165,7 @@ modules.define(
                     api.exec('hello-world', {})
                         .fail(function (error) {
                             error.should.be.instanceOf(ApiError);
-                            error.type.should.be.equal(ApiError.NOT_FOUND);
+                            error.type.should.be.equal(404);
                             callback();
                         });
                     server.respond();
@@ -178,7 +178,7 @@ modules.define(
                     api.exec('hello-world', {})
                         .fail(function (error) {
                             error.should.be.instanceOf(ApiError);
-                            error.type.should.be.equal(ApiError.INTERNAL_ERROR);
+                            error.type.should.be.equal(500);
                             callback();
                         });
                     server.respond();

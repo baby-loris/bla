@@ -38,13 +38,6 @@
             return d.promise();
         }
 
-        /*
-         * Set of predefined API errors.
-         */
-        var XHR_ERRORS = {
-            404: new ApiError(ApiError.NOT_FOUND, 'API middleware wasn\'t found')
-        };
-
         /**
          * Api provider.
          *
@@ -240,8 +233,7 @@
              */
             _rejectPromise: function (defer, xhr) {
                 var errorMessage = xhr.responseText || xhr.message || xhr.statusText;
-                var error = XHR_ERRORS[xhr.status] || new ApiError(ApiError.INTERNAL_ERROR, errorMessage);
-                defer.reject(error);
+                defer.reject(new ApiError(xhr.status, errorMessage));
             },
 
             /**
