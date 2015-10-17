@@ -1,4 +1,7 @@
 ### 1.4.3
+  * Increase priority for xhr.responseText.
+
+### 1.4.2
   * Remove vow from devDeps.
   * Add licence field.
   * Freeze dependencies in package.json.
