@@ -1,3 +1,6 @@
+### 1.5.1
+  * Update vow and vow-fs.
+
 ### 1.5.0
   * Don't use predefined API errors for xhr.
 
