@@ -239,7 +239,7 @@
              * @param {XMLHttpRequest} xhr
              */
             _rejectPromise: function (defer, xhr) {
-                var errorMessage = xhr.message || xhr.statusText || xhr.responseText;
+                var errorMessage = xhr.responseText || xhr.message || xhr.statusText;
                 var error = XHR_ERRORS[xhr.status] || new ApiError(ApiError.INTERNAL_ERROR, errorMessage);
                 defer.reject(error);
             },
