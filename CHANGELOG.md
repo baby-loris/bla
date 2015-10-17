@@ -1,3 +1,6 @@
+### 1.5.0
+  * Don't use predefined API errors for xhr.
+
 ### 1.4.3
   * Increase priority for xhr.responseText.
 
