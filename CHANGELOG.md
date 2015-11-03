@@ -1,3 +1,8 @@
+### 1.5.2
+  * Use only latest browser versions for `zuul` tests.
+  * Change examples port to `7777` to avoid collisions.
+  * Show exra information in validation error messages [#108](../../pull/108).
+
 ### 1.5.1
   * Update vow and vow-fs.
 
