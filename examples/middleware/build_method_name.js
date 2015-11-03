@@ -23,10 +23,10 @@ app
         '/api/:service?/:subservice?',
         bla.apiMiddleware(api, {buildMethodName: buildMethodName})
     )
-    .listen(8080);
+    .listen(7777);
 
 console.log(
     'The same API method will be executed on %s and %s'
-        .replace('%s', 'http://127.0.0.1:8080/api/get/kittens')
-        .replace('%s', 'http://127.0.0.1:8080/api/get-kittens')
+        .replace('%s', 'http://127.0.0.1:7777/api/get/kittens')
+        .replace('%s', 'http://127.0.0.1:7777/api/get-kittens')
 );

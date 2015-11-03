@@ -28,7 +28,7 @@ test-client:
 
 # Run tests via zuul locally
 zuul-local:
-	$(v)$(NODE_MODULES_BIN)/zuul --local 8080 -- tools/zuul.js
+	$(v)$(NODE_MODULES_BIN)/zuul --local 7777 -- tools/zuul.js
 
 # Run tests via zuul in the sause cloud
 zuul:

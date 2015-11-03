@@ -11,6 +11,6 @@ var apiRouter = express.Router()
 module.exports =
 app
     .use('/api/', apiRouter)
-    .listen(8080);
+    .listen(7777);
 
-console.log('Go to http://127.0.0.1:8080/api/ and make sure that there is no docpage.');
+console.log('Go to http://127.0.0.1:7777/api/ and make sure that there is no docpage.');
