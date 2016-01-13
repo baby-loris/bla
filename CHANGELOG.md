@@ -1,3 +1,6 @@
+### 1.6.0
+  * Add more convenient way to require bla [#109](../../issues/109).
+
 ### 1.5.2
   * Use only latest browser versions for `zuul` tests.
   * Change examples port to `7777` to avoid collisions.
