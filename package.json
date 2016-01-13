@@ -55,7 +55,8 @@
     "api",
     "blocks",
     "lib",
-    "build"
+    "build",
+    "client.js"
   ],
   "scripts": {
     "test": "make validate",
