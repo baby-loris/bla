@@ -81,6 +81,16 @@ api.exec('hello', {name: 'Stepan'}).then(function (response) {
     console.log(response); // 'Hello, Stepan'
 });
 ```
+
+if you use commonjs modules then do.
+```javascript
+var bla = require('bla/client');
+var api = new bla.Api('/api/');
+api.exec('hello', {name: 'Stepan'}).then(function (response) {
+    console.log(response); // 'Hello, Stepan'
+});
+```
+
 BLA works with the most popular module systems. See [Examples of frontend side](#examples).
 
 See [Api class](REFERENCE.md#class-api-bla) for more information.
