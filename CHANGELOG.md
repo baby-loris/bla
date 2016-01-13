@@ -1,3 +1,6 @@
+### 1.6.1
+  * Add `client.js` to package assets.
+
 ### 1.6.0
   * Add more convenient way to require bla [#109](../../issues/109).
 
