@@ -2,18 +2,18 @@ language: node_js
 node_js:
 - '0.10'
 sudo: false
-script: "npm run travis"
+script: npm run travis
 after_success:
-- "npm install coveralls@2.11.1 && cat ./coverage/lcov.info | coveralls"
-- "zuul -- tools/zuul.js"
+- npm install coveralls@2.11.1 && cat ./coverage/lcov.info | coveralls
+- zuul -- tools/zuul.js
 deploy:
   provider: npm
   email: tarmolov@gmail.com
   api_key:
-    secure: LfLG35921234nZk3Me9Z3G3qy5NxJvZ5mLwJE3iTIloJlbDLgmaXlClYMVtO0JHD7/nLxZA1EE9lFJ1JexDNMCnH/eLqWDGui0YdAAAzysrNwlpoQNuRChxRL8lLaNAxilIDv/rQxCoKZCzT7apjU7nV1Of4SgJOYhOZ2kkmub0=
+    secure: Ce8Pb8X1fCzLNxYNyJPe3fZTXQozU7tMNmwfRgWpRm0r/igo6DM+6DSj9uPTCdg1qy4kiRvxOjvm/zoOiJsY4+njhXuHpmCnn40cwrEoALyI+IAsNmPkKdTOcVQeylSiacglY6me7aZ5C3zYeLVpegHJnF59gv8EgsRRg2DBN2g=
   on:
     tags: true
-    all_branches: true
+    repo: baby-loris/bla
 env:
   global:
   - secure: ClEcmw33CSP8L9gATIDPjZT/QS3EBrSx2XXAXNcl6K3AXODWqjMH4uzdQJnAYaYSlPkNWLZho+L4UyF9SQJiqdUfCkGE7wlw7765w6DVztMsuupPqiA4hrTGQgbnEsbFyayrsnSLg71/Kf6MV9fyEcJZ+HtXO29BvNpuTRuji0Y=
