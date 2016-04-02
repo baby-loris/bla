@@ -1,3 +1,8 @@
+### 1.7.0
+  * Rename engineStrict to engine-strict.
+  * Rename toJson method to toJSON [#111](../../issues/111).
+  * Move badges to the next line.
+
 ### 1.6.1
   * Add `client.js` to package assets.
 
