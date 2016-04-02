@@ -22,9 +22,9 @@ describe('response-formatter', function () {
         });
     });
 
-    it('should format error with custom toJson method', function () {
+    it('should format error with custom toJSON method', function () {
         var error = {
-            toJson: function () {
+            toJSON: function () {
                 return 'Bad times'
             }
         };

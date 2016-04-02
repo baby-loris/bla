@@ -37,7 +37,7 @@ describe('api-error', function () {
     });
 
     it('should stringify into json', function () {
-        error.toJson().should.deep.equal({
+        error.toJSON().should.deep.equal({
             message: 'Something bad just happened',
             type: 'BAD_TIMES'
         });

@@ -8,7 +8,7 @@
       * [exec([params], [request], [api])](#execparams-request-api)
     * [Class ApiError](#class-apierror)
       * [constructor(type, message)](#constructortype-message)
-      * [toJson](#tojson)
+      * [toJSON](#tojson)
       * [Error types](#error-types)
     * [Express middleware](#express-middleware)
   * Frontend side
@@ -220,16 +220,16 @@ var ApiError = require('bla').ApiError;
 throw new ApiError(ApiError.INTERNAL_ERROR, 'Internal server error');
 ```
 
-### toJson()
+### toJSON()
 Stringify an ApiError into a json object. It's used by [middleware](#express-middleware).
 
-You can specify your own `toJson` implementation if you want to pass extra parameters to the client side.
+You can specify your own `toJSON` implementation if you want to pass extra parameters to the client side.
 ```javascript
 var apiMethod = new bla.ApiMethod({
     name: 'method',
     action: function () {
         var error = new Error('Something bad is happened');
-        error.toJson = function ()  {
+        error.toJSON = function ()  {
             return {
                 type: 'BAD_ERROR',
                 message: 'Something bad is happened',
