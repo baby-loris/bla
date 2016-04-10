@@ -108,6 +108,30 @@ modules.define(
                     setTimeout(server.respond.bind(server), TIMEOUT);
                 });
             });
+
+            describe('when a global timeout is specified', function () {
+                beforeEach(function () {
+                    api = new Api('/api/', {timeout: 1});
+                });
+
+                it('should reject a promise in case of timeout', function (callback) {
+                    api.exec('hello', {})
+                        .fail(function (error) {
+                            error.should.be.instanceOf(ApiError);
+                            callback();
+                        });
+                });
+            });
+
+            describe('when timeout option is passed', function () {
+                it('should reject a promise in case of timeout', function (callback) {
+                    api.exec('hello', {}, {timeout: 1})
+                        .fail(function (error) {
+                            error.should.be.instanceOf(ApiError);
+                            callback();
+                        });
+                });
+            });
         });
 
         describe('when batching mode is disabled globally with `enableBatching` option', function () {
@@ -182,6 +206,16 @@ modules.define(
                             callback();
                         });
                     server.respond();
+                });
+            });
+
+            describe('when timeout option is passed', function () {
+                it('should reject a promise in case of timeout', function (callback) {
+                    api.exec('hello', {}, {timeout: 1})
+                        .fail(function (error) {
+                            error.should.be.instanceOf(ApiError);
+                            callback();
+                        });
                 });
             });
         });

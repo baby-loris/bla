@@ -13,12 +13,13 @@
          *
          * @param {String} url A string containing the URL to which the request is sent.
          * @param {String} data Data to be sent to the server.
+         * @param {Object} execOptions Exec-specific options.
+         * @param {Number} execOptions.timeout Request timeout.
          * @returns {vow.Promise}
          */
-        function sendAjaxRequest(url, data) {
+        function sendAjaxRequest(url, data, execOptions) {
             var xhr = new XMLHttpRequest();
             var d = vow.defer();
-
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
@@ -28,8 +29,25 @@
                     }
                 }
             };
+            xhr.ontimeout = function () {
+                d.reject(new ApiError(ApiError.TIMEOUT, 'Timeout was reached while waiting for ' + url));
+                xhr.abort();
+            };
+
+            // shim for browsers which don't support timeout/ontimeout
+            if (typeof xhr.timeout !== 'number' && execOptions.timeout) {
+                var timeoutId = setTimeout(xhr.ontimeout.bind(xhr), execOptions.timeout);
+                var oldHandler = xhr.onreadystatechange;
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        clearTimeout(timeoutId);
+                    }
+                    oldHandler();
+                };
+            }
 
             xhr.open('POST', url, true);
+            xhr.timeout = execOptions.timeout;
             xhr.setRequestHeader('Accept', 'application/json, text/javascript, */*; q=0.01');
             xhr.setRequestHeader('Content-type', 'application/json');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -44,6 +62,7 @@
          * @param {String} basePath Url path to the middleware root.
          * @param {Object} [options] Extra options.
          * @param {Boolean} [options.enableBatching=true] Enables batching.
+         * @param {Number} [options.timeout=0] Global timeout for all requests.
          */
         function Api(basePath, options) {
             this._basePath = basePath;
@@ -51,7 +70,8 @@
             this._options = {
                 enableBatching: options.hasOwnProperty('enableBatching') ?
                     options.enableBatching :
-                    true
+                    true,
+                timeout: options.timeout || 0
             };
             this._batch = [];
             this._deferreds = {};
@@ -68,18 +88,22 @@
              * @param {Object} [execOptions] Exec-specific options.
              * @param {Boolean} [execOptions.enableBatching=true] Should the current call of the method be batched.
              * method be batched.
+             * @param {Number} [execOptions.timeout=0] Request timeout.
              * @returns {vow.Promise}
              */
             exec: function (methodName, params, execOptions) {
                 execOptions = execOptions || {};
 
-                var enableBatching = execOptions.hasOwnProperty('enableBatching') ?
-                    execOptions.enableBatching :
-                    this._options.enableBatching;
+                var options = {
+                    enableBatching: execOptions.hasOwnProperty('enableBatching') ?
+                        execOptions.enableBatching :
+                        this._options.enableBatching,
+                    timeout: execOptions.timeout || this._options.timeout
+                };
 
-                return enableBatching ?
-                    this._execWithBatching(methodName, params) :
-                    this._execWithoutBatching(methodName, params);
+                return options.enableBatching ?
+                    this._execWithBatching(methodName, params, options) :
+                    this._execWithoutBatching(methodName, params, options);
             },
 
             /**
@@ -87,14 +111,15 @@
              *
              * @param {String} methodName Method name.
              * @param {Object} params Data should be sent to the method.
+             * @param {Object} execOptions Exec-specific options.
              * @returns {vow.Promise}
              */
-            _execWithoutBatching: function (methodName, params) {
+            _execWithoutBatching: function (methodName, params, execOptions) {
                 var defer = vow.defer();
                 var url = this._basePath + methodName;
                 var data = JSON.stringify(params);
 
-                sendAjaxRequest(url, data).then(
+                sendAjaxRequest(url, data, execOptions).then(
                     this._resolvePromise.bind(this, defer),
                     this._rejectPromise.bind(this, defer)
                 );
@@ -107,16 +132,17 @@
              *
              * @param {String} methodName Method name.
              * @param {Object} params Data should be sent to the method.
+             * @param {Object} execOptions Exec-specific options.
              * @returns {vow.Promise}
              */
-            _execWithBatching: function (methodName, params) {
+            _execWithBatching: function (methodName, params, execOptions) {
                 var requestId = this._getRequestId(methodName, params);
                 var promise = this._getRequestPromise(requestId);
 
                 if (!promise) {
                     this._addToBatch(methodName, params);
                     promise = this._createPromise(requestId);
-                    this._run();
+                    this._run(execOptions);
                 }
 
                 return promise;
@@ -172,22 +198,26 @@
 
             /**
              * Initializes async batch request.
+             *
+             * @param {Object} execOptions Exec-specific options.
              */
-            _run: function () {
+            _run: function (execOptions) {
                 // The collecting requests for the batch will start when a first request is received.
                 // That's why the batch length is checked there.
                 if (this._batch.length === 1) {
-                    vow.resolve().then(this._sendBatchRequest, this);
+                    vow.resolve().then(this._sendBatchRequest.bind(this, execOptions));
                 }
             },
 
             /**
              * Performs batch request.
+             *
+             * @param {Object} execOptions Exec-specific options.
              */
-            _sendBatchRequest: function () {
+            _sendBatchRequest: function (execOptions) {
                 var url = this._basePath + 'batch';
                 var data = JSON.stringify({methods: this._batch});
-                sendAjaxRequest(url, data).then(
+                sendAjaxRequest(url, data, execOptions).then(
                     this._resolvePromises.bind(this, this._batch),
                     this._rejectPromises.bind(this, this._batch)
                 );
@@ -232,8 +262,9 @@
              * @param {XMLHttpRequest} xhr
              */
             _rejectPromise: function (defer, xhr) {
+                var errorType = xhr.type || xhr.status;
                 var errorMessage = xhr.responseText || xhr.message || xhr.statusText;
-                defer.reject(new ApiError(xhr.status, errorMessage));
+                defer.reject(new ApiError(errorType, errorMessage));
             },
 
             /**

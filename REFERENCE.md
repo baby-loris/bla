@@ -246,6 +246,7 @@ var apiMethod = new bla.ApiMethod({
   * `ApiError.BAD_REQUEST` — Invalid or missed parameter.
   * `ApiError.INTERNAL_ERROR` — Unspecified error or error in server logic.
   * `ApiError.NOT_FOUND` — API method or middleware wasn't found.
+  * `ApiError.TIMEOUT` — Timeout.
 
 ## Express Middleware
 ```
@@ -316,9 +317,10 @@ Creates a new instance of client API. `basePath` is used to build the path for A
 
 Also you can specify extra options:
 
-| Name               | Type    | Description                                                                             |
-| ------------------ | ------- | --------------------------------------------------------------------------------------- |
+| Name               | Type    | Description                                                                                  |
+| ------------------ | ------- | -------------------------------------------------------------------------------------------- |
 | \[enableBatching\] | Boolean | Configure [batching](README.md#batch) globally. Pass `false` to disable. Defaults to `true`. |
+| \[timeout\]        | Number  | Set a global timeout for all requests. Defaults to `0` that means no timeout.                |
 
 You can use the client-side bundle of bla with different module systems. For example:
 ```javascript
@@ -347,9 +349,10 @@ The method returns a [vow.Promise](http://dfilatov.github.io/vow/).
 
 execOptions:
 
-| Name               | Type    | Description                                                                                            |
-| ------------------ | ------- | ------------------------------------------------------------------------------------------------------ |
+| Name               | Type    | Description                                                                                                 |
+| ------------------ | ------- | ----------------------------------------------------------------------------------------------------------- |
 | \[enableBatching\] | Boolean | Configure [batching](README.md#batch) for the current request. Pass `false` to disable. Defaults to `true`. |
+| \[timeout\]        | Number  | Set a timeout for a request. Defaults to `0` that means no timeout.                                         |
 
 For example:
 ```javascript
@@ -365,8 +368,8 @@ api.exec('hello')
 ```
 If you want to disable the batching for a single `api.exec()` call:
 ```javascript
-// method 'slow-poke' won't be batched for this call only
-api.exec('slow-poke', {}, {enableBatching: false}).then(function () {
+// method 'slow-poke' won't be batched for this call only but has a timeout 4 seconds
+api.exec('slow-poke', {}, {enableBatching: false, timeout: 4000}).then(function () {
     // ...
 });
 ```
