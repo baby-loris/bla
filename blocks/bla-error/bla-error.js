@@ -37,6 +37,11 @@
      */
     ApiError.NOT_FOUND = 'NOT_FOUND';
 
+    /**
+     * Timeout.
+     */
+    ApiError.TIMEOUT = 'TIMEOUT';
+
     var defineAsGlobal = true;
 
     /**
