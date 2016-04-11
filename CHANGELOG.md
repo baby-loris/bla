@@ -1,3 +1,6 @@
+### 1.8.0
+  * Support timeout option [#112](../../issues/112).
+
 ### 1.7.0
   * Rename engineStrict to engine-strict.
   * Rename toJson method to toJSON [#111](../../issues/111).
