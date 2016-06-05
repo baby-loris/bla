@@ -233,30 +233,6 @@ describe('api-method', function () {
         fn.should.throw(ApiError);
     });
 
-    it('should use custom validator', function () {
-        var spy = sinon.spy();
-        var apiMethod = new ApiMethod({
-            name: 'test-method',
-            params: {
-                param1: {type: 'String'}
-            },
-            options: {
-                paramsValidation: function () {
-                    return 'baking bread';
-                }
-            },
-            action: spy
-        });
-
-        return apiMethod.exec({param1: 'breaking bad'})
-            .then(function (response) {
-                spy.alwaysCalledWith({
-                    param1: 'baking bread'
-                }).should.be.true;
-                spy.calledOnce.should.be.true;
-            });
-    });
-
     describe('when preventThrowingErrors option is set', function () {
         it('should return reject promise for syntax error', function (done) {
             var apiMethod = new ApiMethod({
@@ -273,6 +249,55 @@ describe('api-method', function () {
                 .fail(function (error) {
                     error.should.be.an.instanceof(ReferenceError);
                     done();
+                });
+        });
+    });
+
+    describe('when params param is a function', function () {
+        it('should validate params using the function', function (done) {
+            var apiMethod = new ApiMethod({
+                name: 'matrix',
+                params: function (params) {
+                    if (params.name !== 'Neo') {
+                        throw new ApiError(ApiError.BAD_REQUEST, 'Only the choosen one can proceed');
+                    }
+                    return params;
+                },
+                action: function (params) {
+                    return params;
+                }
+            });
+
+            apiMethod.exec()
+                .fail(function (error) {
+                    error.should.be.an.instanceof(ApiError);
+                    done();
+                });
+        });
+    });
+
+    describe('[deprecated]', function () {
+        it('should use custom validator', function () {
+            var spy = sinon.spy();
+            var apiMethod = new ApiMethod({
+                name: 'test-method',
+                params: {
+                    param1: {type: 'String'}
+                },
+                options: {
+                    paramsValidation: function () {
+                        return 'baking bread';
+                    }
+                },
+                action: spy
+            });
+
+            return apiMethod.exec({param1: 'breaking bad'})
+                .then(function (response) {
+                    spy.alwaysCalledWith({
+                        param1: 'baking bread'
+                    }).should.be.true;
+                    spy.calledOnce.should.be.true;
                 });
         });
     });

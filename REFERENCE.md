@@ -33,7 +33,7 @@ Also you can pass extra `options`:
 | --------------------- | ------------------ | ------------------------------------------------------------------------------------------- |
 | allowUndeclaredParams | Boolean            | Tolerates undeclared parameters. Defaults to `false`. See [ApiMethod](#class-apimethod)     |
 | preventThrowingErrors | Boolean            | Wraps api call in promise to prevent throwing errors. Defaults to `false`. See [ApiMethod](#class-apimethod |
-| paramsValidation      | String \| Function | Preprocessing method parameters. Defaults to `normalize`. See [ApiMethod](#class-apimethod) |
+| paramsValidation      | String             | Preprocessing method parameters. Defaults to `normalize`. See [ApiMethod](#class-apimethod) |
 
 ### exec(methodName, [params], [request])
 Executes an API method `methodName` with the provided `params`.
@@ -60,13 +60,13 @@ Creates a new instance of ApiMethod with provided data.
 
 `method` is an object described a method.
 
-| Name                    | Type     | Description                                        |
-| ----------------------- | -------- | -------------------------------------------------- |
-| name                    | String   | Method name                                        |
-| [action](#action)       | Function | Function which should be executed when method runs |
-| \[description\]         | String   | Method description                                 |
-| [\[params\]](#params)   | Object   | Declarations of method parameters                  |
-| [\[options\]](#options) | Object   | Method options                                     |
+| Name                    | Type                | Description                                        |
+| ----------------------- | ------------------- | -------------------------------------------------- |
+| name                    | String              | Method name                                        |
+| [action](#action)       | Function            | Function which should be executed when method runs |
+| \[description\]         | String              | Method description                                 |
+| [\[params\]](#params)   | Object \| Function  | Declarations of method parameters                  |
+| [\[options\]](#options) | Object              | Method options                                     |
 
 Example:
 ```javascript
@@ -95,11 +95,10 @@ var helloMethod = new ApiMethod({
 ```
 
 #### params
-API method param is an object with the follow fields:
+API method param is an set of params where field name is an param name and a value is an object with the following fields:
 
 | Name             | Type    | Description                                       |
 | ---------------- | ------- | ------------------------------------------------- |
-| name             | String  | Parameter name                                    |
 | description      | String  | Parameter description                             |
 | \[type\]         | String  | Parameter type (String, Number, Boolean, etc.)    |
 | \[defaultValue\] | Any     | Default value of the parameter                    |
@@ -116,8 +115,24 @@ var helloMethod = new ApiMethod({
             required: true
         }
     },
-    action: function () {
-        return 'Hello, world!';
+    action: function (params) {
+        return 'Hello, ' + params.name;
+    }
+});
+```
+
+You can specify a function instead of object for a custom params validation. First argument is params which are passed to the method and the second one is Express request when method is executed from the client side.
+```javascript
+var helloMethod = new ApiMethod({
+    name: 'hello',
+    params: function (params, req) {
+        if (typeof params.name !== 'string') {
+            throw new ApiError(ApiError.BAD_REQUST, 'Invalid username param');
+        }
+        return params;
+    },
+    action: function (params) {
+        return 'Hello, ' + params.name;
     }
 });
 ```
@@ -131,35 +146,13 @@ List of available `options`:
 | executeOnServerOnly   | Boolean            | Permit to execute method only on server side. Defaults to `false`.         |
 | allowUndeclaredParams | Boolean            | Tolerates undeclared parameters. Defaults to `false`.                      |
 | preventThrowingErrors | Boolean            | Wraps api call in promise to prevent throwing errors. Defaults to `false`. |
-| paramsValidation      | String \| Function | Preprocessing method parameters. Defaults to `normalize`.                  |
+| paramsValidation      | String             | Preprocessing method parameters. Defaults to `normalize`.                  |
 
 By default all passed undeclared paramters cause an error. The option `allowUndeclaredParams` disable this behaviour and makes it possible to pass undeclared parameters.
 
 The `preventThrowingErrors` option is good for production environment because all errors which occur in api methods (even SyntaxError) will be safely wrapped in a promise. So it breaks the developed service more gracefully.
 
 The option `paramsValidation` makes it possible to change default parameter preprocessing. `normalize` mode tries to convert each parameter value to its declared type if it is possible. `strict` mode strictly checks if parameter value corresponds to its declared type.
-
-Also you can implement your own `paramsValidation` function.
-```javascript
-var helloMethod = new ApiMethod({
-    name: 'hello',
-    params: {
-        name: {type: 'String'}
-    },
-    options: {
-        paramsValidation: function (paramValue, paramName, paramDeclaration) {
-            return paramValue; // don't use validation at all
-        }
-    },
-    action: function () {}
-});
-
-```
-where
-  * `paramValue` — a parameter value which should be validated.
-  * `paramDeclaration` — [parameter declaration](#params).
-
-**Note.** It is strongly recommended to throw ApiErrors only.
 
 ### exec([params], [request], [api])
 Executes an API method with provided `params`.
