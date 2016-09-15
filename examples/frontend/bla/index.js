@@ -1,9 +1,9 @@
 var express = require('express');
 var app = express();
-var jade = require('jade');
 var bodyParser = require('body-parser');
 var bla = require('../../../lib');
 var api = new bla.Api(__dirname + '/../../api/**/*.api.js');
+var getPageHtml = require(__dirname + '/../get-page-html');
 
 module.exports =
 app
@@ -15,7 +15,7 @@ app
     .use('/node_modules', express.static(__dirname + '/../../../node_modules'))
     .use('/api/:method?', bla.apiMiddleware(api))
     .get('/', function (req, res) {
-        res.render('page');
+        res.send(getPageHtml());
     })
     .listen(7777);
 
