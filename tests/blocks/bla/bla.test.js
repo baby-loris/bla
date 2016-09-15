@@ -35,7 +35,9 @@ modules.define(
                             {
                                 'Content-Type': 'application/json'
                             },
-                            '{"data": [{"data": "Hello, world"}]}'
+                            JSON.stringify({
+                                data: [{data: 'Hello, world'}]
+                            })
                         ]
                     );
 
@@ -58,7 +60,20 @@ modules.define(
                             {
                                 'Content-Type': 'application/json'
                             },
-                            '{"data": [{"error": {"type": "BAD_REQUEST", "message": "missing parameter"}}]}'
+                            JSON.stringify({
+                                data: [{
+                                    error: {
+                                        type: 'BAD_REQUEST',
+                                        message: 'missing parameter',
+                                        data: {
+                                            validation: {
+                                                key: 'name',
+                                                error: 'missing'
+                                            }
+                                        }
+                                    }
+                                }]
+                            })
                         ]
                     );
 
@@ -82,7 +97,14 @@ modules.define(
                             {
                                 'Content-Type': 'application/json'
                             },
-                            '{"data":[{"error":{"type":"NOT_FOUND","message":"API method was\'t found"}}]}'
+                            JSON.stringify({
+                                data: [{
+                                    error: {
+                                        type: 'NOT_FOUND',
+                                        message: 'API method was\'t found'
+                                    }
+                                }]
+                            })
                         ]
                     );
 
@@ -149,7 +171,9 @@ modules.define(
                             {
                                 'Content-Type': 'application/json'
                             },
-                            '{"data": "Hello, world"}'
+                            JSON.stringify({
+                                data: 'Hello, world'
+                            })
                         ]
                     );
 
@@ -170,7 +194,18 @@ modules.define(
                             {
                                 'Content-Type': 'application/json'
                             },
-                            '{"error": {"type": "BAD_REQUEST", "message": "missing an important parameter"}}'
+                            JSON.stringify({
+                                error: {
+                                    type: 'BAD_REQUEST',
+                                    message: 'missing an important parameter',
+                                    data: {
+                                        validation: {
+                                            key: 'name',
+                                            error: 'missing'
+                                        }
+                                    }
+                                }
+                            })
                         ]
                     );
 
@@ -230,7 +265,9 @@ modules.define(
                         {
                             'Content-Type': 'application/json'
                         },
-                        '{"data": [{"data": "Hello, world"}]}'
+                        JSON.stringify({
+                            data: [{data: 'Hello, world'}]
+                        })
                     ]
                 );
 
@@ -242,7 +279,9 @@ modules.define(
                         {
                             'Content-Type': 'application/json'
                         },
-                        '{"data": "Long text"}'
+                        JSON.stringify({
+                            data: 'Long text'
+                        })
                     ]
                 );
             });

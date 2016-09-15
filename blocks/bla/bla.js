@@ -234,7 +234,7 @@
             _resolvePromise: function (defer, response) {
                 var error = response.error;
                 if (error) {
-                    defer.reject(new ApiError(error.type, error.message));
+                    defer.reject(new ApiError(error.type, error.message, error.data));
                 } else {
                     defer.resolve(response.data);
                 }

@@ -5,11 +5,13 @@
      *
      * @param {String} type Error type.
      * @param {String} message Human-readable description of the error.
+     * @param {Object} data Extra data (stack trace, for example).
      */
-    function ApiError(type, message) {
+    function ApiError(type, message, data) {
         this.name = 'ApiError';
         this.type = type;
         this.message = message;
+        this.data = data;
 
         if (Error.captureStackTrace) {
             Error.captureStackTrace(this, this.constructor);

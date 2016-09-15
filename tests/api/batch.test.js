@@ -55,7 +55,13 @@ describe('batch.api.js', function () {
                 HelloMethod.exec.calledOnce.should.be.true;
                 response[0].error.should.be.deep.equal({
                     type: 'BAD_REQUEST',
-                    message: 'missing name parameter'
+                    message: 'missing name parameter',
+                    data: {
+                        validation: {
+                            error: 'missing',
+                            key: 'name'
+                        }
+                    }
                 });
             });
     });
