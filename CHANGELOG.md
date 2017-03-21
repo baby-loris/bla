@@ -1,3 +1,8 @@
+### 1.9.0
+  * Remove `jade` package.
+  * Pass extra data with `ApiError`.
+  * Add custom params validation.
+
 ### 1.8.0
   * Support timeout option [#112](../../issues/112).
 
