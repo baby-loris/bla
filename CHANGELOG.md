@@ -1,3 +1,6 @@
+### 1.9.1
+  * Updated extend version to 3.0.2
+
 ### 1.9.0
   * Remove `jade` package.
   * Pass extra data with `ApiError`.
