@@ -1,3 +1,6 @@
+### 1.9.2
+  * Updated vow version to 0.4.20 [#124](../../pull/124)
+
 ### 1.9.1
   * Updated extend version to 3.0.2
 
