@@ -1,0 +1,7 @@
+/client
+/server
+/shared
+/node_modules
+.idea
+.vscode
+.DS_Store

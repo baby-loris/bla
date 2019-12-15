@@ -1,0 +1,50 @@
+{
+  "name": "bla",
+  "version": "1.9.2",
+  "description": "Easy way to create your own API methods for server and client sides",
+  "homepage": "https://github.com/baby-loris/bla",
+  "author": "Alexander Tarmolov <tarmolov@gmail.com>",
+  "contributors": [
+    "Olesya Pashkovskaya",
+    "Petar Dodev",
+    "Dmitry Filatov"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baby-loris/bla.git"
+  },
+  "files": [
+    "client",
+    "server",
+    "shared"
+  ],
+  "scripts": {
+    "test": "npx jest",
+    "lint": "npx tsc -p . --noEmit && npx eslint --ext ts src",
+    "build": "rm -rf server client shared && npx rollup -c rollup.config.ts"
+  },
+  "dependencies": {
+    "body-parser": "1.19.0",
+    "express": "4.17.1",
+    "yup": "0.28.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "1.17.1",
+    "@types/express": "4.17.2",
+    "@types/jest": "24.0.23",
+    "@types/yup": "0.26.26",
+    "@typescript-eslint/eslint-plugin": "2.12.0",
+    "@typescript-eslint/parser": "2.12.0",
+    "eslint": "6.7.2",
+    "husky": "3.1.0",
+    "jest": "24.9.0",
+    "jest-fetch-mock": "2.1.2",
+    "node-mocks-http": "1.8.1",
+    "rollup": "1.27.13",
+    "rollup-plugin-typescript2": "0.25.3",
+    "ts-jest": "24.2.0",
+    "ts-node": "8.5.4",
+    "typescript": "3.7.3"
+  }
+}
