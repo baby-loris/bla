@@ -1,9 +1,8 @@
-import * as yup from 'yup';
 import * as express from 'express';
-import ApiMethod, { ExtractApiMethodParams, ExtractApiMethodResult } from './ApiMethod';
+import ApiMethod, { ApiMethodParams, ExtractApiMethodParams, ExtractApiMethodResult } from './ApiMethod';
 import ApiError from '../shared/ApiError';
 
-class Api<TMethods extends Record<string, ApiMethod<yup.ObjectSchema, any>> = {}> {
+class Api<TMethods extends Record<string, ApiMethod<ApiMethodParams, any>> = {}> {
     constructor(private methods: TMethods) {}
 
     exec<TMethodName extends keyof TMethods>(

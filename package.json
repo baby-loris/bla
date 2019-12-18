@@ -1,5 +1,5 @@
 {
-  "name": "bla",
+  "name": "blab",
   "version": "2.0.0-rc.0",
   "description": "Easy way to create your own API methods for server and client sides",
   "homepage": "https://github.com/baby-loris/bla",
@@ -27,13 +27,12 @@
   "dependencies": {
     "body-parser": "1.19.0",
     "express": "4.17.1",
-    "yup": "0.28.0"
+    "runtypes": "4.0.3"
   },
   "devDependencies": {
     "@types/body-parser": "1.17.1",
     "@types/express": "4.17.2",
     "@types/jest": "24.0.23",
-    "@types/yup": "0.26.26",
     "@typescript-eslint/eslint-plugin": "2.12.0",
     "@typescript-eslint/parser": "2.12.0",
     "eslint": "6.7.2",

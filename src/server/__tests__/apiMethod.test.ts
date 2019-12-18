@@ -1,17 +1,14 @@
 import ApiMethod from '../ApiMethod';
-import * as yup from 'yup';
+import * as runtypes from 'runtypes';
 import * as httpMocks from 'node-mocks-http';
 
 describe('api method', () => {
     const requestMock = httpMocks.createRequest();
-    const params = yup.object({
-        requiredParam: yup
-            .string()
-            .required(),
-        optionalParam: yup
-            .number()
-            .notRequired()
-    });
+    const params = runtypes.Record({
+        requiredParam: runtypes.String
+    }).And(runtypes.Partial({
+        optionalParam: runtypes.Number
+    }));
     let method: ApiMethod<typeof params>;
     let action: jest.Mock;
 
@@ -21,7 +18,7 @@ describe('api method', () => {
     });
 
     it('should reject with error if params are not valid', () => {
-        return expect(method.exec({} as any, requestMock)).rejects.toBeInstanceOf(yup.ValidationError);
+        return expect(method.exec({} as any, requestMock)).rejects.toBeInstanceOf(runtypes.ValidationError);
     });
 
     it('should not execute action if params are not valid', done => {
@@ -35,26 +32,6 @@ describe('api method', () => {
         method.exec({ requiredParam: 'test' }, requestMock).then(() => {
             expect(action).toBeCalled();
             expect(action).toBeCalledWith({ requiredParam: 'test' }, requestMock);
-            done();
-        });
-    });
-
-    it('should strip unknown params', done => {
-        method.exec(
-            { requiredParam: 'test', optionalParam: 1, anotherParam: 'test3' } as any,
-            requestMock
-        ).then(() => {
-            expect(action).toBeCalledWith({ requiredParam: 'test', optionalParam: 1 }, requestMock);
-            done();
-        });
-    });
-
-    it('should coerce params if possible', done => {
-        method.exec(
-            { requiredParam: 'test', optionalParam: '1', anotherParam: 'test3' } as any,
-            requestMock
-        ).then(() => {
-            expect(action).toBeCalledWith({ requiredParam: 'test', optionalParam: 1 }, requestMock);
             done();
         });
     });

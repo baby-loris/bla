@@ -19,7 +19,8 @@ const rollupConfig = [
                     compilerOptions: {
                         allowJs: false,
                         declaration: true,
-                        declarationDir: '.'
+                        declarationDir: '.',
+                        module: 'esnext'
                     },
                     include: ['src/server/**/*'],
                     exclude: ['src/server/__tests__']
@@ -45,6 +46,7 @@ const rollupConfig = [
                         allowJs: false,
                         declaration: true,
                         declarationDir: '.',
+                        module: 'esnext',
                         target: 'es5'
                     },
                     include: ['src/client/**/*'],

@@ -1,24 +1,20 @@
 import Api from '../Api';
 import ApiError from '../../shared/ApiError';
 import { Api as ServerApi, ApiMethod as ServerApiMethod, ExtractApiMethodsDesc } from '../../server';
-import * as yup from 'yup';
+import * as runtypes from 'runtypes';
 
 describe('api', () => {
     const serverApi = new ServerApi({
         method1: new ServerApiMethod({
-            params: yup.object({
-                method1RequiredParam: yup
-                    .string()
-                    .required()
+            params: runtypes.Record({
+                method1RequiredParam: runtypes.String
             }),
             action: params => `${params.method1RequiredParam}!`
         }),
 
         method2: new ServerApiMethod({
-            params: yup.object({
-                method2RequiredParam: yup
-                    .number()
-                    .required()
+            params: runtypes.Record({
+                method2RequiredParam: runtypes.Number
             }),
             action: () => {
                 throw new Error('Unspecified error');
@@ -117,7 +113,15 @@ describe('api', () => {
                 JSON.stringify({
                     data: [
                         { data: 'test!' },
-                        { error: { message: 'Unspecified error' } }
+                        {
+                            error: {
+                                message: 'method2: Expected string, but was undefined',
+                                source: {
+                                    key: 'method2RequiredParam',
+                                    name: 'ValidationError'
+                                }
+                            }
+                        }
                     ]
                 })
             );
@@ -129,11 +133,15 @@ describe('api', () => {
                     },
                     done.fail
                 ),
-                api.exec('method2', { method2RequiredParam: 4 }).then(
+                api.exec('method2', {} as any).then(
                     done.fail,
                     err => {
                         expect(err).toBeInstanceOf(ApiError);
-                        expect(err.message).toBe('Unspecified error');
+                        expect(err.message).toBe('method2: Expected string, but was undefined');
+                        expect(err.source).toEqual({
+                            key: 'method2RequiredParam',
+                            name: 'ValidationError'
+                        });
                     }
                 )
             ]).then(() => {

@@ -1,26 +1,22 @@
 import Api from '../Api';
 import ApiMethod from '../ApiMethod';
 import ApiError from '../../shared/ApiError';
-import * as yup from 'yup';
+import * as runtypes from 'runtypes';
 import * as httpMocks from 'node-mocks-http';
 
 describe('api', () => {
     const requestMock = httpMocks.createRequest();
     const api = new Api({
         method1: new ApiMethod({
-            params: yup.object({
-                method1RequiredParam: yup
-                    .string()
-                    .required()
+            params: runtypes.Record({
+                method1RequiredParam: runtypes.String
             }),
             action: params => `${params.method1RequiredParam}!`
         }),
 
         method2: new ApiMethod({
-            params: yup.object({
-                method2RequiredParam: yup
-                    .number()
-                    .required()
+            params: runtypes.Record({
+                method2RequiredParam: runtypes.Number
             }),
             action: () => {
                 throw new Error('Unspecified error');
@@ -39,7 +35,9 @@ describe('api', () => {
     it('should reject with api error if method params are not valid', done => {
         api.exec('method1', {} as any, requestMock).catch(err => {
             expect(err).toBeInstanceOf(ApiError);
-            expect(err.message).toBe('method1: method1RequiredParam is a required field');
+            expect(err.message).toBe('method1: Expected string, but was undefined');
+            expect(err.source).toBeInstanceOf(runtypes.ValidationError);
+            expect(err.source.key).toBe('method1RequiredParam');
             done();
         });
     });

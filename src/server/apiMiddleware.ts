@@ -1,59 +1,41 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import * as yup from 'yup';
+import * as runtypes from 'runtypes';
 import Api from './Api';
 import ApiMethod, { ExtractApiMethodParams } from './ApiMethod';
 import ApiError from '../shared/ApiError';
 import { ApiMethodResponse } from '../shared/types';
 
-const apiMethodSchema = yup.object({
-    method: yup.string().required(),
-    params: yup.object().notRequired()
-});
-const batchSchema = yup.object({
-    method: yup.string().oneOf(['batch']),
-    params: yup.array().of(yup.object()).required()
-});
+const apiMethodSchema = runtypes.Record({});
+const batchSchema = runtypes.Array(
+    runtypes.Record({
+        method: runtypes.String,
+        params: runtypes.Record({})
+    })
+);
 const apiRouter = express.Router().use(bodyParser.json({ type: '*/*' }));
 
 function apiMiddleware<TMethods extends Record<string, ApiMethod>>(
     api: Api<TMethods>
 ): express.RequestHandler {
     return apiRouter.post(
-        '/',
+        '/:method',
         (req, res, next) => {
-            Promise.all([
-                apiMethodSchema.validate(req.body).catch(() => null),
-                batchSchema.validate(req.body).catch(() => null)
-            ]).then(([apiMethod, batch]) => {
-                if(apiMethod) {
-                    return execApiMethod(
-                        api,
-                        apiMethod.method,
-                        apiMethod.params as ExtractApiMethodParams<TMethods[typeof apiMethod.method]>,
-                        req
-                    );
+            if(req.params.method === 'batch') {
+                if(validate(req.body, batchSchema)) {
+                    execBatch(api, req.body, req).then(res.json);
+                } else {
+                    res.json({
+                        error: { message: 'Incompatible body data, expected array of methods' }
+                    });
                 }
-
-                if(batch) {
-                    return execBatch(
-                        api,
-                        batch.params as {
-                            method: keyof TMethods;
-                            params: ExtractApiMethodParams<TMethods[keyof TMethods]>;
-                        }[],
-                        req
-                    );
-                }
-
-                return {
-                    error: {
-                        message: 'Incompatible input data, expected object with method and params fields'
-                    }
-                };
-            }).then(methodRes => {
-                res.json(methodRes);
-            });
+            } else if(validate(req.body, apiMethodSchema)) {
+                execApiMethod(api, req.params.method, req.body, req).then(res.json);
+            } else {
+                res.json({
+                    error: { message: 'Incompatible body data, expected method params' }
+                });
+            }
         }
     );
 }
@@ -81,6 +63,16 @@ function execApiMethod<TMethods extends Record<string, ApiMethod>>(
         methodRes => ({ data: methodRes }),
         ({ message, source }: ApiError) => ({ error: { message, source } })
     );
+}
+
+function validate(obj: unknown, schema: runtypes.Runtype): boolean {
+    try {
+        schema.check(obj);
+
+        return true;
+    } catch {
+        return false;
+    }
 }
 
 export default apiMiddleware;

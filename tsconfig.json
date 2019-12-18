@@ -6,7 +6,7 @@
         "sourceMap": false,
         "strictNullChecks": true,
         "moduleResolution": "node",
-        "module": "esnext",
+        "module": "CommonJS",
         "resolveJsonModule": true,
         "target": "es2017",
         "allowSyntheticDefaultImports": true

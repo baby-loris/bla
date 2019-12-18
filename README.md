@@ -1,14 +1,14 @@
-# bla 
+# bla
 [![NPM version](https://badge.fury.io/js/bla.svg)](http://badge.fury.io/js/bla) [![Build Status](https://secure.travis-ci.org/baby-loris/bla.svg)](http://travis-ci.org/baby-loris/bla)
 
 ## Installation
 ```
 npm i bla
 ```
-If you use TypeScript, don't forget to install typings for [yup](https://github.com/jquense/yup):
+Also you have to install [runtypes](https://github.com/pelotom/runtypes) to define params schema.
 
 ```
-npm i @types/yup
+npm i runtypes
 ```
 
 ## Quick start
@@ -18,11 +18,11 @@ npm i @types/yup
 Write API method declaration
 ```ts
 import { ApiMethod } from 'bla/server';
-import * as yup from 'yup';
+import * as runtypes from 'runtypes';
 
 const helloMethod = new ApiMethod({
-    params: yup.object({
-        name: yup.string().required()
+    params: runtypes.Record({
+        name: runtypes.String
     }),
     action: params => `Hello, ${params.name}`;
 });
