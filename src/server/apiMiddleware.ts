@@ -19,7 +19,7 @@ function apiMiddleware<TMethods extends Record<string, ApiMethod>>(
     api: Api<TMethods>
 ): express.RequestHandler {
     return apiRouter.post(
-        '/:method',
+        '/:method(*)',
         (req, res, next) => {
             if(req.params.method === 'batch') {
                 if(validate(req.body, batchSchema)) {
