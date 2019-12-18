@@ -25,87 +25,110 @@ describe('api middleware', () => {
 
     const apiRequestHandler = apiMiddleware(api);
 
-    it.skip('should send error if input format is wrong', () => {
-        const request = httpMocks.createRequest({
-            method: 'POST',
-            url: '/method1',
-            body: '234' as any
+    describe('without batch', () => {
+        it('should send error if body format is not valid', () => {
+            const request = httpMocks.createRequest({
+                method: 'POST',
+                url: '/method1',
+                body: 'wrong format' as any
+            });
+            const response = httpMocks.createResponse();
+
+            apiRequestHandler(request, response, () => {});
+
+            return flushPromises().then(() => {
+                expect(response._getData()).toBe(
+                    JSON.stringify({
+                        error: { message: 'Unexpected body, expected method params' }
+                    })
+                );
+            });
         });
-        const response = httpMocks.createResponse();
 
-        apiRequestHandler(request, response, () => {});
+        it('should send method result', () => {
+            const request = httpMocks.createRequest({
+                method: 'POST',
+                url: '/method1',
+                body: { method1RequiredParam: 'test' }
+            });
+            const response = httpMocks.createResponse();
 
-        return flushPromises().then(() => {
-            expect(response._getData()).toBe(
-                JSON.stringify({
-                    error: { message: 'Incompatible input data, expected object with method and params fields' }
-                })
-            );
+            apiRequestHandler(request, response, () => {});
+
+            return flushPromises().then(() => {
+                expect(response._getData()).toBe(JSON.stringify({ data: 'test!' }));
+            });
         });
-    });
 
-    it('should send method result', () => {
-        const request = httpMocks.createRequest({
-            method: 'POST',
-            url: '/method1',
-            body: { method1RequiredParam: 'test' }
-        });
-        const response = httpMocks.createResponse();
+        it('should send method error', () => {
+            const request = httpMocks.createRequest({
+                method: 'POST',
+                url: '/method1',
+                body: {}
+            });
+            const response = httpMocks.createResponse();
 
-        apiRequestHandler(request, response, () => {});
+            apiRequestHandler(request, response, () => {});
 
-        return flushPromises().then(() => {
-            expect(response._getData()).toBe(JSON.stringify({ data: 'test!' }));
-        });
-    });
-
-    it('should send method error', () => {
-        const request = httpMocks.createRequest({
-            method: 'POST',
-            url: '/method1',
-            body: {}
-        });
-        const response = httpMocks.createResponse();
-
-        apiRequestHandler(request, response, () => {});
-
-        return flushPromises().then(() => {
-            expect(response._getData()).toBe(
-                JSON.stringify({
-                    error: {
-                        message: 'method1: Expected string, but was undefined',
-                        source: {
-                            key: 'method1RequiredParam',
-                            name: 'ValidationError'
+            return flushPromises().then(() => {
+                expect(response._getData()).toBe(
+                    JSON.stringify({
+                        error: {
+                            message: 'method1: Expected string, but was undefined',
+                            source: {
+                                key: 'method1RequiredParam',
+                                name: 'ValidationError'
+                            }
                         }
-                    }
-                })
-            );
+                    })
+                );
+            });
         });
     });
 
-    it('should send batch result', () => {
-        const request = httpMocks.createRequest({
-            method: 'POST',
-            url: '/batch',
-            body: [
-                { method: 'method1', params: { method1RequiredParam: 'test' } },
-                { method: 'method2', params: { method2RequiredParam: 1 } }
-            ]
+    describe('with batch', () => {
+        it('should send error if body format is not valid', () => {
+            const request = httpMocks.createRequest({
+                method: 'POST',
+                url: '/batch',
+                body: [{ method: 'method1' }]
+            });
+            const response = httpMocks.createResponse();
+
+            apiRequestHandler(request, response, () => {});
+
+            return flushPromises().then(() => {
+                expect(response._getData()).toBe(
+                    JSON.stringify({
+                        error: { message: 'Unexpected body, expected array of methods' }
+                    })
+                );
+            });
         });
-        const response = httpMocks.createResponse();
 
-        apiRequestHandler(request, response, () => {});
+        it('should send batch result', () => {
+            const request = httpMocks.createRequest({
+                method: 'POST',
+                url: '/batch',
+                body: [
+                    { method: 'method1', params: { method1RequiredParam: 'test' } },
+                    { method: 'method2', params: { method2RequiredParam: 1 } }
+                ]
+            });
+            const response = httpMocks.createResponse();
 
-        return flushPromises().then(() => {
-            expect(response._getData()).toBe(
-                JSON.stringify({
-                    data: [
-                        { data: 'test!' },
-                        { error: { message: 'method2: Unspecified error', source: {} } }
-                    ]
-                })
-            );
+            apiRequestHandler(request, response, () => {});
+
+            return flushPromises().then(() => {
+                expect(response._getData()).toBe(
+                    JSON.stringify({
+                        data: [
+                            { data: 'test!' },
+                            { error: { message: 'method2: Unspecified error', source: {} } }
+                        ]
+                    })
+                );
+            });
         });
     });
 });

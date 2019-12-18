@@ -1,18 +1,10 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import * as runtypes from 'runtypes';
 import Api from './Api';
 import ApiMethod, { ExtractApiMethodParams } from './ApiMethod';
 import ApiError from '../shared/ApiError';
 import { ApiMethodResponse } from '../shared/types';
 
-const apiMethodSchema = runtypes.Record({});
-const batchSchema = runtypes.Array(
-    runtypes.Record({
-        method: runtypes.String,
-        params: runtypes.Record({})
-    })
-);
 const apiRouter = express.Router().use(bodyParser.json({ type: '*/*' }));
 
 function apiMiddleware<TMethods extends Record<string, ApiMethod>>(
@@ -22,18 +14,26 @@ function apiMiddleware<TMethods extends Record<string, ApiMethod>>(
         '/:method(*)',
         (req, res, next) => {
             if(req.params.method === 'batch') {
-                if(validate(req.body, batchSchema)) {
+                if(
+                    Array.isArray(req.body) &&
+                    req.body.every(item =>
+                        item &&
+                        typeof item.method === 'string' &&
+                        item.params &&
+                        typeof item.params === 'object'
+                    )
+                ) {
                     execBatch(api, req.body, req).then(res.json);
                 } else {
                     res.json({
-                        error: { message: 'Incompatible body data, expected array of methods' }
+                        error: { message: 'Unexpected body, expected array of methods' }
                     });
                 }
-            } else if(validate(req.body, apiMethodSchema)) {
+            } else if(req.body && typeof req.body === 'object') {
                 execApiMethod(api, req.params.method, req.body, req).then(res.json);
             } else {
                 res.json({
-                    error: { message: 'Incompatible body data, expected method params' }
+                    error: { message: 'Unexpected body, expected method params' }
                 });
             }
         }
@@ -63,16 +63,6 @@ function execApiMethod<TMethods extends Record<string, ApiMethod>>(
         methodRes => ({ data: methodRes }),
         ({ message, source }: ApiError) => ({ error: { message, source } })
     );
-}
-
-function validate(obj: unknown, schema: runtypes.Runtype): boolean {
-    try {
-        schema.check(obj);
-
-        return true;
-    } catch {
-        return false;
-    }
 }
 
 export default apiMiddleware;
