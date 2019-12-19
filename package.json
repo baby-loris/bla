@@ -22,7 +22,7 @@
   "scripts": {
     "test": "npx jest",
     "lint": "npx tsc -p . --noEmit && npx eslint --ext ts src",
-    "build": "rm -rf server client shared && npx rollup -c rollup.config.ts",
+    "build": "rm -rf server client shared && npx rollup -c rollup.config.ts && cp src/shared/types.ts shared/types.d.ts",
     "preversion": "npm run lint",
     "prepublishOnly": "npm run build",
     "postpublish": "git push && git push --tags"
