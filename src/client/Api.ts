@@ -53,7 +53,7 @@ class Api<TApiContract extends ApiContract> {
                     reject,
                     method,
                     params,
-                    resolve: (res: ApiMethodResponse): void => {
+                    resolve: (res: ApiMethodResponse) => {
                         this.handleMethodResponse(res, resolve, reject);
                     }
                 });
