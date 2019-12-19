@@ -2,7 +2,7 @@ import * as express from 'express';
 import ApiMethod, { ApiMethodParams, ExtractApiMethodParams, ExtractApiMethodResult } from './ApiMethod';
 import ApiError from '../shared/ApiError';
 
-class Api<TMethods extends Record<string, ApiMethod<ApiMethodParams, any>> = {}> {
+class Api<TMethods extends Record<string, ApiMethod<ApiMethodParams, unknown>> = {}> {
     constructor(private methods: TMethods) {}
 
     exec<TMethodName extends keyof TMethods>(
@@ -13,7 +13,7 @@ class Api<TMethods extends Record<string, ApiMethod<ApiMethodParams, any>> = {}>
         return methodName in this.methods ?
             this.methods[methodName].exec(methodParams, request).catch(err => {
                 throw this.normalizeError(err, methodName as string);
-            }) :
+            }) as Promise<ExtractApiMethodResult<TMethods[TMethodName]>> :
             Promise.reject(new ApiError(`Method ${methodName} not found`));
     }
 

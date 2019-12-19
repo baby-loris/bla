@@ -69,7 +69,7 @@ class Api<TApiContract extends ApiContract> {
         this.doRequest({
             method: 'batch',
             params: queue.map(({ method, params }) => ({ method, params })),
-            resolve: ({ data }: ApiMethodResponseSuccess<ApiMethodResponse[]>): void => {
+            resolve: ({ data }: ApiMethodResponseSuccess<ApiMethodResponse[]>) => {
                 queue.forEach(({ resolve, reject }, i) => {
                     const item = data[i];
 
@@ -80,7 +80,7 @@ class Api<TApiContract extends ApiContract> {
                     this.handleMethodResponse(item, resolve, reject);
                 });
             },
-            reject: (err: ApiError): void => {
+            reject: (err: ApiError) => {
                 queue.forEach(({ reject }) => {
                     reject(err);
                 });
