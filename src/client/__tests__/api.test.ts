@@ -1,6 +1,6 @@
 import Api from '../Api';
 import ApiError from '../../shared/ApiError';
-import { Api as ServerApi, ApiMethod as ServerApiMethod, ExtractApiMethodsDesc } from '../../server';
+import { Api as ServerApi, ApiMethod as ServerApiMethod, ExtractApiContract } from '../../server';
 import * as runtypes from 'runtypes';
 
 describe('api', () => {
@@ -27,7 +27,7 @@ describe('api', () => {
     });
 
     describe('without batch', () => {
-        const api = new Api<ExtractApiMethodsDesc<typeof serverApi>>({ url: '/api' });
+        const api = new Api<ExtractApiContract<typeof serverApi>>({ url: '/api' });
 
         it('should reject if server does not respond', done => {
             fetchMock.mockResponseOnce('', { status: 500, statusText: 'Internal server error' });
@@ -80,7 +80,7 @@ describe('api', () => {
     });
 
     describe('with batch', () => {
-        const api = new Api<ExtractApiMethodsDesc<typeof serverApi>>({
+        const api = new Api<ExtractApiContract<typeof serverApi>>({
             url: '/api',
             batchMaxSize: Number.POSITIVE_INFINITY
         });
