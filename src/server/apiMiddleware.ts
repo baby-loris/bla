@@ -23,14 +23,18 @@ function apiMiddleware<TMethods extends Record<string, ApiMethod>>(
                         typeof item.params === 'object'
                     )
                 ) {
-                    execBatch(api, req.body, req).then(res.json);
+                    execBatch(api, req.body, req).then(data => {
+                        res.json(data);
+                    });
                 } else {
                     res.json({
                         error: { message: 'Unexpected body, expected array of methods' }
                     });
                 }
             } else if(req.body && typeof req.body === 'object') {
-                execApiMethod(api, req.params.method, req.body, req).then(res.json);
+                execApiMethod(api, req.params.method, req.body, req).then(data => {
+                    res.json(data);
+                });
             } else {
                 res.json({
                     error: { message: 'Unexpected body, expected method params' }
