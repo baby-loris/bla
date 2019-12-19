@@ -3,6 +3,7 @@ import * as express from 'express';
 
 type ApiMethodParams =
     runtypes.Record<{}, false> |
+    runtypes.Partial<{}> |
     runtypes.Intersect2<runtypes.Record<{}, false>, runtypes.Partial<{}>>;
 
 type ApiMethodAction<TParams extends ApiMethodParams, TResult> =
@@ -32,7 +33,11 @@ class ApiMethod<TParams extends ApiMethodParams = ApiMethodParams, TResult = unk
 }
 
 type ExtractApiMethodParams<TApiMethod extends ApiMethod<ApiMethodParams, unknown>> =
-    TApiMethod extends ApiMethod<infer TParams, unknown> ? runtypes.Static<TParams> : never;
+    TApiMethod extends ApiMethod<infer TParams, unknown> ?
+        runtypes.Static<TParams> extends { [x: string]: never; } ?
+            { [x: string]: never; } :
+            runtypes.Static<TParams> :
+        never;
 
 type ExtractApiMethodResult<TApiMethod extends ApiMethod<ApiMethodParams, unknown>> =
     TApiMethod extends ApiMethod<ApiMethodParams, infer TResult> ? TResult : never;
