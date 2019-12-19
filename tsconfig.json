@@ -7,8 +7,8 @@
         "strictNullChecks": true,
         "moduleResolution": "node",
         "module": "CommonJS",
-        "resolveJsonModule": true,
         "target": "es2017",
+        "resolveJsonModule": true,
         "allowSyntheticDefaultImports": true
     }
 }
