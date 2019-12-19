@@ -1,13 +1,5 @@
 import ApiError from '../shared/ApiError';
-import { ApiMethodResponse, ApiMethodResponseSuccess } from '../shared/types';
-
-type ApiMethodsDesc = Record<
-    string,
-    {
-        params: Record<string, unknown>;
-        result: unknown;
-    }
->;
+import { ApiContract, ApiMethodResponse, ApiMethodResponseSuccess } from '../shared/types';
 
 interface ApiItem {
     method: string;
@@ -25,7 +17,7 @@ const DEFAULT_API_OPTIONS = {
     batchMaxSize: 1
 };
 
-class Api<TMethods extends ApiMethodsDesc> {
+class Api<TApiContract extends ApiContract> {
     private options: Required<ApiOptions>;
     private queue: ApiItem[] = [];
 
@@ -36,10 +28,10 @@ class Api<TMethods extends ApiMethodsDesc> {
         };
     }
 
-    exec<TMethod extends Extract<keyof TMethods, string>>(
+    exec<TMethod extends Extract<keyof TApiContract, string>>(
         method: TMethod,
-        params: TMethods[TMethod]['params']
-    ): Promise<TMethods[TMethod]['result']> {
+        params: TApiContract[TMethod]['params']
+    ): Promise<TApiContract[TMethod]['result']> {
         return new Promise((resolve, reject) => {
             const { options, queue } = this;
 

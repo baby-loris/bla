@@ -1,3 +1,11 @@
+type ApiContract = Record<
+    string,
+    {
+        params: Record<string, unknown>;
+        result: unknown;
+    }
+>;
+
 interface ApiMethodResponseSuccess<TData = unknown> {
     data: TData;
     error?: undefined;
@@ -15,4 +23,4 @@ type ApiMethodResponse<TData = unknown> =
     ApiMethodResponseSuccess<TData> |
     ApiMethodResponseFailed;
 
-export { ApiMethodResponse, ApiMethodResponseSuccess, ApiMethodResponseFailed };
+export { ApiContract, ApiMethodResponse, ApiMethodResponseSuccess, ApiMethodResponseFailed };
