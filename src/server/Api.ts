@@ -30,7 +30,7 @@ class Api<TMethods extends Record<string, ApiMethod<ApiMethodParams, any>> = {}>
     }
 }
 
-type ExtractApiMethodsDesc<TApi extends Api> = TApi extends Api<infer TMethods> ?
+type ExtractApiContract<TApi extends Api> = TApi extends Api<infer TMethods> ?
     {
         [methodName in keyof TMethods]: {
             params: ExtractApiMethodParams<TMethods[methodName]>;
@@ -40,4 +40,4 @@ type ExtractApiMethodsDesc<TApi extends Api> = TApi extends Api<infer TMethods> 
     never;
 
 export default Api;
-export { ExtractApiMethodsDesc };
+export { ExtractApiContract };
