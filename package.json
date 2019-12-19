@@ -25,7 +25,7 @@
     "build": "rm -rf server client shared && npx rollup -c rollup.config.ts && cp src/shared/types.ts shared/types.d.ts",
     "preversion": "npm run lint",
     "prepublishOnly": "npm run build",
-    "postpublish": "git push && git push --tags"
+    "postpublish": "git push --follow-tags --no-verify"
   },
   "dependencies": {
     "body-parser": "1.19.0",
