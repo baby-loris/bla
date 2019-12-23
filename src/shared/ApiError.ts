@@ -28,7 +28,8 @@ function ApiError<TData extends unknown>(
     return err;
 }
 
-ApiError.prototype = Object.create(
+// NOTE: Use [] to get rid of an error in generated d.ts
+ApiError['prototype'] = Object.create(
     Error.prototype,
     {
         constructor: {
