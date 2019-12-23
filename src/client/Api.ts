@@ -10,10 +10,14 @@ interface ApiItem {
 
 interface ApiOptions {
     url: string;
+    csrfToken?: string;
     batchMaxSize?: number;
 }
 
+const MAX_RETRIES = 2;
+
 const DEFAULT_API_OPTIONS = {
+    csrfToken: '',
     batchMaxSize: 1
 };
 
@@ -88,13 +92,20 @@ class Api<TApiContract extends ApiContract> {
         });
     }
 
-    private doRequest({ resolve, reject, method, params }: ApiItem): void {
+    private doRequest(
+        { resolve, reject, method, params, retries = 0 }: ApiItem & { retries?: number; }
+    ): void {
+        const { url, csrfToken } = this.options;
+
         fetch(
-            this.options.url,
+            `${url}/${method}`,
             {
                 method: 'POST',
-                credentials: 'include',
-                body: JSON.stringify({ method, params })
+                credentials: 'same-origin',
+                headers: csrfToken ?
+                    { 'X-Csrf-Token': csrfToken } :
+                    undefined,
+                body: JSON.stringify(params)
             }
         ).then(
             response => {
@@ -102,6 +113,14 @@ class Api<TApiContract extends ApiContract> {
                     return response.json().catch(err => {
                         throw new ApiError(err.message, err);
                     });
+                } else if(csrfToken) {
+                    const newCsrfToken = response.headers.get('X-Csrf-Token');
+
+                    if(newCsrfToken && newCsrfToken !== csrfToken) {
+                        this.options.csrfToken = newCsrfToken;
+
+                        throw new ApiError('Wrong csrf token', { type: 'WRONG_CSRF_TOKEN' });
+                    }
                 }
 
                 throw new ApiError(response.statusText);
@@ -115,7 +134,13 @@ class Api<TApiContract extends ApiContract> {
             } else {
                 throw new ApiError('Incompatible format, expected object with data or error field');
             }
-        }).catch(reject);
+        }).catch(err => {
+            if(err && err.source && err.source.type === 'WRONG_CSRF_TOKEN' && retries < MAX_RETRIES) {
+                this.doRequest({ resolve, reject, method, params, retries: retries + 1 });
+            } else {
+                reject(err);
+            }
+        });
     }
 
     private handleMethodResponse(
