@@ -14,8 +14,9 @@ interface ApiMethodResponseSuccess<TData = unknown> {
 interface ApiMethodResponseFailed {
     data?: undefined;
     error: {
+        type: string;
         message: string;
-        source?: unknown;
+        data?: unknown;
     };
 }
 

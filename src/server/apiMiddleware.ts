@@ -28,7 +28,10 @@ function apiMiddleware<TMethods extends Record<string, ApiMethod>>(
                     });
                 } else {
                     res.json({
-                        error: { message: 'Unexpected body, expected array of methods' }
+                        error: {
+                            type: ApiError.BAD_REQUEST,
+                            message: 'Unexpected body, expected array of methods'
+                        }
                     });
                 }
             } else if(req.body && typeof req.body === 'object') {
@@ -37,7 +40,10 @@ function apiMiddleware<TMethods extends Record<string, ApiMethod>>(
                 });
             } else {
                 res.json({
-                    error: { message: 'Unexpected body, expected method params' }
+                    error: {
+                        type: ApiError.BAD_REQUEST,
+                        message: 'Unexpected body, expected method params'
+                    }
                 });
             }
         }
@@ -65,7 +71,7 @@ function execApiMethod<TMethods extends Record<string, ApiMethod>>(
 ): Promise<ApiMethodResponse> {
     return api.exec(method, params, request).then(
         methodRes => ({ data: methodRes }),
-        ({ message, source }: ApiError) => ({ error: { message, source } })
+        ({ type, message, data }: ApiError) => ({ error: { type, message, data } })
     );
 }
 

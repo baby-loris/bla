@@ -14,17 +14,19 @@ class Api<TMethods extends Record<string, ApiMethod<ApiMethodParams, unknown>> =
             this.methods[methodName].exec(methodParams, request).catch(err => {
                 throw this.normalizeError(err, methodName as string);
             }) as Promise<ExtractApiMethodResult<TMethods[TMethodName]>> :
-            Promise.reject(new ApiError(`Method ${methodName} not found`));
+            Promise.reject(new ApiError(ApiError.NOT_FOUND, `Method ${methodName} not found`));
     }
 
     private normalizeError(err: unknown, methodName: string): ApiError {
         return err instanceof ApiError ?
             new ApiError(
+                err.type,
                 `${methodName}: ${err.message}`,
-                err.source
+                err.data
             ) :
             new ApiError(
-                `${methodName}: ${err instanceof Error ? err.message : 'Internal error'}`,
+                ApiError.INTERNAL_ERROR,
+                `${methodName}: ${err instanceof Error ? err.message : undefined}`,
                 err
             );
     }

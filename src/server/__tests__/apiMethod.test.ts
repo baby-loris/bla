@@ -17,8 +17,12 @@ describe('api method', () => {
         method = new ApiMethod({ params, action });
     });
 
-    it('should reject with error if params are not valid', () => {
-        return expect(method.exec({} as any, requestMock)).rejects.toBeInstanceOf(runtypes.ValidationError);
+    it('should reject with error if params are not valid', done => {
+        method.exec({} as any, requestMock).catch(err => {
+            expect(err.type).toBe('BAD_REQUEST');
+            expect(err.data).toBeInstanceOf(runtypes.ValidationError);
+            done();
+        });
     });
 
     it('should not execute action if params are not valid', done => {

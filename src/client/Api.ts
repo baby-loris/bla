@@ -111,7 +111,7 @@ class Api<TApiContract extends ApiContract> {
             response => {
                 if(response.ok) {
                     return response.json().catch(err => {
-                        throw new ApiError(err.message, err);
+                        throw new ApiError(ApiError.INTERNAL_ERROR, err.message, err);
                     });
                 } else if(csrfToken) {
                     const newCsrfToken = response.headers.get('X-Csrf-Token');
@@ -119,23 +119,26 @@ class Api<TApiContract extends ApiContract> {
                     if(newCsrfToken && newCsrfToken !== csrfToken) {
                         this.options.csrfToken = newCsrfToken;
 
-                        throw new ApiError('Wrong csrf token', { type: 'WRONG_CSRF_TOKEN' });
+                        throw new ApiError('WRONG_CSRF_TOKEN');
                     }
                 }
 
-                throw new ApiError(response.statusText);
+                throw new ApiError(ApiError.INTERNAL_ERROR, response.statusText);
             },
             err => {
-                throw new ApiError(err.message, err);
+                throw new ApiError(ApiError.INTERNAL_ERROR, err.message, err);
             }
         ).then((res: ApiMethodResponse) => {
             if('data' in res || 'error' in res) {
                 resolve(res);
             } else {
-                throw new ApiError('Incompatible format, expected object with data or error field');
+                throw new ApiError(
+                    ApiError.INTERNAL_ERROR,
+                    'Incompatible format, expected object with data or error field'
+                );
             }
         }).catch(err => {
-            if(err && err.source && err.source.type === 'WRONG_CSRF_TOKEN' && retries < MAX_RETRIES) {
+            if(err && err.type === 'WRONG_CSRF_TOKEN' && retries < MAX_RETRIES) {
                 this.doRequest({ resolve, reject, method, params, retries: retries + 1 });
             } else {
                 reject(err);
@@ -149,7 +152,7 @@ class Api<TApiContract extends ApiContract> {
         reject: (err: unknown) => void,
     ): void {
         if(response.error) {
-            reject(new ApiError(response.error.message, response.error.source));
+            reject(new ApiError(response.error.type, response.error.message, response.error.data));
         } else {
             resolve(response.data);
         }

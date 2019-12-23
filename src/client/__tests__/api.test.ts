@@ -53,18 +53,22 @@ describe('api', () => {
 
             api.exec('method1', { method1RequiredParam: 'test' }).catch(err => {
                 expect(err).toBeInstanceOf(ApiError);
+                expect(err.type).toBe('INTERNAL_ERROR');
                 expect(err.message).toBe('Incompatible format, expected object with data or error field');
                 done();
             });
         });
 
         it('should reject if server method failed', done => {
-            fetchMock.mockResponseOnce(JSON.stringify({ error: { message: 'error!', source: {} } }));
+            fetchMock.mockResponseOnce(
+                JSON.stringify({ error: { type: 'INTERNAL_ERROR', message: 'error!', data: {} } })
+            );
 
             api.exec('method1', { method1RequiredParam: 'test' }).catch(err => {
                 expect(err).toBeInstanceOf(ApiError);
+                expect(err.type).toBe('INTERNAL_ERROR');
                 expect(err.message).toBe('error!');
-                expect(err.source).toEqual({});
+                expect(err.data).toEqual({});
                 done();
             });
         });
@@ -93,6 +97,7 @@ describe('api', () => {
                     done.fail,
                     err => {
                         expect(err).toBeInstanceOf(ApiError);
+                        expect(err.type).toBe('INTERNAL_ERROR');
                         expect(err.message).toBe('Internal server error');
                     }
                 ),
@@ -100,6 +105,7 @@ describe('api', () => {
                     done.fail,
                     err => {
                         expect(err).toBeInstanceOf(ApiError);
+                        expect(err.type).toBe('INTERNAL_ERROR');
                         expect(err.message).toBe('Internal server error');
                     }
                 )
@@ -115,8 +121,9 @@ describe('api', () => {
                         { data: 'test!' },
                         {
                             error: {
+                                type: 'BAD_REQUEST',
                                 message: 'method2: Expected string, but was undefined',
-                                source: {
+                                data: {
                                     key: 'method2RequiredParam',
                                     name: 'ValidationError'
                                 }
@@ -137,8 +144,9 @@ describe('api', () => {
                     done.fail,
                     err => {
                         expect(err).toBeInstanceOf(ApiError);
+                        expect(err.type).toBe('BAD_REQUEST');
                         expect(err.message).toBe('method2: Expected string, but was undefined');
-                        expect(err.source).toEqual({
+                        expect(err.data).toEqual({
                             key: 'method2RequiredParam',
                             name: 'ValidationError'
                         });

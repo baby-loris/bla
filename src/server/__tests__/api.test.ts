@@ -27,6 +27,7 @@ describe('api', () => {
     it('should reject with api error if method does not exist', done => {
         api.exec('method3' as any, {}, requestMock).catch(err => {
             expect(err).toBeInstanceOf(ApiError);
+            expect(err.type).toBe('NOT_FOUND');
             expect(err.message).toBe('Method method3 not found');
             done();
         });
@@ -35,9 +36,10 @@ describe('api', () => {
     it('should reject with api error if method params are not valid', done => {
         api.exec('method1', {} as any, requestMock).catch(err => {
             expect(err).toBeInstanceOf(ApiError);
+            expect(err.type).toBe('BAD_REQUEST');
             expect(err.message).toBe('method1: Expected string, but was undefined');
-            expect(err.source).toBeInstanceOf(runtypes.ValidationError);
-            expect(err.source.key).toBe('method1RequiredParam');
+            expect(err.data).toBeInstanceOf(runtypes.ValidationError);
+            expect(err.data.key).toBe('method1RequiredParam');
             done();
         });
     });
@@ -46,7 +48,7 @@ describe('api', () => {
         api.exec('method2', { method2RequiredParam: 1 }, requestMock).catch(err => {
             expect(err).toBeInstanceOf(ApiError);
             expect(err.message).toBe('method2: Unspecified error');
-            expect(err.source).toBeInstanceOf(Error);
+            expect(err.data).toBeInstanceOf(Error);
             done();
         });
     });

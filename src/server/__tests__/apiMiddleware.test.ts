@@ -39,7 +39,10 @@ describe('api middleware', () => {
             return flushPromises().then(() => {
                 expect(response._getData()).toBe(
                     JSON.stringify({
-                        error: { message: 'Unexpected body, expected method params' }
+                        error: {
+                            type: 'BAD_REQUEST',
+                            message: 'Unexpected body, expected method params'
+                        }
                     })
                 );
             });
@@ -74,8 +77,9 @@ describe('api middleware', () => {
                 expect(response._getData()).toBe(
                     JSON.stringify({
                         error: {
+                            type: 'BAD_REQUEST',
                             message: 'method1: Expected string, but was undefined',
-                            source: {
+                            data: {
                                 key: 'method1RequiredParam',
                                 name: 'ValidationError'
                             }
@@ -100,7 +104,10 @@ describe('api middleware', () => {
             return flushPromises().then(() => {
                 expect(response._getData()).toBe(
                     JSON.stringify({
-                        error: { message: 'Unexpected body, expected array of methods' }
+                        error: {
+                            type: 'BAD_REQUEST',
+                            message: 'Unexpected body, expected array of methods'
+                        }
                     })
                 );
             });
@@ -124,7 +131,7 @@ describe('api middleware', () => {
                     JSON.stringify({
                         data: [
                             { data: 'test!' },
-                            { error: { message: 'method2: Unspecified error', source: {} } }
+                            { error: { type: 'INTERNAL_ERROR', message: 'method2: Unspecified error', data: {} } }
                         ]
                     })
                 );
