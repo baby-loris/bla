@@ -21,14 +21,18 @@ describe('api', () => {
             action: () => {
                 throw new Error('Unspecified error');
             }
+        }),
+
+        method3: new ApiMethod({
+            action: () => Promise.reject({ type: 'CUSTOM_ERROR', message: 'Custom message' })
         })
     });
 
     it('should reject with api error if method does not exist', done => {
-        api.exec('method3' as any, {}, requestMock).catch(err => {
+        api.exec('methodNotExist' as any, {}, requestMock).catch(err => {
             expect(err).toBeInstanceOf(ApiError);
             expect(err.type).toBe('NOT_FOUND');
-            expect(err.message).toBe('Method method3 not found');
+            expect(err.message).toBe('Method methodNotExist not found');
             done();
         });
     });
@@ -49,6 +53,16 @@ describe('api', () => {
             expect(err).toBeInstanceOf(ApiError);
             expect(err.message).toBe('method2: Unspecified error');
             expect(err.data).toBeInstanceOf(Error);
+            done();
+        });
+    });
+
+    it('should normalize method error like', done => {
+        api.exec('method3', {}, requestMock).catch(err => {
+            expect(err).toBeInstanceOf(ApiError);
+            expect(err.type).toBe('CUSTOM_ERROR');
+            expect(err.message).toBe('method3: Custom message');
+            expect(err.data).toEqual({ type: 'CUSTOM_ERROR', message: 'Custom message' });
             done();
         });
     });

@@ -1,6 +1,5 @@
 import * as runtypes from 'runtypes';
 import * as express from 'express';
-import ApiError from '../shared/ApiError';
 
 type ApiMethodParams =
     runtypes.Record<{}, false> |
@@ -27,11 +26,7 @@ class ApiMethod<TParams extends ApiMethodParams = ApiMethodParams, TResult = unk
                 this.params.check(params);
                 resolve(this.action(params, request));
             } catch(err) {
-                reject(
-                    err instanceof runtypes.ValidationError ?
-                        new ApiError(ApiError.BAD_REQUEST, err.message, err) :
-                        err
-                );
+                reject(err);
             }
         });
     }

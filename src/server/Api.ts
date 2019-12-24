@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as runtypes from 'runtypes';
 import ApiMethod, { ApiMethodParams, ExtractApiMethodParams, ExtractApiMethodResult } from './ApiMethod';
 import ApiError from '../shared/ApiError';
 
@@ -18,18 +19,36 @@ class Api<TMethods extends Record<string, ApiMethod<ApiMethodParams, unknown>> =
     }
 
     private normalizeError(err: unknown, methodName: string): ApiError {
-        return err instanceof ApiError ?
-            new ApiError(
-                err.type,
-                `${methodName}: ${err.message}`,
-                err.data
-            ) :
-            new ApiError(
-                ApiError.INTERNAL_ERROR,
-                `${methodName}: ${err instanceof Error ? err.message : undefined}`,
-                err
-            );
+        if(err instanceof ApiError) {
+            return new ApiError(err.type, `${methodName}: ${err.message}`, err.data);
+        }
+
+        if(err instanceof runtypes.ValidationError) {
+            return new ApiError(ApiError.BAD_REQUEST, `${methodName}: ${err.message}`, err);
+        }
+
+        if(err instanceof Error) {
+            return new ApiError(ApiError.INTERNAL_ERROR, `${methodName}: ${err.message}`, err);
+        }
+
+        if(isErrorLike(err)) {
+            return new ApiError(err.type, `${methodName}: ${err.message}`, err);
+        }
+
+        return new ApiError(ApiError.INTERNAL_ERROR, `${methodName}: Something went wrong`, err);
     }
+}
+
+function isErrorLike(err: unknown): err is { type: string; message?: string; } {
+    return (
+        typeof err === 'object' &&
+        err !== null &&
+        typeof (err as { type?: unknown; }).type === 'string' &&
+        (
+            typeof (err as { message?: unknown; }).message === 'string' ||
+            typeof (err as { message?: unknown; }).message === 'undefined'
+        )
+    );
 }
 
 type ExtractApiContract<TApi extends Api> = TApi extends Api<infer TMethods> ?

@@ -19,8 +19,7 @@ describe('api method', () => {
 
     it('should reject with error if params are not valid', done => {
         method.exec({} as any, requestMock).catch(err => {
-            expect(err.type).toBe('BAD_REQUEST');
-            expect(err.data).toBeInstanceOf(runtypes.ValidationError);
+            expect(err).toBeInstanceOf(runtypes.ValidationError);
             done();
         });
     });
