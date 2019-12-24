@@ -41,16 +41,12 @@ const api = new Api({
     hello: helloMethod
 });
 
-api.exec('hello', { name: 'Stepan' }).then(res => {
-    console.log(res); // 'Hello, Stepan'
-});
-
 export default api;
 ```
 
 Save it to `api.ts`.
 
-#### or expose it as express middleware
+#### exposing as express middleware
 ```ts
 import * as express from 'express';
 import { apiMiddleware } from 'bla/server';
