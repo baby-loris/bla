@@ -20,22 +20,22 @@ class Api<TMethods extends Record<string, ApiMethod<ApiMethodParams, unknown>> =
 
     private normalizeError(err: unknown, methodName: string): ApiError {
         if(err instanceof ApiError) {
-            return new ApiError(err.type, `${methodName}: ${err.message}`, err.data);
+            return new ApiError(err.type, formatMethodErrorMessage(methodName, err.message), err.data);
         }
 
         if(err instanceof runtypes.ValidationError) {
-            return new ApiError(ApiError.BAD_REQUEST, `${methodName}: ${err.message}`, err);
+            return new ApiError(ApiError.BAD_REQUEST, formatMethodErrorMessage(methodName, err.message), err);
         }
 
         if(err instanceof Error) {
-            return new ApiError(ApiError.INTERNAL_ERROR, `${methodName}: ${err.message}`, err);
+            return new ApiError(ApiError.INTERNAL_ERROR, formatMethodErrorMessage(methodName, err.message), err);
         }
 
         if(isErrorLike(err)) {
-            return new ApiError(err.type, `${methodName}: ${err.message}`, err);
+            return new ApiError(err.type, formatMethodErrorMessage(methodName, err.message), err);
         }
 
-        return new ApiError(ApiError.INTERNAL_ERROR, `${methodName}: Something went wrong`, err);
+        return new ApiError(ApiError.INTERNAL_ERROR, formatMethodErrorMessage(methodName), err);
     }
 }
 
@@ -49,6 +49,10 @@ function isErrorLike(err: unknown): err is { type: string; message?: string; } {
             typeof (err as { message?: unknown; }).message === 'undefined'
         )
     );
+}
+
+function formatMethodErrorMessage(methodName: string, errorMessage?: string): string {
+    return `${methodName}: ${errorMessage || 'Something went wrong'}`;
 }
 
 type ExtractApiContract<TApi extends Api> = TApi extends Api<infer TMethods> ?
