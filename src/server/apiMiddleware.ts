@@ -5,49 +5,50 @@ import ApiMethod, { ExtractApiMethodParams } from './ApiMethod';
 import ApiError from '../shared/ApiError';
 import { ApiMethodResponse } from '../shared/types';
 
-const apiRouter = express.Router().use(bodyParser.json({ type: '*/*' }));
-
 function apiMiddleware<TMethods extends Record<string, ApiMethod>>(
-    api: Api<TMethods>
+    api: Api<TMethods>,
+    bodyParserOptions: bodyParser.OptionsJson = { type: '*/*' }
 ): express.RequestHandler {
-    return apiRouter.post(
-        '/:method(*)',
-        (req, res, next) => {
-            if(req.params.method === 'batch') {
-                if(
-                    Array.isArray(req.body) &&
-                    req.body.every(item =>
-                        item &&
-                        typeof item.method === 'string' &&
-                        item.params &&
-                        typeof item.params === 'object'
-                    )
-                ) {
-                    execBatch(api, req.body, req).then(data => {
+    return express.Router()
+        .use(bodyParser.json(bodyParserOptions))
+        .post(
+            '/:method(*)',
+            (req, res) => {
+                if(req.params.method === 'batch') {
+                    if(
+                        Array.isArray(req.body) &&
+                        req.body.every(item =>
+                            item &&
+                            typeof item.method === 'string' &&
+                            item.params &&
+                            typeof item.params === 'object'
+                        )
+                    ) {
+                        execBatch(api, req.body, req).then(data => {
+                            res.json(data);
+                        });
+                    } else {
+                        res.json({
+                            error: {
+                                type: ApiError.BAD_REQUEST,
+                                message: 'Unexpected body, expected array of methods'
+                            }
+                        });
+                    }
+                } else if(req.body && typeof req.body === 'object') {
+                    execApiMethod(api, req.params.method, req.body, req).then(data => {
                         res.json(data);
                     });
                 } else {
                     res.json({
                         error: {
                             type: ApiError.BAD_REQUEST,
-                            message: 'Unexpected body, expected array of methods'
+                            message: 'Unexpected body, expected method params'
                         }
                     });
                 }
-            } else if(req.body && typeof req.body === 'object') {
-                execApiMethod(api, req.params.method, req.body, req).then(data => {
-                    res.json(data);
-                });
-            } else {
-                res.json({
-                    error: {
-                        type: ApiError.BAD_REQUEST,
-                        message: 'Unexpected body, expected method params'
-                    }
-                });
             }
-        }
-    );
+        );
 }
 
 function execBatch<TMethods extends Record<string, ApiMethod>>(
