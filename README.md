@@ -53,7 +53,7 @@ import { apiMiddleware } from 'bla/server';
 import api from './api';
 
 express()
-    .use('/api', apiMiddleware(api))
+    .use('/api', apiMiddleware({ api }))
     .listen(8080);
 ```
 

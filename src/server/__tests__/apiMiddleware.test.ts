@@ -23,7 +23,7 @@ describe('api middleware', () => {
         })
     });
 
-    const apiRequestHandler = apiMiddleware(api);
+    const apiRequestHandler = apiMiddleware({ api });
 
     describe('without batch', () => {
         it('should send error if body format is not valid', () => {
