@@ -5,12 +5,13 @@ import ApiMethod, { ExtractApiMethodParams } from './ApiMethod';
 import ApiError from '../shared/ApiError';
 import { ApiMethodResponse } from '../shared/types';
 
+type BodyParserOptions = Omit<bodyParser.OptionsJson, 'type'>;
+
 function apiMiddleware<TMethods extends Record<string, ApiMethod>>(
-    api: Api<TMethods>,
-    bodyParserOptions: bodyParser.OptionsJson = { type: '*/*' }
+    { api, bodyParserOptions }: { api: Api<TMethods>; bodyParserOptions?: BodyParserOptions; }
 ): express.RequestHandler {
     return express.Router()
-        .use(bodyParser.json(bodyParserOptions))
+        .use(bodyParser.json({ ...bodyParserOptions, type: '*/*' }))
         .post(
             '/:method(*)',
             (req, res) => {
