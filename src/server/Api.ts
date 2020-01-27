@@ -4,7 +4,7 @@ import ApiMethod, { ApiMethodParams, ExtractApiMethodParams, ExtractApiMethodRes
 import ApiError from '../shared/ApiError';
 
 class Api<TMethods extends Record<string, ApiMethod<ApiMethodParams, unknown>> = {}> {
-    constructor(protected methods: TMethods) {}
+    constructor(protected readonly methods: TMethods) {}
 
     exec<TMethodName extends keyof TMethods>(
         methodName: TMethodName,
