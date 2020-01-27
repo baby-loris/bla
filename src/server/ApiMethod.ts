@@ -10,8 +10,8 @@ type ApiMethodAction<TParams extends ApiMethodParams, TResult> =
     (params: runtypes.Static<TParams>, request: express.Request) => TResult | Promise<TResult>;
 
 class ApiMethod<TParams extends ApiMethodParams = ApiMethodParams, TResult = unknown> {
-    private params: TParams;
-    private action: ApiMethodAction<TParams, TResult>;
+    protected params: TParams;
+    protected action: ApiMethodAction<TParams, TResult>;
 
     constructor(
         { params, action }: { params?: TParams; action: ApiMethodAction<TParams, TResult>; }
