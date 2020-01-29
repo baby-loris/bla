@@ -41,7 +41,11 @@ const api = new Api({
     hello: helloMethod
 });
 
+// Export api contract to use it on client side
+type ApiContract = ExtractApiContract<typeof api>;
+
 export default api;
+export { ApiContract };
 ```
 
 Save it to `api.ts`.
@@ -60,8 +64,9 @@ express()
 ### Client side
 ```ts
 import { Api } from 'bla/client';
+import { ApiContract } from 'pathToServer/Api.ts';
 
-const api = new Api({ url: '/api' });
+const api = new Api<ApiContract>({ url: '/api' });
 
 api.exec('hello', { name: 'Stepan' }).then(res => {
     console.log(res); // 'Hello, Stepan'
