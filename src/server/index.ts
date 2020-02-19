@@ -1,5 +1,6 @@
 import Api, { ExtractApiContract } from './Api';
-import ApiMethod, { ApiMethodParams, ExtractApiMethodParams, ExtractApiMethodResult } from './ApiMethod';
+import ApiMethod, { ApiMethodParams, ApiMethodAction, ExtractApiMethodParams, ExtractApiMethodResult }
+    from './ApiMethod';
 import apiMiddleware from './apiMiddleware';
 import ApiError from '../shared/ApiError';
 import { ApiContract } from '../shared/types';
@@ -9,6 +10,7 @@ export {
     ApiContract,
     ApiMethod,
     ApiMethodParams,
+    ApiMethodAction,
     ApiError,
     apiMiddleware,
 
