@@ -4,7 +4,8 @@ import * as express from 'express';
 type ApiMethodParams =
     runtypes.Record<{}, false> |
     runtypes.Partial<{}> |
-    runtypes.Intersect2<runtypes.Record<{}, false>, runtypes.Partial<{}>>;
+    runtypes.Intersect2<ApiMethodParams, ApiMethodParams> |
+    runtypes.Union2<ApiMethodParams, ApiMethodParams>;
 
 type ApiMethodAction<TParams extends ApiMethodParams, TResult> =
     (params: runtypes.Static<TParams>, request: express.Request) => TResult | Promise<TResult>;
@@ -34,8 +35,8 @@ class ApiMethod<TParams extends ApiMethodParams = ApiMethodParams, TResult = unk
 
 type ExtractApiMethodParams<TApiMethod extends ApiMethod<ApiMethodParams, unknown>> =
     TApiMethod extends ApiMethod<infer TParams, unknown> ?
-        runtypes.Static<TParams> extends { [x: string]: never; } ?
-            { [x: string]: never; } :
+        runtypes.Static<TParams> extends Record<string, never> ?
+            Record<string, never> :
             runtypes.Static<TParams> :
         never;
 
@@ -43,4 +44,4 @@ type ExtractApiMethodResult<TApiMethod extends ApiMethod<ApiMethodParams, unknow
     TApiMethod extends ApiMethod<ApiMethodParams, infer TResult> ? TResult : never;
 
 export default ApiMethod;
-export { ApiMethodParams, ExtractApiMethodParams, ExtractApiMethodResult };
+export { ApiMethodParams, ApiMethodAction, ExtractApiMethodParams, ExtractApiMethodResult };
