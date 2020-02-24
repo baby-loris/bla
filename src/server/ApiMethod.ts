@@ -10,15 +10,30 @@ type ApiMethodParams =
 type ApiMethodAction<TParams extends ApiMethodParams, TResult> =
     (params: runtypes.Static<TParams>, request: express.Request) => TResult | Promise<TResult>;
 
-class ApiMethod<TParams extends ApiMethodParams = ApiMethodParams, TResult = unknown> {
-    protected readonly params: TParams;
-    protected readonly action: ApiMethodAction<TParams, TResult>;
+interface IApiMethod<
+    TParams extends ApiMethodParams = ApiMethodParams,
+    TResult = unknown
+> {
+    getParams(): TParams;
+    exec(params: runtypes.Static<TParams>, request: express.Request): Promise<TResult>;
+}
+
+class ApiMethod<
+    TParams extends ApiMethodParams = ApiMethodParams,
+    TResult = unknown,
+> implements IApiMethod<TParams, TResult> {
+    private readonly params: TParams;
+    private readonly action: ApiMethodAction<TParams, TResult>;
 
     constructor(
         { params, action }: { params?: TParams; action: ApiMethodAction<TParams, TResult>; }
     ) {
         this.params = params || runtypes.Record({}) as TParams;
         this.action = action;
+    }
+
+    getParams(): TParams {
+        return this.params;
     }
 
     exec(params: runtypes.Static<TParams>, request: express.Request): Promise<TResult> {
@@ -33,15 +48,15 @@ class ApiMethod<TParams extends ApiMethodParams = ApiMethodParams, TResult = unk
     }
 }
 
-type ExtractApiMethodParams<TApiMethod extends ApiMethod<ApiMethodParams, unknown>> =
-    TApiMethod extends ApiMethod<infer TParams, unknown> ?
+type ExtractApiMethodParams<TApiMethod extends IApiMethod> =
+    TApiMethod extends IApiMethod<infer TParams> ?
         runtypes.Static<TParams> extends Record<string, never> ?
             Record<string, never> :
             runtypes.Static<TParams> :
         never;
 
-type ExtractApiMethodResult<TApiMethod extends ApiMethod<ApiMethodParams, unknown>> =
-    TApiMethod extends ApiMethod<ApiMethodParams, infer TResult> ? TResult : never;
+type ExtractApiMethodResult<TApiMethod extends IApiMethod> =
+    TApiMethod extends IApiMethod<ApiMethodParams, infer TResult> ? TResult : never;
 
 export default ApiMethod;
-export { ApiMethodParams, ApiMethodAction, ExtractApiMethodParams, ExtractApiMethodResult };
+export { IApiMethod, ApiMethodParams, ApiMethodAction, ExtractApiMethodParams, ExtractApiMethodResult };
