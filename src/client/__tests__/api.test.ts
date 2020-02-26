@@ -27,7 +27,7 @@ describe('api', () => {
     });
 
     describe('without batch', () => {
-        const api = new Api<ExtractApiContract<typeof serverApi>>({ url: '/api' });
+        const api = new Api<ExtractApiContract<typeof serverApi>>({ url: '/api', timeout: 500 });
 
         it('should reject if server does not respond', done => {
             fetchMock.mockResponseOnce('', { status: 500, statusText: 'Internal server error' });
@@ -69,6 +69,25 @@ describe('api', () => {
                 expect(err.type).toBe('INTERNAL_ERROR');
                 expect(err.message).toBe('error!');
                 expect(err.data).toEqual({});
+                done();
+            });
+        });
+
+        it('should reject if server timed out', done => {
+            fetchMock.mockResponseOnce(() =>
+                new Promise(resolve => {
+                    window.setTimeout(
+                        () => {
+                            resolve({ body: JSON.stringify({ data: 'test' }) });
+                        },
+                        1000
+                    );
+                })
+            );
+
+            api.exec('method1', { method1RequiredParam: 'test' }).catch(err => {
+                expect(err).toBeInstanceOf(ApiError);
+                expect(err.type).toBe('TIMEOUT');
                 done();
             });
         });

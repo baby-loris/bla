@@ -12,13 +12,15 @@ interface ApiOptions {
     url: string;
     csrfToken?: string;
     batchMaxSize?: number;
+    timeout?: number;
 }
 
 const MAX_RETRIES = 2;
 
 const DEFAULT_API_OPTIONS = {
     csrfToken: '',
-    batchMaxSize: 1
+    batchMaxSize: 1,
+    timeout: 30000
 };
 
 class Api<TApiContract extends ApiContract> {
@@ -95,7 +97,13 @@ class Api<TApiContract extends ApiContract> {
     private doRequest(
         { resolve, reject, method, params, retries = 0 }: ApiItem & { retries?: number; }
     ): void {
-        const { url, csrfToken } = this.options;
+        const { url, csrfToken, timeout } = this.options;
+        const timeoutCancellationToken = window.setTimeout(
+            () => {
+                reject(new ApiError('TIMEOUT'));
+            },
+            timeout
+        );
 
         fetch(
             `${url}/${method}`,
@@ -109,6 +117,8 @@ class Api<TApiContract extends ApiContract> {
             }
         ).then(
             response => {
+                window.clearTimeout(timeoutCancellationToken);
+
                 if(response.ok) {
                     return response.json().catch(err => {
                         throw new ApiError(ApiError.INTERNAL_ERROR, err.message, err);
@@ -126,6 +136,7 @@ class Api<TApiContract extends ApiContract> {
                 throw new ApiError(ApiError.INTERNAL_ERROR, response.statusText);
             },
             err => {
+                window.clearTimeout(timeoutCancellationToken);
                 throw new ApiError(ApiError.INTERNAL_ERROR, err.message, err);
             }
         ).then((res: ApiMethodResponse) => {
