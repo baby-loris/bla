@@ -1,5 +1,6 @@
 import ApiError from '../shared/ApiError';
 import { ApiContract, ApiMethodResponse, ApiMethodResponseSuccess } from '../shared/types';
+import queueMicrotask from './queueMicrotask';
 
 interface ApiItem {
     method: string;
@@ -50,8 +51,7 @@ class Api<TApiContract extends ApiContract> {
                         break;
 
                     case 1:
-                        // TODO: rewrite with microtasks
-                        window.setTimeout(this.processQueue, 0);
+                        queueMicrotask(this.processQueue);
                         break;
                 }
             } else {
