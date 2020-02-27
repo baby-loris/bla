@@ -47,5 +47,6 @@ ApiError.INTERNAL_ERROR = 'INTERNAL_ERROR';
 ApiError.BAD_REQUEST = 'BAD_REQUEST';
 ApiError.NOT_FOUND = 'NOT_FOUND';
 ApiError.TIMEOUT = 'TIMEOUT';
+ApiError.WRONG_CSRF_TOKEN = 'WRONG_CSRF_TOKEN';
 
 export default ApiError;

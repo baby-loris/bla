@@ -100,7 +100,7 @@ class Api<TApiContract extends ApiContract> {
         const { url, csrfToken, timeout } = this.options;
         const timeoutCancellationToken = window.setTimeout(
             () => {
-                reject(new ApiError('TIMEOUT'));
+                reject(new ApiError(ApiError.TIMEOUT));
             },
             timeout
         );
@@ -129,7 +129,7 @@ class Api<TApiContract extends ApiContract> {
                     if(newCsrfToken && newCsrfToken !== csrfToken) {
                         this.options.csrfToken = newCsrfToken;
 
-                        throw new ApiError('WRONG_CSRF_TOKEN');
+                        throw new ApiError(ApiError.WRONG_CSRF_TOKEN);
                     }
                 }
 
@@ -149,7 +149,7 @@ class Api<TApiContract extends ApiContract> {
                 );
             }
         }).catch(err => {
-            if(err && err.type === 'WRONG_CSRF_TOKEN' && retries < MAX_RETRIES) {
+            if(err && err.type === ApiError.WRONG_CSRF_TOKEN && retries < MAX_RETRIES) {
                 this.doRequest({ resolve, reject, method, params, retries: retries + 1 });
             } else {
                 reject(err);
