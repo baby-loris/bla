@@ -70,6 +70,10 @@ class Api<TApiContract extends ApiContract> {
     private processQueue = (): void => {
         const { queue } = this;
 
+        if(queue.length === 0) {
+            return;
+        }
+
         this.queue = [];
 
         this.doRequest({

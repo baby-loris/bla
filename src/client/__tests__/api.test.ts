@@ -27,7 +27,7 @@ describe('api', () => {
     });
 
     describe('without batch', () => {
-        const api = new Api<ExtractApiContract<typeof serverApi>>({ url: '/api', timeout: 500 });
+        const api = new Api<ExtractApiContract<typeof serverApi>>({ url: '/api', timeout: 100 });
 
         it('should reject if server does not respond', done => {
             fetchMock.mockResponseOnce('', { status: 500, statusText: 'Internal server error' });
@@ -80,16 +80,19 @@ describe('api', () => {
                         () => {
                             resolve({ body: JSON.stringify({ data: 'test' }) });
                         },
-                        1000
+                        200
                     );
                 })
             );
 
-            api.exec('method1', { method1RequiredParam: 'test' }).catch(err => {
-                expect(err).toBeInstanceOf(ApiError);
-                expect(err.type).toBe('TIMEOUT');
-                done();
-            });
+            api.exec('method1', { method1RequiredParam: 'test' }).then(
+                done.fail,
+                err => {
+                    expect(err).toBeInstanceOf(ApiError);
+                    expect(err.type).toBe('TIMEOUT');
+                    done();
+                }
+            );
         });
 
         it('should resolve if server method successfully respond', done => {
@@ -105,7 +108,8 @@ describe('api', () => {
     describe('with batch', () => {
         const api = new Api<ExtractApiContract<typeof serverApi>>({
             url: '/api',
-            batchMaxSize: Number.POSITIVE_INFINITY
+            batchMaxSize: Number.POSITIVE_INFINITY,
+            timeout: 100
         });
 
         it('should reject all if server method does not respond', done => {
@@ -127,6 +131,32 @@ describe('api', () => {
                         expect(err.type).toBe('INTERNAL_ERROR');
                         expect(err.message).toBe('Internal server error');
                     }
+                )
+            ]).then(() => {
+                done();
+            });
+        });
+
+        it('should reject all if server timed out', done => {
+            fetchMock.mockResponseOnce(() =>
+                new Promise(resolve => {
+                    window.setTimeout(
+                        () => {
+                            resolve({ body: JSON.stringify({ data: [{ data: 'test1' }, { data: 'test2' }] }) });
+                        },
+                        200
+                    );
+                })
+            );
+
+            Promise.all([
+                api.exec('method1', { method1RequiredParam: 'test' }).then(
+                    done.fail,
+                    () => {}
+                ),
+                api.exec('method2', {} as any).then(
+                    done.fail,
+                    () => {}
                 )
             ]).then(() => {
                 done();
