@@ -43,7 +43,7 @@
     "jest": "25.1.0",
     "jest-fetch-mock": "3.0.1",
     "node-mocks-http": "1.8.1",
-    "rollup": "1.31.1",
+    "rollup": "1.32.0",
     "rollup-plugin-typescript2": "0.26.0",
     "ts-jest": "25.2.1",
     "ts-node": "8.6.2",
