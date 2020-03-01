@@ -67,6 +67,10 @@ class Api<TApiContract extends ApiContract> {
         });
     }
 
+    protected getAdditionalHeaders(): Record<string, string> {
+        return {};
+    }
+
     private processQueue = (): void => {
         const { queue } = this;
 
@@ -114,9 +118,12 @@ class Api<TApiContract extends ApiContract> {
             {
                 method: 'POST',
                 credentials: 'same-origin',
-                headers: csrfToken ?
-                    { 'X-Csrf-Token': csrfToken } :
-                    undefined,
+                headers: {
+                    ...this.getAdditionalHeaders(),
+                    ...csrfToken ?
+                        { 'X-Csrf-Token': csrfToken } :
+                        undefined
+                },
                 body: JSON.stringify(params)
             }
         ).then(
