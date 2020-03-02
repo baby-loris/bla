@@ -106,8 +106,9 @@ class Api<TApiContract extends ApiContract> {
         { resolve, reject, method, params, retries = 0 }: ApiItem & { retries?: number; }
     ): void {
         const { url, csrfToken, timeout, headers } = this.options;
-        const timeoutCancellationToken = window.setTimeout(
+        let timeoutCancellationToken: number | null = window.setTimeout(
             () => {
+                timeoutCancellationToken = null;
                 reject(new ApiError(ApiError.TIMEOUT));
             },
             timeout
@@ -128,6 +129,10 @@ class Api<TApiContract extends ApiContract> {
             }
         ).then(
             response => {
+                if(timeoutCancellationToken === null) {
+                    throw new ApiError(ApiError.TIMEOUT);
+                }
+
                 window.clearTimeout(timeoutCancellationToken);
 
                 if(response.ok) {
@@ -147,6 +152,10 @@ class Api<TApiContract extends ApiContract> {
                 throw new ApiError(ApiError.INTERNAL_ERROR, response.statusText);
             },
             err => {
+                if(timeoutCancellationToken === null) {
+                    throw new ApiError(ApiError.TIMEOUT);
+                }
+
                 window.clearTimeout(timeoutCancellationToken);
                 throw new ApiError(ApiError.INTERNAL_ERROR, err.message, err);
             }
