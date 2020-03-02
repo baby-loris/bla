@@ -26,6 +26,48 @@ describe('api', () => {
         fetchMock.resetMocks();
     });
 
+    describe('headers', () => {
+        it('should be possible to pass static headers', done => {
+            const api = new Api<ExtractApiContract<typeof serverApi>>({
+                url: '/api',
+                headers: { 'X-Lang': 'en' }
+            });
+            let headers: Headers;
+
+            fetchMock.mockResponseOnce(
+                req => {
+                    ({ headers } = req);
+                    return Promise.resolve({ body: JSON.stringify({ data: 'test' }) });
+                }
+            );
+
+            api.exec('method1', { method1RequiredParam: 'test' }).then(() => {
+                expect(headers.get('X-Lang')).toBe('en');
+                done();
+            });
+        });
+
+        it('should be possible to pass headers via function', done => {
+            const api = new Api<ExtractApiContract<typeof serverApi>>({
+                url: '/api',
+                headers: () => ({ 'X-Lang': 'en' })
+            });
+            let headers: Headers;
+
+            fetchMock.mockResponseOnce(
+                req => {
+                    ({ headers } = req);
+                    return Promise.resolve({ body: JSON.stringify({ data: 'test' }) });
+                }
+            );
+
+            api.exec('method1', { method1RequiredParam: 'test' }).then(() => {
+                expect(headers.get('X-Lang')).toBe('en');
+                done();
+            });
+        });
+    });
+
     describe('without batch', () => {
         const api = new Api<ExtractApiContract<typeof serverApi>>({ url: '/api', timeout: 100 });
 

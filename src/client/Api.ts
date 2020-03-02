@@ -14,14 +14,18 @@ interface ApiOptions {
     csrfToken?: string;
     batchMaxSize?: number;
     timeout?: number;
+    headers?:
+        RequestInit['headers'] |
+        (() => RequestInit['headers']);
 }
 
 const MAX_RETRIES = 2;
 
 const DEFAULT_API_OPTIONS = {
-    csrfToken: '',
     batchMaxSize: 1,
-    timeout: 30000
+    csrfToken: '',
+    timeout: 30000,
+    headers: {}
 };
 
 class Api<TApiContract extends ApiContract> {
@@ -67,10 +71,6 @@ class Api<TApiContract extends ApiContract> {
         });
     }
 
-    protected getAdditionalHeaders(): Record<string, string> {
-        return {};
-    }
-
     private processQueue = (): void => {
         const { queue } = this;
 
@@ -105,7 +105,7 @@ class Api<TApiContract extends ApiContract> {
     private doRequest(
         { resolve, reject, method, params, retries = 0 }: ApiItem & { retries?: number; }
     ): void {
-        const { url, csrfToken, timeout } = this.options;
+        const { url, csrfToken, timeout, headers } = this.options;
         const timeoutCancellationToken = window.setTimeout(
             () => {
                 reject(new ApiError(ApiError.TIMEOUT));
@@ -119,7 +119,7 @@ class Api<TApiContract extends ApiContract> {
                 method: 'POST',
                 credentials: 'same-origin',
                 headers: {
-                    ...this.getAdditionalHeaders(),
+                    ...typeof headers === 'function' ? headers() : headers,
                     ...csrfToken ?
                         { 'X-Csrf-Token': csrfToken } :
                         undefined
