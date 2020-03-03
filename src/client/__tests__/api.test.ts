@@ -4,29 +4,22 @@ import { Api as ServerApi, ApiMethod as ServerApiMethod, ExtractApiContract } fr
 import * as runtypes from 'runtypes';
 
 describe('api', () => {
-    const serverMethod1 = new ServerApiMethod({
-        params: runtypes.Record({
-            method1RequiredParam: runtypes.String
-        }),
-        action: params => `${params.method1RequiredParam}!`
-    });
-    const serverMethod2 = new ServerApiMethod({
-        params: runtypes.Record({
-            method2RequiredParam: runtypes.Number
-        }),
-        action: () => {
-            throw new Error('Unspecified error');
-        }
-    });
-    const serverMethod3 = new ServerApiMethod({
-        action: () => {
-            throw new Error('Unspecified error');
-        }
-    });
     const serverApi = new ServerApi({
-        method1: serverMethod1,
-        method2: serverMethod2,
-        method3: serverMethod3
+        method1: new ServerApiMethod({
+            params: runtypes.Record({
+                method1RequiredParam: runtypes.String
+            }),
+            action: params => `${params.method1RequiredParam}!`
+        }),
+
+        method2: new ServerApiMethod({
+            params: runtypes.Record({
+                method2RequiredParam: runtypes.Number
+            }),
+            action: () => {
+                throw new Error('Unspecified error');
+            }
+        })
     });
 
     afterAll(() => {
@@ -203,7 +196,7 @@ describe('api', () => {
                     done.fail,
                     () => {}
                 ),
-                api.exec('method3').then(
+                api.exec('method2', {} as any).then(
                     done.fail,
                     () => {}
                 )

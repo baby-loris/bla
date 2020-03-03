@@ -11,7 +11,7 @@ type ApiMethodAction<TParams extends ApiMethodParams, TResult> =
     (params: runtypes.Static<TParams>, request: express.Request) => TResult | Promise<TResult>;
 
 interface IApiMethod<
-    TParams extends ApiMethodParams = runtypes.Record<{}, false>,
+    TParams extends ApiMethodParams = ApiMethodParams,
     TResult = unknown
 > {
     getParams(): TParams;
@@ -19,7 +19,7 @@ interface IApiMethod<
 }
 
 class ApiMethod<
-    TParams extends ApiMethodParams = runtypes.Record<{}, false>,
+    TParams extends ApiMethodParams = ApiMethodParams,
     TResult = unknown,
 > implements IApiMethod<TParams, TResult> {
     private readonly params: TParams;
@@ -36,12 +36,7 @@ class ApiMethod<
         return this.params;
     }
 
-    exec(
-        params: runtypes.Static<TParams> extends Record<string, never> ?
-            Record<string, never> :
-            runtypes.Static<TParams>,
-        request: express.Request
-    ): Promise<TResult> {
+    exec(params: runtypes.Static<TParams>, request: express.Request): Promise<TResult> {
         return new Promise((resolve, reject) => {
             try {
                 this.params.check(params);
@@ -53,14 +48,14 @@ class ApiMethod<
     }
 }
 
-type ExtractApiMethodParams<TApiMethod extends IApiMethod<ApiMethodParams>> =
+type ExtractApiMethodParams<TApiMethod extends IApiMethod> =
     TApiMethod extends IApiMethod<infer TParams> ?
         runtypes.Static<TParams> extends Record<string, never> ?
             Record<string, never> :
             runtypes.Static<TParams> :
         never;
 
-type ExtractApiMethodResult<TApiMethod extends IApiMethod<ApiMethodParams>> =
+type ExtractApiMethodResult<TApiMethod extends IApiMethod> =
     TApiMethod extends IApiMethod<ApiMethodParams, infer TResult> ? TResult : never;
 
 export default ApiMethod;
