@@ -19,14 +19,13 @@ interface ApiOptions {
         (() => RequestInit['headers']);
 }
 
-const MAX_RETRIES = 2;
-
 const DEFAULT_API_OPTIONS = {
     batchMaxSize: 1,
     csrfToken: '',
     timeout: 30000,
     headers: {}
 };
+const MAX_RETRIES = 2;
 
 class Api<TApiContract extends ApiContract> {
     private options: Required<ApiOptions>;
@@ -139,7 +138,9 @@ class Api<TApiContract extends ApiContract> {
                     return response.json().catch(err => {
                         throw new ApiError(ApiError.INTERNAL_ERROR, err.message, err);
                     });
-                } else if(csrfToken) {
+                }
+
+                if(csrfToken) {
                     const newCsrfToken = response.headers.get('X-Csrf-Token');
 
                     if(newCsrfToken && newCsrfToken !== csrfToken) {
