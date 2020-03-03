@@ -4,7 +4,7 @@ import queueMicrotask from './queueMicrotask';
 
 interface ApiItem {
     method: string;
-    params: Record<string, unknown> | Record<string, unknown>[];
+    params: Record<string, unknown> | Record<string, unknown>[] | undefined;
     resolve(data: unknown): void;
     reject(err: unknown): void;
 }
@@ -39,8 +39,9 @@ class Api<TApiContract extends ApiContract> {
     }
 
     exec<TMethod extends Extract<keyof TApiContract, string>>(
-        method: TMethod,
-        params: TApiContract[TMethod]['params']
+        ...[method, params = {}]: TApiContract[TMethod]['params'] extends Record<string, never> ?
+            [TMethod] :
+            [TMethod, TApiContract[TMethod]['params']]
     ): Promise<TApiContract[TMethod]['result']> {
         return new Promise((resolve, reject) => {
             const { options, queue } = this;
