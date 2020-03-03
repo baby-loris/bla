@@ -30,6 +30,7 @@ const MAX_RETRIES = 2;
 class Api<TApiContract extends ApiContract> {
     private options: Required<ApiOptions>;
     private queue: ApiItem[] = [];
+    private pendingPromises = new Set<Promise<unknown>>();
 
     constructor(options: ApiOptions) {
         this.options = {
@@ -42,11 +43,23 @@ class Api<TApiContract extends ApiContract> {
         method: TMethod,
         params: TApiContract[TMethod]['params']
     ): Promise<TApiContract[TMethod]['result']> {
-        return new Promise((resolve, reject) => {
-            const { options, queue } = this;
-
+        const { options, queue, pendingPromises } = this;
+        const promise = new Promise((resolve, reject) => {
             if(options.batchMaxSize > 1) {
-                queue.push({ method, params, resolve, reject });
+                queue.push({
+                    method,
+                    params,
+                    resolve: (res: ApiMethodResponse) => {
+                        if(this.isPending(promise)) {
+                            resolve(res);
+                        }
+                    },
+                    reject: (err: ApiError) => {
+                        if(this.isPending(promise)) {
+                            reject(err);
+                        }
+                    }
+                });
 
                 switch(queue.length) {
                     case options.batchMaxSize:
@@ -59,15 +72,37 @@ class Api<TApiContract extends ApiContract> {
                 }
             } else {
                 this.doRequest({
-                    reject,
                     method,
                     params,
                     resolve: (res: ApiMethodResponse) => {
-                        this.handleMethodResponse(res, resolve, reject);
+                        if(this.isPending(promise)) {
+                            this.handleMethodResponse(res, resolve, reject);
+                        }
+                    },
+                    reject: (err: ApiError) => {
+                        if(this.isPending(promise)) {
+                            reject(err);
+                        }
                     }
                 });
             }
+        }).finally(() => {
+            pendingPromises.delete(promise);
         });
+
+        pendingPromises.add(promise);
+
+        return promise;
+    }
+
+    abort(promise: Promise<unknown>): void {
+        if(this.isPending(promise)) {
+            this.pendingPromises.delete(promise);
+        }
+    }
+
+    private isPending(promise: Promise<unknown>): boolean {
+        return this.pendingPromises.has(promise);
     }
 
     private processQueue = (): void => {
