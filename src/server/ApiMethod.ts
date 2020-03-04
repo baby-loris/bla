@@ -25,10 +25,14 @@ class ApiMethod<
     private readonly params: TParams;
     private readonly action: ApiMethodAction<TParams, TResult>;
 
-    constructor(
-        { params, action }: { params?: TParams; action: ApiMethodAction<TParams, TResult>; }
-    ) {
-        this.params = params || runtypes.Record({}) as TParams;
+    constructor({
+        params = runtypes.Record({}) as TParams,
+        action
+    }: {
+        params?: TParams;
+        action: ApiMethodAction<TParams, TResult>;
+    }) {
+        this.params = params;
         this.action = action;
     }
 
