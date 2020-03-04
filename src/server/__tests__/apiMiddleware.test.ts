@@ -7,9 +7,14 @@ import * as httpMocks from 'node-mocks-http';
 describe('api middleware', () => {
     const api = new Api({
         method1: new ApiMethod({
-            params: runtypes.Record({
-                method1RequiredParam: runtypes.String
-            }),
+            params: runtypes.Intersect(
+                runtypes.Record({
+                    method1RequiredParam: runtypes.String
+                }),
+                runtypes.Partial({
+                    method1OptionalParam: runtypes.String
+                })
+            ),
             action: params => `${params.method1RequiredParam}!`
         }),
 

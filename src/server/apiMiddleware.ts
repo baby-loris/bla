@@ -1,13 +1,13 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import Api from './Api';
-import { IApiMethod, ExtractApiMethodParams } from './ApiMethod';
+import { IApiMethod, ApiMethodParams, ExtractApiMethodParams } from './ApiMethod';
 import ApiError from '../shared/ApiError';
 import { ApiMethodResponse } from '../shared/types';
 
 type BodyParserOptions = Omit<bodyParser.OptionsJson, 'type'>;
 
-function apiMiddleware<TMethods extends Record<string, IApiMethod>>(
+function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParams>>>(
     { api, bodyParserOptions }: { api: Api<TMethods>; bodyParserOptions?: BodyParserOptions; }
 ): express.RequestHandler {
     return express.Router()
@@ -52,7 +52,7 @@ function apiMiddleware<TMethods extends Record<string, IApiMethod>>(
         );
 }
 
-function execBatch<TMethods extends Record<string, IApiMethod>>(
+function execBatch<TMethods extends Record<string, IApiMethod<ApiMethodParams>>>(
     api: Api<TMethods>,
     params: {
         method: keyof TMethods;
@@ -65,7 +65,7 @@ function execBatch<TMethods extends Record<string, IApiMethod>>(
     ).then(methodsRes => ({ data: methodsRes }));
 }
 
-function execApiMethod<TMethods extends Record<string, IApiMethod>>(
+function execApiMethod<TMethods extends Record<string, IApiMethod<ApiMethodParams>>>(
     api: Api<TMethods>,
     method: keyof TMethods,
     params: ExtractApiMethodParams<TMethods[keyof TMethods]>,
