@@ -41,7 +41,7 @@ class Api<TApiContract extends ApiContract> {
     exec<TMethod extends Extract<keyof TApiContract, string>>(
         ...[method, params = {}]: TApiContract[TMethod]['params'] extends Record<string, never>?
             [TMethod] :
-            [TMethod, ApiContract[TMethod]['params']]
+            [TMethod, TApiContract[TMethod]['params']]
     ): Promise<TApiContract[TMethod]['result']> {
         return new Promise((resolve, reject) => {
             const { options, queue } = this;

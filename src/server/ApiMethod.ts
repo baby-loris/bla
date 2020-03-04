@@ -48,14 +48,14 @@ class ApiMethod<
     }
 }
 
-type ExtractApiMethodParams<TApiMethod extends IApiMethod> =
+type ExtractApiMethodParams<TApiMethod extends IApiMethod<ApiMethodParams>> =
     TApiMethod extends IApiMethod<infer TParams> ?
         runtypes.Static<TParams> extends Record<string, never> ?
             Record<string, never> :
             runtypes.Static<TParams> :
         never;
 
-type ExtractApiMethodResult<TApiMethod extends IApiMethod> =
+type ExtractApiMethodResult<TApiMethod extends IApiMethod<ApiMethodParams>> =
     TApiMethod extends IApiMethod<ApiMethodParams, infer TResult> ? TResult : never;
 
 export default ApiMethod;

@@ -5,9 +5,14 @@ import * as runtypes from 'runtypes';
 
 describe('api', () => {
     const serverMethod1 = new ServerApiMethod({
-        params: runtypes.Record({
-            method1RequiredParam: runtypes.String
-        }),
+        params: runtypes.Intersect(
+            runtypes.Record({
+                method1RequiredParam: runtypes.String
+            }),
+            runtypes.Partial({
+                method1OptionalParam: runtypes.String
+            })
+        ),
         action: params => `${params.method1RequiredParam}!`
     });
     const serverMethod2 = new ServerApiMethod({
