@@ -1,9 +1,9 @@
 import * as express from 'express';
 import * as runtypes from 'runtypes';
-import { IApiMethod, ApiMethodParams, ExtractApiMethodParams, ExtractApiMethodResult } from './ApiMethod';
+import { IApiMethod, ExtractApiMethodParams, ExtractApiMethodResult } from './ApiMethod';
 import ApiError from '../shared/ApiError';
 
-class Api<TMethods extends Record<string, IApiMethod<ApiMethodParams, unknown>> = {}> {
+class Api<TMethods extends Record<string, IApiMethod<runtypes.Record<{}, false>, unknown>> = {}> {
     constructor(private readonly methods: TMethods) {}
 
     exec<TMethodName extends keyof TMethods>(

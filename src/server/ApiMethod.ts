@@ -11,7 +11,7 @@ type ApiMethodAction<TParams extends ApiMethodParams, TResult> =
     (params: runtypes.Static<TParams>, request: express.Request) => TResult | Promise<TResult>;
 
 interface IApiMethod<
-    TParams extends ApiMethodParams = ApiMethodParams,
+    TParams extends ApiMethodParams = runtypes.Record<{}, false>,
     TResult = unknown
 > {
     getParams(): TParams;
@@ -19,7 +19,7 @@ interface IApiMethod<
 }
 
 class ApiMethod<
-    TParams extends ApiMethodParams = ApiMethodParams,
+    TParams extends ApiMethodParams = runtypes.Record<{}, false>,
     TResult = unknown,
 > implements IApiMethod<TParams, TResult> {
     private readonly params: TParams;
