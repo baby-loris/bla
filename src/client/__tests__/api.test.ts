@@ -103,12 +103,12 @@ describe('api', () => {
         });
 
         it('should reject if server return invalid format', done => {
-            fetchMock.mockResponseOnce('{}');
+            fetchMock.mockResponseOnce('null');
 
             api.exec('method1', { method1RequiredParam: 'test' }).catch(err => {
                 expect(err).toBeInstanceOf(ApiError);
                 expect(err.type).toBe('INTERNAL_ERROR');
-                expect(err.message).toBe('Incompatible format, expected object with data or error field');
+                expect(err.message).toBe('Incompatible response format');
                 done();
             });
         });

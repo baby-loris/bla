@@ -162,13 +162,10 @@ class Api<TApiContract extends ApiContract> {
                 throw new ApiError(ApiError.INTERNAL_ERROR, err.message, err);
             }
         ).then((res: ApiMethodResponse) => {
-            if('data' in res || 'error' in res) {
+            if(typeof res === 'object' && res !== null) {
                 resolve(res);
             } else {
-                throw new ApiError(
-                    ApiError.INTERNAL_ERROR,
-                    'Incompatible format, expected object with data or error field'
-                );
+                throw new ApiError(ApiError.INTERNAL_ERROR, 'Incompatible response format');
             }
         }).catch(err => {
             if(err && err.type === ApiError.WRONG_CSRF_TOKEN && retries < MAX_RETRIES) {
