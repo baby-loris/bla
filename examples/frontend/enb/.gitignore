@@ -1,4 +1,0 @@
-/.enb/tmp
-/pages/*/*.*
-!/pages/*/*.bemjson.js
-/node_modules
