@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "sourceMap": false,
+        "strictNullChecks": true,
+        "moduleResolution": "node",
+        "module": "CommonJS",
+        "target": "es2017",
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true
+    }
+}
