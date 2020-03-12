@@ -1,3 +1,6 @@
+### 2.0.0
+  * Implement v2
+
 ### 1.9.2
   * Updated vow version to 0.4.20 [#124](../../pull/124)
 
