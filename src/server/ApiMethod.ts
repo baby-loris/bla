@@ -3,7 +3,7 @@ import * as express from 'express';
 
 type ApiMethodParams =
     runtypes.Record<{}, false> |
-    runtypes.Partial<{}> |
+    runtypes.Partial<{}, false> |
     runtypes.Intersect2<ApiMethodParams, ApiMethodParams> |
     runtypes.Union2<ApiMethodParams, ApiMethodParams>;
 
