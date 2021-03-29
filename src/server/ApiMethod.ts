@@ -7,30 +7,32 @@ type ApiMethodParams =
     runtypes.Intersect2<ApiMethodParams, ApiMethodParams> |
     runtypes.Union2<ApiMethodParams, ApiMethodParams>;
 
-type ApiMethodAction<TParams extends ApiMethodParams, TResult> =
-    (params: runtypes.Static<TParams>, request: express.Request) => TResult | Promise<TResult>;
+type ApiMethodAction<TParams extends ApiMethodParams, TResult, TRequest extends express.Request> =
+    (params: runtypes.Static<TParams>, request: TRequest) => TResult | Promise<TResult>;
 
 interface IApiMethod<
     TParams extends ApiMethodParams = runtypes.Record<{}, false>,
-    TResult = unknown
+    TResult = unknown,
+    TRequest extends express.Request = express.Request
 > {
     getParams(): TParams;
-    exec(params: runtypes.Static<TParams>, request: express.Request): Promise<TResult>;
+    exec(params: runtypes.Static<TParams>, request: TRequest): Promise<TResult>;
 }
 
 class ApiMethod<
     TParams extends ApiMethodParams = runtypes.Record<{}, false>,
     TResult = unknown,
-> implements IApiMethod<TParams, TResult> {
+    TRequest extends express.Request = express.Request
+> implements IApiMethod<TParams, TResult, TRequest> {
     private readonly params: TParams;
-    private readonly action: ApiMethodAction<TParams, TResult>;
+    private readonly action: ApiMethodAction<TParams, TResult, TRequest>;
 
     constructor({
         params = runtypes.Record({}) as TParams,
         action
     }: {
         params?: TParams;
-        action: ApiMethodAction<TParams, TResult>;
+        action: ApiMethodAction<TParams, TResult, TRequest>;
     }) {
         this.params = params;
         this.action = action;
@@ -40,7 +42,7 @@ class ApiMethod<
         return this.params;
     }
 
-    exec(params: runtypes.Static<TParams>, request: express.Request): Promise<TResult> {
+    exec(params: runtypes.Static<TParams>, request: TRequest): Promise<TResult> {
         return new Promise((resolve, reject) => {
             try {
                 this.params.check(params);
