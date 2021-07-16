@@ -4,8 +4,8 @@ import * as express from 'express';
 type ApiMethodParams =
     runtypes.Record<{}, false> |
     runtypes.Partial<{}, false> |
-    runtypes.Intersect2<ApiMethodParams, ApiMethodParams> |
-    runtypes.Union2<ApiMethodParams, ApiMethodParams>;
+    runtypes.Intersect<[ApiMethodParams, ApiMethodParams]> |
+    runtypes.Union<[ApiMethodParams, ApiMethodParams]>;
 
 type ApiMethodAction<TParams extends ApiMethodParams, TResult, TRequest extends express.Request> =
     (params: runtypes.Static<TParams>, request: TRequest) => TResult | Promise<TResult>;

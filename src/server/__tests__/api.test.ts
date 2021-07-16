@@ -41,9 +41,9 @@ describe('api', () => {
         api.exec('method1', {} as any, requestMock).catch(err => {
             expect(err).toBeInstanceOf(ApiError);
             expect(err.type).toBe('BAD_REQUEST');
-            expect(err.message).toBe('method1: Expected string, but was undefined in method1RequiredParam');
+            expect(err.message).toBe('method1: Expected { method1RequiredParam: string; }, but was incompatible');
             expect(err.data).toBeInstanceOf(runtypes.ValidationError);
-            expect(err.data.key).toBe('method1RequiredParam');
+            expect(err.data.details).toEqual({ method1RequiredParam: 'Expected string, but was missing' });
             done();
         });
     });

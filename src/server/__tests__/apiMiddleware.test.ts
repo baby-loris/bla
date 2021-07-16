@@ -83,10 +83,13 @@ describe('api middleware', () => {
                     JSON.stringify({
                         error: {
                             type: 'BAD_REQUEST',
-                            message: 'method1: Expected string, but was undefined in method1RequiredParam',
+                            message: 'method1: Expected { method1RequiredParam: string; }, but was incompatible',
                             data: {
-                                key: 'method1RequiredParam',
-                                name: 'ValidationError'
+                                name: 'ValidationError',
+                                code: 'CONTENT_INCORRECT',
+                                details: {
+                                    method1RequiredParam: 'Expected string, but was missing'
+                                }
                             }
                         }
                     })
