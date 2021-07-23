@@ -1,6 +1,8 @@
 import Api from '../Api';
 import ApiMethod from '../ApiMethod';
+import ApiError from '../../shared/ApiError';
 import apiMiddleware from '../apiMiddleware';
+import * as express from 'express';
 import * as runtypes from 'runtypes';
 import * as httpMocks from 'node-mocks-http';
 
@@ -28,7 +30,13 @@ describe('api middleware', () => {
         })
     });
 
-    const apiRequestHandler = apiMiddleware({ api });
+    let onError: jest.Mock;
+    let apiRequestHandler: express.RequestHandler;
+
+    beforeEach(() => {
+        onError = jest.fn();
+        apiRequestHandler = apiMiddleware({ api, onError });
+    });
 
     describe('without batch', () => {
         it('should send error if body format is not valid', () => {
@@ -50,6 +58,9 @@ describe('api middleware', () => {
                         }
                     })
                 );
+                expect(onError).toBeCalledWith(
+                    new ApiError('BAD_REQUEST', 'Unexpected body, expected method params')
+                );
             });
         });
 
@@ -65,6 +76,7 @@ describe('api middleware', () => {
 
             return flushPromises().then(() => {
                 expect(response._getData()).toBe(JSON.stringify({ data: 'test!' }));
+                expect(onError).not.toBeCalled();
             });
         });
 
@@ -94,6 +106,12 @@ describe('api middleware', () => {
                         }
                     })
                 );
+                expect(onError).toBeCalledWith(
+                    new ApiError(
+                        'BAD_REQUEST',
+                        'method1: Expected { method1RequiredParam: string; }, but was incompatible'
+                    )
+                );
             });
         });
     });
@@ -117,6 +135,9 @@ describe('api middleware', () => {
                             message: 'Unexpected body, expected array of methods'
                         }
                     })
+                );
+                expect(onError).toBeCalledWith(
+                    new ApiError('BAD_REQUEST', 'Unexpected body, expected array of methods')
                 );
             });
         });
@@ -142,6 +163,10 @@ describe('api middleware', () => {
                             { error: { type: 'INTERNAL_ERROR', message: 'method2: Unspecified error', data: {} } }
                         ]
                     })
+                );
+                expect(onError).toBeCalledTimes(1);
+                expect(onError).toBeCalledWith(
+                    new ApiError('BAD_REQUEST', 'method2: Unspecified error')
                 );
             });
         });

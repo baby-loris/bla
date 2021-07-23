@@ -3,12 +3,21 @@ import * as bodyParser from 'body-parser';
 import Api from './Api';
 import { IApiMethod, ApiMethodParams, ExtractApiMethodParams } from './ApiMethod';
 import ApiError from '../shared/ApiError';
-import { ApiMethodResponse } from '../shared/types';
+import { ApiMethodResponse, ApiMethodResponseFailed } from '../shared/types';
 
 type BodyParserOptions = Omit<bodyParser.OptionsJson, 'type'>;
+type onError = (err: ApiError) => void;
 
 function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParams>>>(
-    { api, bodyParserOptions }: { api: Api<TMethods>; bodyParserOptions?: BodyParserOptions; }
+    {
+        api,
+        bodyParserOptions,
+        onError
+    }: {
+        api: Api<TMethods>;
+        bodyParserOptions?: BodyParserOptions;
+        onError?: onError;
+    }
 ): express.RequestHandler {
     return express.Router()
         .use(bodyParser.json({ ...bodyParserOptions, type: '*/*' }))
@@ -25,28 +34,24 @@ function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParam
                             typeof item.params === 'object'
                         )
                     ) {
-                        execBatch(api, req.body, req).then(data => {
+                        execBatch(api, req.body, req, onError).then(data => {
                             res.json(data);
                         });
                     } else {
-                        res.json({
-                            error: {
-                                type: ApiError.BAD_REQUEST,
-                                message: 'Unexpected body, expected array of methods'
-                            }
-                        });
+                        const err = new ApiError(ApiError.BAD_REQUEST, 'Unexpected body, expected array of methods');
+
+                        onError?.(err);
+                        res.json(convertApiErrorToResponse(err));
                     }
                 } else if(req.body && typeof req.body === 'object') {
-                    execApiMethod(api, req.params.method, req.body, req).then(data => {
+                    execApiMethod(api, req.params.method, req.body, req, onError).then(data => {
                         res.json(data);
                     });
                 } else {
-                    res.json({
-                        error: {
-                            type: ApiError.BAD_REQUEST,
-                            message: 'Unexpected body, expected method params'
-                        }
-                    });
+                    const err = new ApiError(ApiError.BAD_REQUEST, 'Unexpected body, expected method params');
+
+                    onError?.(err);
+                    res.json(convertApiErrorToResponse(err));
                 }
             }
         );
@@ -58,10 +63,11 @@ function execBatch<TMethods extends Record<string, IApiMethod<ApiMethodParams>>>
         method: keyof TMethods;
         params: ExtractApiMethodParams<TMethods[keyof TMethods]>;
     }[],
-    request: express.Request
+    request: express.Request,
+    onError?: onError
 ): Promise<ApiMethodResponse> {
     return Promise.all(
-        params.map(({ method, params }) => execApiMethod(api, method, params, request))
+        params.map(({ method, params }) => execApiMethod(api, method, params, request, onError))
     ).then(methodsRes => ({ data: methodsRes }));
 }
 
@@ -69,12 +75,26 @@ function execApiMethod<TMethods extends Record<string, IApiMethod<ApiMethodParam
     api: Api<TMethods>,
     method: keyof TMethods,
     params: ExtractApiMethodParams<TMethods[keyof TMethods]>,
-    request: express.Request
+    request: express.Request,
+    onError?: onError
 ): Promise<ApiMethodResponse> {
     return api.exec(method, params, request).then(
         methodRes => ({ data: methodRes }),
-        ({ type, message, data }: ApiError) => ({ error: { type, message, data } })
+        (err: ApiError) => {
+            onError?.(err);
+            return convertApiErrorToResponse(err);
+        }
     );
+}
+
+function convertApiErrorToResponse({ type, message, data }: ApiError): ApiMethodResponseFailed {
+    return {
+        error: {
+            type,
+            message,
+            data
+        }
+    };
 }
 
 export default apiMiddleware;
