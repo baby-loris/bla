@@ -21,9 +21,7 @@ function ApiError<TData extends unknown>(
 
     Object.setPrototypeOf(err, Object.getPrototypeOf(this));
 
-    if(Error.captureStackTrace) {
-        Error.captureStackTrace(err, ApiError);
-    }
+    Error.captureStackTrace?.(err, ApiError);
 
     return err;
 }
