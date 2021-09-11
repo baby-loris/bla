@@ -59,7 +59,8 @@ describe('api middleware', () => {
                     })
                 );
                 expect(onError).toBeCalledWith(
-                    new ApiError('BAD_REQUEST', 'Unexpected body, expected method params')
+                    new ApiError('BAD_REQUEST', 'Unexpected body, expected method params'),
+                    request
                 );
             });
         });
@@ -110,7 +111,8 @@ describe('api middleware', () => {
                     new ApiError(
                         'BAD_REQUEST',
                         'method1: Expected { method1RequiredParam: string; }, but was incompatible'
-                    )
+                    ),
+                    request
                 );
             });
         });
@@ -137,7 +139,8 @@ describe('api middleware', () => {
                     })
                 );
                 expect(onError).toBeCalledWith(
-                    new ApiError('BAD_REQUEST', 'Unexpected body, expected array of methods')
+                    new ApiError('BAD_REQUEST', 'Unexpected body, expected array of methods'),
+                    request
                 );
             });
         });
@@ -166,7 +169,8 @@ describe('api middleware', () => {
                 );
                 expect(onError).toBeCalledTimes(1);
                 expect(onError).toBeCalledWith(
-                    new ApiError('BAD_REQUEST', 'method2: Unspecified error')
+                    new ApiError('BAD_REQUEST', 'method2: Unspecified error'),
+                    request
                 );
             });
         });

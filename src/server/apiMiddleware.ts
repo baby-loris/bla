@@ -6,7 +6,7 @@ import ApiError from '../shared/ApiError';
 import { ApiMethodResponse, ApiMethodResponseFailed } from '../shared/types';
 
 type BodyParserOptions = Omit<bodyParser.OptionsJson, 'type'>;
-type onError = (err: ApiError) => void;
+type onError = (err: ApiError, req: express.Request) => void;
 
 function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParams>>>(
     {
@@ -40,7 +40,7 @@ function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParam
                     } else {
                         const err = new ApiError(ApiError.BAD_REQUEST, 'Unexpected body, expected array of methods');
 
-                        onError?.(err);
+                        onError?.(err, req);
                         res.json(convertApiErrorToResponse(err));
                     }
                 } else if(req.body && typeof req.body === 'object') {
@@ -50,7 +50,7 @@ function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParam
                 } else {
                     const err = new ApiError(ApiError.BAD_REQUEST, 'Unexpected body, expected method params');
 
-                    onError?.(err);
+                    onError?.(err, req);
                     res.json(convertApiErrorToResponse(err));
                 }
             }
@@ -63,11 +63,11 @@ function execBatch<TMethods extends Record<string, IApiMethod<ApiMethodParams>>>
         method: keyof TMethods;
         params: ExtractApiMethodParams<TMethods[keyof TMethods]>;
     }[],
-    request: express.Request,
+    req: express.Request,
     onError?: onError
 ): Promise<ApiMethodResponse> {
     return Promise.all(
-        params.map(({ method, params }) => execApiMethod(api, method, params, request, onError))
+        params.map(({ method, params }) => execApiMethod(api, method, params, req, onError))
     ).then(methodsRes => ({ data: methodsRes }));
 }
 
@@ -75,13 +75,13 @@ function execApiMethod<TMethods extends Record<string, IApiMethod<ApiMethodParam
     api: Api<TMethods>,
     method: keyof TMethods,
     params: ExtractApiMethodParams<TMethods[keyof TMethods]>,
-    request: express.Request,
+    req: express.Request,
     onError?: onError
 ): Promise<ApiMethodResponse> {
-    return api.exec(method, params, request).then(
+    return api.exec(method, params, req).then(
         methodRes => ({ data: methodRes }),
         (err: ApiError) => {
-            onError?.(err);
+            onError?.(err, req);
             return convertApiErrorToResponse(err);
         }
     );
