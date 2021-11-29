@@ -6,9 +6,7 @@ describe('api method', () => {
     const requestMock = httpMocks.createRequest();
     const params = runtypes.Record({
         requiredParam: runtypes.String
-    }).And(runtypes.Partial({
-        optionalParam: runtypes.Number
-    }));
+    });
     let method: ApiMethod<typeof params>;
     let action: jest.Mock;
 

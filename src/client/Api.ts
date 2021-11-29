@@ -100,7 +100,7 @@ class Api<TApiContract extends ApiContract> {
                 });
             }
         });
-    }
+    };
 
     private doRequest(
         { resolve, reject, method, params, retries = 0 }: ApiItem & { retries?: number; }

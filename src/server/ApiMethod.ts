@@ -1,17 +1,13 @@
 import * as runtypes from 'runtypes';
 import * as express from 'express';
 
-type ApiMethodParams =
-    runtypes.Record<{}, false> |
-    runtypes.Partial<{}, false> |
-    runtypes.Intersect<[ApiMethodParams, ApiMethodParams]> |
-    runtypes.Union<[ApiMethodParams, ApiMethodParams]>;
+type ApiMethodParams = runtypes.Runtype<Record<string, unknown>>;
 
 type ApiMethodAction<TParams extends ApiMethodParams, TResult, TRequest extends express.Request> =
     (params: runtypes.Static<TParams>, request: TRequest) => TResult | Promise<TResult>;
 
 interface IApiMethod<
-    TParams extends ApiMethodParams = runtypes.Record<{}, false>,
+    TParams extends ApiMethodParams = ApiMethodParams,
     TResult = unknown,
     TRequest extends express.Request = express.Request
 > {
@@ -19,8 +15,10 @@ interface IApiMethod<
     exec(params: runtypes.Static<TParams>, request: TRequest): Promise<TResult>;
 }
 
+const EMPTY_PARAMS: ApiMethodParams = runtypes.Record({});
+
 class ApiMethod<
-    TParams extends ApiMethodParams = runtypes.Record<{}, false>,
+    TParams extends ApiMethodParams | runtypes.Never = runtypes.Never,
     TResult = unknown,
     TRequest extends express.Request = express.Request
 > implements IApiMethod<TParams, TResult, TRequest> {
@@ -28,7 +26,7 @@ class ApiMethod<
     private readonly action: ApiMethodAction<TParams, TResult, TRequest>;
 
     constructor({
-        params = runtypes.Record({}) as TParams,
+        params = EMPTY_PARAMS as TParams,
         action
     }: {
         params?: TParams;
@@ -56,8 +54,8 @@ class ApiMethod<
 
 type ExtractApiMethodParams<TApiMethod extends IApiMethod<ApiMethodParams>> =
     TApiMethod extends IApiMethod<infer TParams> ?
-        runtypes.Static<TParams> extends Record<string, never> ?
-            Record<string, never> :
+        TParams extends runtypes.Never ?
+            never :
             runtypes.Static<TParams> :
         never;
 
