@@ -12,10 +12,12 @@ function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParam
     {
         api,
         bodyParserOptions,
+        batchMaxSize = Number.POSITIVE_INFINITY,
         onError
     }: {
         api: Api<TMethods>;
         bodyParserOptions?: BodyParserOptions;
+        batchMaxSize?: number;
         onError?: onError;
     }
 ): express.RequestHandler {
@@ -34,9 +36,16 @@ function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParam
                             typeof item.params === 'object'
                         )
                     ) {
-                        execBatch(api, req.body, req, onError).then(data => {
-                            res.json(data);
-                        });
+                        if(req.body.length > batchMaxSize) {
+                            const err = new ApiError(ApiError.BAD_REQUEST, 'Unexpected size of batch');
+
+                            onError?.(err, req);
+                            res.json(convertApiErrorToResponse(err));
+                        } else {
+                            execBatch(api, req.body, req, onError).then(data => {
+                                res.json(data);
+                            });
+                        }
                     } else {
                         const err = new ApiError(ApiError.BAD_REQUEST, 'Unexpected body, expected array of methods');
 
