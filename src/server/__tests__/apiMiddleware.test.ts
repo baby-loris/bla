@@ -35,7 +35,7 @@ describe('api middleware', () => {
 
     beforeEach(() => {
         onError = jest.fn();
-        apiRequestHandler = apiMiddleware({ api, onError });
+        apiRequestHandler = apiMiddleware({ api, batchMaxSize: 2, onError });
     });
 
     describe('without batch', () => {
@@ -143,6 +143,34 @@ describe('api middleware', () => {
                     request
                 );
             });
+        });
+
+        it('should send error if batch size is too big', () => {
+            const request = httpMocks.createRequest({
+                method: 'POST',
+                url: '/batch',
+                body: [
+                    { method: 'method1', params: { method1RequiredParam: 'test' } },
+                    { method: 'method2', params: { method2RequiredParam: 1 } },
+                    { method: 'method2', params: { method2RequiredParam: 1 } }
+                ]
+            });
+            const response = httpMocks.createResponse();
+
+            apiRequestHandler(request, response, () => {});
+
+            expect(response._getData()).toBe(
+                JSON.stringify({
+                    error: {
+                        type: 'BAD_REQUEST',
+                        message: 'Unexpected size of batch'
+                    }
+                })
+            );
+            expect(onError).toBeCalledWith(
+                new ApiError('BAD_REQUEST', 'Unexpected size of batch'),
+                request
+            );
         });
 
         it('should send batch result', () => {
