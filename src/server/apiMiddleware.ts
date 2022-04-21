@@ -23,6 +23,12 @@ function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParam
 ): express.RequestHandler {
     return express.Router()
         .use(bodyParser.json({ ...bodyParserOptions, type: '*/*' }))
+        .use((_: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+            const err = new ApiError(ApiError.BAD_REQUEST, 'Unexpected body, expected valid json');
+
+            onError?.(err, req);
+            res.json(convertApiErrorToResponse(err));
+        })
         .post(
             '/:method(*)',
             (req, res) => {
