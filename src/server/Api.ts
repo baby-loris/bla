@@ -15,7 +15,7 @@ class Api<TMethods extends Record<string, IApiMethod<ApiMethodParams, unknown>> 
             this.methods[methodName].exec(methodParams, request).catch(err => {
                 throw this.normalizeError(err, methodName as string);
             }) as Promise<ExtractApiMethodResult<TMethods[TMethodName]>> :
-            Promise.reject(new ApiError(ApiError.NOT_FOUND, `Method ${methodName} not found`));
+            Promise.reject(new ApiError(ApiError.NOT_FOUND, `Method ${methodName as string} not found`));
     }
 
     private normalizeError(err: unknown, methodName: string): ApiError {

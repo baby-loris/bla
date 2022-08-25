@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import Api from '../Api';
 import ApiError from '../../shared/ApiError';
 import { Api as ServerApi, ApiMethod as ServerApiMethod, ExtractApiContract } from '../../server';

@@ -41,7 +41,8 @@ describe('api', () => {
         api.exec('method1', {} as any, requestMock).catch(err => {
             expect(err).toBeInstanceOf(ApiError);
             expect(err.type).toBe('BAD_REQUEST');
-            expect(err.message).toBe('method1: Expected { method1RequiredParam: string; }, but was incompatible');
+            // eslint-disable-next-line max-len
+            expect(err.message).toBe('method1: Validation failed:\n{\n  "method1RequiredParam": "Expected string, but was missing"\n}.\nObject should match { method1RequiredParam: string; }');
             expect(err.data).toBeInstanceOf(runtypes.ValidationError);
             expect(err.data.details).toEqual({ method1RequiredParam: 'Expected string, but was missing' });
             done();

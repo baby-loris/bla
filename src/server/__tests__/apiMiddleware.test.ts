@@ -92,11 +92,14 @@ describe('api middleware', () => {
             apiRequestHandler(request, response, () => {});
 
             return flushPromises().then(() => {
+                // eslint-disable-next-line max-len
+                const expectedErrorMessage = 'method1: Validation failed:\n{\n  "method1RequiredParam": "Expected string, but was missing"\n}.\nObject should match { method1RequiredParam: string; }';
+
                 expect(response._getData()).toBe(
                     JSON.stringify({
                         error: {
                             type: 'BAD_REQUEST',
-                            message: 'method1: Expected { method1RequiredParam: string; }, but was incompatible',
+                            message: expectedErrorMessage,
                             data: {
                                 name: 'ValidationError',
                                 code: 'CONTENT_INCORRECT',
@@ -110,7 +113,7 @@ describe('api middleware', () => {
                 expect(onError).toBeCalledWith(
                     new ApiError(
                         'BAD_REQUEST',
-                        'method1: Expected { method1RequiredParam: string; }, but was incompatible'
+                        expectedErrorMessage
                     ),
                     request
                 );
