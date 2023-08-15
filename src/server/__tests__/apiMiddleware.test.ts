@@ -5,6 +5,7 @@ import apiMiddleware from '../apiMiddleware';
 import * as express from 'express';
 import * as runtypes from 'runtypes';
 import * as httpMocks from 'node-mocks-http';
+import * as timers from 'timers';
 
 describe('api middleware', () => {
     const api = new Api({
@@ -209,5 +210,5 @@ describe('api middleware', () => {
 });
 
 function flushPromises(): Promise<void> {
-    return new Promise(setImmediate);
+    return new Promise(timers.setImmediate);
 }
