@@ -17,13 +17,15 @@ interface ApiOptions {
     headers?:
         RequestInit['headers'] |
         (() => RequestInit['headers']);
+    searchString?: string | (() => string);
 }
 
 const DEFAULT_API_OPTIONS = {
     batchMaxSize: 1,
     csrfToken: '',
     timeout: 30000,
-    headers: {}
+    headers: {},
+    searchString: ''
 };
 const MAX_RETRIES = 2;
 
@@ -105,7 +107,7 @@ class Api<TApiContract extends ApiContract> {
     private doRequest(
         { resolve, reject, method, params, retries = 0 }: ApiItem & { retries?: number; }
     ): void {
-        const { url, csrfToken, timeout, headers } = this.options;
+        const { url, csrfToken, timeout, headers, searchString } = this.options;
         let timeoutCancellationToken: number | null = window.setTimeout(
             () => {
                 timeoutCancellationToken = null;
@@ -114,8 +116,10 @@ class Api<TApiContract extends ApiContract> {
             timeout
         );
 
+        const searchParams = new URLSearchParams(typeof searchString === 'function' ? searchString() : searchString);
+
         fetch(
-            `${url}/${method}`,
+            `${url}/${method}?${searchParams}`,
             {
                 method: 'POST',
                 credentials: 'same-origin',

@@ -84,6 +84,57 @@ describe('api', () => {
         });
     });
 
+    describe('searchString', () => {
+        const getSearchParamsFromUrl = (url: string): URLSearchParams => {
+            return new URLSearchParams(url.split('?')[1]);
+        };
+
+        describe.each([
+            { searchString: 'foo=bar', subTitle: '' },
+            { searchString: '?foo=bar', subTitle: 'with leading \'?\' character' }
+        ])('should be possible to pass static searchString', ({ searchString, subTitle }) => {
+            test(subTitle, done => {
+                const api = new Api<ExtractApiContract<typeof serverApi>>({
+                    url: '/api',
+                    searchString
+                });
+                let url: string;
+
+                fetchMock.mockResponseOnce(
+                    req => {
+                        ({ url } = req);
+                        return Promise.resolve({ body: JSON.stringify({ data: 'test' }) });
+                    }
+                );
+
+                api.exec('method1', { method1RequiredParam: 'test' }).then(() => {
+                    expect(getSearchParamsFromUrl(url).get('foo')).toBe('bar');
+                    done();
+                });
+            });
+        });
+
+        it('should be possible to pass searchString via function', done => {
+            const api = new Api<ExtractApiContract<typeof serverApi>>({
+                url: '/api',
+                searchString: () => new URLSearchParams([['bar', 'foo']]).toString()
+            });
+            let url: string;
+
+            fetchMock.mockResponseOnce(
+                req => {
+                    ({ url } = req);
+                    return Promise.resolve({ body: JSON.stringify({ data: 'test' }) });
+                }
+            );
+
+            api.exec('method1', { method1RequiredParam: 'test' }).then(() => {
+                expect(getSearchParamsFromUrl(url).get('bar')).toBe('foo');
+                done();
+            });
+        });
+    });
+
     describe('without batch', () => {
         const api = new Api<ExtractApiContract<typeof serverApi>>({ url: '/api', timeout: 100 });
 
