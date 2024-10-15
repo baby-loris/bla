@@ -17,7 +17,7 @@ interface ApiOptions {
     headers?:
         RequestInit['headers'] |
         (() => RequestInit['headers']);
-    searchString?: string | (() => string);
+    searchParams?: URLSearchParams | (() => URLSearchParams);
 }
 
 const DEFAULT_API_OPTIONS = {
@@ -25,7 +25,7 @@ const DEFAULT_API_OPTIONS = {
     csrfToken: '',
     timeout: 30000,
     headers: {},
-    searchString: ''
+    searchParams: new URLSearchParams()
 };
 const MAX_RETRIES = 2;
 
@@ -107,7 +107,7 @@ class Api<TApiContract extends ApiContract> {
     private doRequest(
         { resolve, reject, method, params, retries = 0 }: ApiItem & { retries?: number; }
     ): void {
-        const { url, csrfToken, timeout, headers, searchString } = this.options;
+        const { url, csrfToken, timeout, headers, searchParams } = this.options;
         let timeoutCancellationToken: number | null = window.setTimeout(
             () => {
                 timeoutCancellationToken = null;
@@ -116,10 +116,11 @@ class Api<TApiContract extends ApiContract> {
             timeout
         );
 
-        const searchParams = new URLSearchParams(typeof searchString === 'function' ? searchString() : searchString);
+        const queryString = (typeof searchParams === 'function' ? searchParams() : searchParams).toString();
+        const search = queryString ? `?${queryString}` : '';
 
         fetch(
-            `${url}/${method}?${searchParams}`,
+            `${url}/${method}${search}`,
             {
                 method: 'POST',
                 credentials: 'same-origin',

@@ -84,40 +84,35 @@ describe('api', () => {
         });
     });
 
-    describe('searchString', () => {
+    describe('searchParams', () => {
         const getSearchParamsFromUrl = (url: string): URLSearchParams => {
             return new URLSearchParams(url.split('?')[1]);
         };
 
-        describe.each([
-            { searchString: 'foo=bar', subTitle: '' },
-            { searchString: '?foo=bar', subTitle: 'with leading \'?\' character' }
-        ])('should be possible to pass static searchString', ({ searchString, subTitle }) => {
-            test(subTitle, done => {
-                const api = new Api<ExtractApiContract<typeof serverApi>>({
-                    url: '/api',
-                    searchString
-                });
-                let url: string;
+        test('should be possible to pass static searchParams', done => {
+            const api = new Api<ExtractApiContract<typeof serverApi>>({
+                url: '/api',
+                searchParams: new URLSearchParams('foo=bar')
+            });
+            let url: string;
 
-                fetchMock.mockResponseOnce(
-                    req => {
-                        ({ url } = req);
-                        return Promise.resolve({ body: JSON.stringify({ data: 'test' }) });
-                    }
-                );
+            fetchMock.mockResponseOnce(
+                req => {
+                    ({ url } = req);
+                    return Promise.resolve({ body: JSON.stringify({ data: 'test' }) });
+                }
+            );
 
-                api.exec('method1', { method1RequiredParam: 'test' }).then(() => {
-                    expect(getSearchParamsFromUrl(url).get('foo')).toBe('bar');
-                    done();
-                });
+            api.exec('method1', { method1RequiredParam: 'test' }).then(() => {
+                expect(getSearchParamsFromUrl(url).get('foo')).toBe('bar');
+                done();
             });
         });
 
-        it('should be possible to pass searchString via function', done => {
+        it('should be possible to pass searchParams via function', done => {
             const api = new Api<ExtractApiContract<typeof serverApi>>({
                 url: '/api',
-                searchString: () => new URLSearchParams([['bar', 'foo']]).toString()
+                searchParams: () => new URLSearchParams([['bar', 'foo']])
             });
             let url: string;
 
