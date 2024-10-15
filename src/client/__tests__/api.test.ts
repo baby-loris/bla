@@ -84,6 +84,52 @@ describe('api', () => {
         });
     });
 
+    describe('searchParams', () => {
+        const getSearchParamsFromUrl = (url: string): URLSearchParams => {
+            return new URLSearchParams(url.split('?')[1]);
+        };
+
+        test('should be possible to pass static searchParams', done => {
+            const api = new Api<ExtractApiContract<typeof serverApi>>({
+                url: '/api',
+                searchParams: new URLSearchParams('foo=bar')
+            });
+            let url: string;
+
+            fetchMock.mockResponseOnce(
+                req => {
+                    ({ url } = req);
+                    return Promise.resolve({ body: JSON.stringify({ data: 'test' }) });
+                }
+            );
+
+            api.exec('method1', { method1RequiredParam: 'test' }).then(() => {
+                expect(getSearchParamsFromUrl(url).get('foo')).toBe('bar');
+                done();
+            });
+        });
+
+        it('should be possible to pass searchParams via function', done => {
+            const api = new Api<ExtractApiContract<typeof serverApi>>({
+                url: '/api',
+                searchParams: () => new URLSearchParams([['bar', 'foo']])
+            });
+            let url: string;
+
+            fetchMock.mockResponseOnce(
+                req => {
+                    ({ url } = req);
+                    return Promise.resolve({ body: JSON.stringify({ data: 'test' }) });
+                }
+            );
+
+            api.exec('method1', { method1RequiredParam: 'test' }).then(() => {
+                expect(getSearchParamsFromUrl(url).get('bar')).toBe('foo');
+                done();
+            });
+        });
+    });
+
     describe('without batch', () => {
         const api = new Api<ExtractApiContract<typeof serverApi>>({ url: '/api', timeout: 100 });
 
