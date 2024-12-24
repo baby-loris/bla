@@ -32,7 +32,9 @@ function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParam
         .post(
             '/*method',
             (req, res) => {
-                if((req.params as {method: string[];}).method[0] === 'batch') {
+                const method = (req.params as {method: string[];}).method;
+
+                if(method.length === 1 && method[0] === 'batch') {
                     if(
                         Array.isArray(req.body) &&
                         req.body.every(item =>
@@ -61,7 +63,7 @@ function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParam
                 } else if(req.body && typeof req.body === 'object') {
                     execApiMethod(
                         api,
-                        (req.params as {method: string[];}).method.join('/'),
+                        method.join('/'),
                         req.body,
                         req,
                         onError

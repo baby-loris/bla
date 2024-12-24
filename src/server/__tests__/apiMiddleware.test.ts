@@ -40,6 +40,18 @@ describe('api middleware', () => {
                 })
             ),
             action: params => `${params.method3RequiredParam}!`
+        }),
+
+        ['batch/path']: new ApiMethod({
+            params: runtypes.Intersect(
+                runtypes.Record({
+                    batchRequiredParam: runtypes.String
+                }),
+                runtypes.Partial({
+                    batchOptionalParam: runtypes.String
+                })
+            ),
+            action: params => `${params.batchRequiredParam}!`
         })
     });
 
@@ -71,7 +83,7 @@ describe('api middleware', () => {
                         }
                     })
                 );
-                expect(onError).toBeCalledWith(
+                expect(onError).toHaveBeenCalledWith(
                     new ApiError('BAD_REQUEST', 'Unexpected body, expected method params'),
                     request
                 );
@@ -90,7 +102,7 @@ describe('api middleware', () => {
 
             return flushPromises().then(() => {
                 expect(response._getData()).toBe(JSON.stringify({ data: 'test!' }));
-                expect(onError).not.toBeCalled();
+                expect(onError).not.toHaveBeenCalled();
             });
         });
 
@@ -99,6 +111,22 @@ describe('api middleware', () => {
                 method: 'POST',
                 url: '/method3/path',
                 body: { method3RequiredParam: 'test' }
+            });
+            const response = httpMocks.createResponse();
+
+            apiRequestHandler(request, response, () => {});
+
+            return flushPromises().then(() => {
+                expect(response._getData()).toBe(JSON.stringify({ data: 'test!' }));
+                expect(onError).not.toHaveBeenCalled();
+            });
+        });
+
+        it('should send method result with composite path includes batch', () => {
+            const request = httpMocks.createRequest({
+                method: 'POST',
+                url: '/batch/path',
+                body: { batchRequiredParam: 'test' }
             });
             const response = httpMocks.createResponse();
 
