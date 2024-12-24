@@ -28,6 +28,30 @@ describe('api middleware', () => {
             action: () => {
                 throw new Error('Unspecified error');
             }
+        }),
+
+        ['method3/path']: new ApiMethod({
+            params: runtypes.Intersect(
+                runtypes.Record({
+                    method3RequiredParam: runtypes.String
+                }),
+                runtypes.Partial({
+                    method3OptionalParam: runtypes.String
+                })
+            ),
+            action: params => `${params.method3RequiredParam}!`
+        }),
+
+        ['batch/path']: new ApiMethod({
+            params: runtypes.Intersect(
+                runtypes.Record({
+                    batchRequiredParam: runtypes.String
+                }),
+                runtypes.Partial({
+                    batchOptionalParam: runtypes.String
+                })
+            ),
+            action: params => `${params.batchRequiredParam}!`
         })
     });
 
@@ -59,7 +83,7 @@ describe('api middleware', () => {
                         }
                     })
                 );
-                expect(onError).toBeCalledWith(
+                expect(onError).toHaveBeenCalledWith(
                     new ApiError('BAD_REQUEST', 'Unexpected body, expected method params'),
                     request
                 );
@@ -78,7 +102,39 @@ describe('api middleware', () => {
 
             return flushPromises().then(() => {
                 expect(response._getData()).toBe(JSON.stringify({ data: 'test!' }));
-                expect(onError).not.toBeCalled();
+                expect(onError).not.toHaveBeenCalled();
+            });
+        });
+
+        it('should send method result with composite path', () => {
+            const request = httpMocks.createRequest({
+                method: 'POST',
+                url: '/method3/path',
+                body: { method3RequiredParam: 'test' }
+            });
+            const response = httpMocks.createResponse();
+
+            apiRequestHandler(request, response, () => {});
+
+            return flushPromises().then(() => {
+                expect(response._getData()).toBe(JSON.stringify({ data: 'test!' }));
+                expect(onError).not.toHaveBeenCalled();
+            });
+        });
+
+        it('should send method result with composite path includes batch', () => {
+            const request = httpMocks.createRequest({
+                method: 'POST',
+                url: '/batch/path',
+                body: { batchRequiredParam: 'test' }
+            });
+            const response = httpMocks.createResponse();
+
+            apiRequestHandler(request, response, () => {});
+
+            return flushPromises().then(() => {
+                expect(response._getData()).toBe(JSON.stringify({ data: 'test!' }));
+                expect(onError).not.toHaveBeenCalled();
             });
         });
 
@@ -111,7 +167,7 @@ describe('api middleware', () => {
                         }
                     })
                 );
-                expect(onError).toBeCalledWith(
+                expect(onError).toHaveBeenCalledWith(
                     new ApiError(
                         'BAD_REQUEST',
                         expectedErrorMessage
@@ -142,7 +198,7 @@ describe('api middleware', () => {
                         }
                     })
                 );
-                expect(onError).toBeCalledWith(
+                expect(onError).toHaveBeenCalledWith(
                     new ApiError('BAD_REQUEST', 'Unexpected body, expected array of methods'),
                     request
                 );
@@ -171,7 +227,7 @@ describe('api middleware', () => {
                     }
                 })
             );
-            expect(onError).toBeCalledWith(
+            expect(onError).toHaveBeenCalledWith(
                 new ApiError('BAD_REQUEST', 'Unexpected size of batch'),
                 request
             );
@@ -199,8 +255,8 @@ describe('api middleware', () => {
                         ]
                     })
                 );
-                expect(onError).toBeCalledTimes(1);
-                expect(onError).toBeCalledWith(
+                expect(onError).toHaveBeenCalledTimes(1);
+                expect(onError).toHaveBeenCalledWith(
                     new ApiError('BAD_REQUEST', 'method2: Unspecified error'),
                     request
                 );
