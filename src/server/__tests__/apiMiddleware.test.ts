@@ -33,13 +33,13 @@ describe('api middleware', () => {
         ['method3/path']: new ApiMethod({
             params: runtypes.Intersect(
                 runtypes.Record({
-                    method1RequiredParam: runtypes.String
+                    method3RequiredParam: runtypes.String
                 }),
                 runtypes.Partial({
-                    method1OptionalParam: runtypes.String
+                    method3OptionalParam: runtypes.String
                 })
             ),
-            action: params => `${params.method1RequiredParam}!`
+            action: params => `${params.method3RequiredParam}!`
         })
     });
 
@@ -98,7 +98,7 @@ describe('api middleware', () => {
             const request = httpMocks.createRequest({
                 method: 'POST',
                 url: '/method3/path',
-                body: { method1RequiredParam: 'test' }
+                body: { method3RequiredParam: 'test' }
             });
             const response = httpMocks.createResponse();
 
