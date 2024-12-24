@@ -30,9 +30,9 @@ function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParam
             res.json(convertApiErrorToResponse(err));
         })
         .post(
-            '/:method(*)',
+            '/*method',
             (req, res) => {
-                if(req.params.method === 'batch') {
+                if((req.params as {method: string[];}).method[0] === 'batch') {
                     if(
                         Array.isArray(req.body) &&
                         req.body.every(item =>
@@ -59,7 +59,13 @@ function apiMiddleware<TMethods extends Record<string, IApiMethod<ApiMethodParam
                         res.json(convertApiErrorToResponse(err));
                     }
                 } else if(req.body && typeof req.body === 'object') {
-                    execApiMethod(api, req.params.method, req.body, req, onError).then(data => {
+                    execApiMethod(
+                        api,
+                        (req.params as {method: string[];}).method.join('/'),
+                        req.body,
+                        req,
+                        onError
+                    ).then((data) => {
                         res.json(data);
                     });
                 } else {

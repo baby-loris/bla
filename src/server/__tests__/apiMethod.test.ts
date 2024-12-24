@@ -24,15 +24,15 @@ describe('api method', () => {
 
     it('should not execute action if params are not valid', done => {
         method.exec({} as any, requestMock).catch(() => {
-            expect(action).not.toBeCalled();
+            expect(action).not.toHaveBeenCalled();
             done();
         });
     });
 
     it('should execute action with params if params are valid', done => {
         method.exec({ requiredParam: 'test' }, requestMock).then(() => {
-            expect(action).toBeCalled();
-            expect(action).toBeCalledWith({ requiredParam: 'test' }, requestMock);
+            expect(action).toHaveBeenCalled();
+            expect(action).toHaveBeenCalledWith({ requiredParam: 'test' }, requestMock);
             done();
         });
     });
